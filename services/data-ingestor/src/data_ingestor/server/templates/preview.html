@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Step 2: Preview{% endblock %}
+
+{% block steps %}
+<div class="step-bar mb-4">
+  <div class="step-node step-done"><div class="step-circle">1</div><span class="step-label"><a href="/" style="color:inherit">Source</a></span></div>
+  <div class="step-line done"></div>
+  <div class="step-node step-active"><div class="step-circle">2</div><span class="step-label">Preview &amp; Map</span></div>
+  <div class="step-line"></div>
+  <div class="step-node step-pending"><div class="step-circle">3</div><span class="step-label">Result</span></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<h4 class="mb-2">Step 2 — Preview &amp; Column Mapping</h4>
+<p class="muted mb-3">
+  Ticker: <strong>{{ ticker }}</strong> &nbsp;|&nbsp;
+  Method: <strong>{{ method }}</strong>
+</p>
+
+{% if error %}
+<div class="alert alert-error">
+  <strong>Error fetching data:</strong> {{ error }}
+  <a href="/" class="btn btn-outline btn-sm ms-2">← Start over</a>
+</div>
+{% else %}
+
+<!-- Melt toggle -->
+<form method="post" action="/preview" class="mb-3" style="display:flex;align-items:center;gap:1rem">
+  <input type="hidden" name="api_url"      value="{{ api_url }}">
+  <input type="hidden" name="ticker"       value="{{ ticker }}">
+  <input type="hidden" name="method"       value="{{ method }}">
+  <input type="hidden" name="payload_json" value="{{ payload_json | e }}">
+  {% if force_refresh %}<input type="hidden" name="force_refresh" value="1">{% endif %}
+  {% if period %}<input type="hidden" name="period" value="{{ period }}">{% endif %}
+
+  <label class="form-check">
+    <input type="checkbox" id="melt" name="melt" value="1"
+           {% if melt %}checked{% endif %}>
+    Long format <span class="muted">(melt: one row per item × period)</span>
+  </label>
+  <button type="submit" class="btn btn-outline btn-sm">Re-preview</button>
+</form>
+
+{% if preview_rows %}
+<div class="card mb-4">
+  <div class="card-header">Data Preview (first {{ preview_rows | length }} rows)</div>
+  <div class="card-body" style="padding:0">
+    <div class="preview-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in preview_rows %}
+          <tr>
+            {% for cell in row %}
+            <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-warning">No data rows found.</div>
+{% endif %}
+
+<form method="post" action="/ingest">
+  <!-- Hidden context fields -->
+  <input type="hidden" name="api_url" value="{{ api_url }}">
+  <input type="hidden" name="ticker" value="{{ ticker }}">
+  <input type="hidden" name="method" value="{{ method }}">
+  <input type="hidden" name="payload_json" value="{{ payload_json | e }}">
+  {% if melt %}<input type="hidden" name="melt" value="1">{% endif %}
+  {% if period %}<input type="hidden" name="period" value="{{ period }}">{% endif %}
+
+  <div class="form-row mb-4">
+    <div class="form-group">
+      <label for="table_name" class="form-label">Target Table Name</label>
+      <input type="text" class="form-input" id="table_name" name="table_name"
+             value="{{ table_name }}" required>
+    </div>
+    <div class="form-group" style="flex:0 0 auto;align-self:flex-end;padding-bottom:.875rem">
+      <label class="form-check">
+        <input type="checkbox" id="truncate" name="truncate" value="1">
+        Truncate before insert
+      </label>
+      <div class="form-hint">Unchecked = append</div>
+    </div>
+  </div>
+
+  <!-- Column mapping -->
+  <div class="card mb-4">
+    <div class="card-header">Column Mapping</div>
+    <div class="card-body" style="padding:0">
+      <div class="preview-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:50px">Include</th>
+              <th style="width:50px">Key</th>
+              <th>Source Column</th>
+              <th>Target Column Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for col in columns %}
+            {% set i = loop.index0 %}
+            {% set is_meta = col in meta_cols %}
+            {% set inferred = col_types[i] if col_types and i < col_types|length else 'TEXT' %}
+            <tr>
+              <td class="text-center">
+                <input type="hidden" name="col_source" value="{{ col }}">
+                <input type="checkbox" name="col_include" value="{{ i }}" checked>
+              </td>
+              <td class="text-center">
+                <input type="checkbox" name="conflict_col" value="{{ col }}"
+                       {% if col in default_conflict_cols %}checked{% endif %}>
+              </td>
+              <td><code>{{ col }}</code></td>
+              <td>
+                <input type="text" name="col_target" value="{{ col }}"
+                       class="form-input form-select-sm">
+              </td>
+              <td>
+                {% if is_meta %}
+                  <span class="badge badge-gray">{{ inferred }}</span>
+                  <input type="hidden" name="col_type" value="{{ inferred }}">
+                {% else %}
+                  <select name="col_type" class="form-input form-select-sm">
+                    {% for t in ['TEXT','INTEGER','NUMERIC','TIMESTAMP','DATE','BOOLEAN'] %}
+                    <option value="{{ t }}" {% if t == inferred %}selected{% endif %}>{{ t }}</option>
+                    {% endfor %}
+                  </select>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Ingest into Postgres →</button>
+  <a href="/" class="btn btn-outline ms-2">← Start over</a>
+</form>
+{% endif %}
+{% endblock %}

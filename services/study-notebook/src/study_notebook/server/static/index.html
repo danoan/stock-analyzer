@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>study-notebook</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
+  <style>
+    /* ── Custom Properties ───────────────────────────────────────────────── */
+    :root {
+      --cp:  #2563eb; --cp-h: #1d4ed8;
+      --cb:  #ffffff;
+      --bg:  #f8f9fa;
+      --tx:  #111827; --tm: #6b7280;
+      --br:  #e5e7eb;
+      --ok:  #16a34a;
+      --er:  #dc2626;
+      --r:   8px;
+      --sh:  0 1px 3px rgba(0,0,0,.06);
+    }
+
+    /* ── Reset / Base ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; color: var(--tx); background: var(--bg); }
+    a { cursor: pointer; text-decoration: none; }
+    input, textarea, select, button { font: inherit; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--br); font-size: .875rem; }
+    th { font-weight: 600; font-size: .8rem; color: var(--tm); text-transform: uppercase; letter-spacing: .04em; }
+    code { font-family: "SF Mono", "Cascadia Code", monospace; font-size: .88em; background: #f3f4f6; padding: .1em .35em; border-radius: 4px; }
+    [x-cloak] { display: none !important; }
+
+    /* ── Top Nav ─────────────────────────────────────────────────────────── */
+    .topnav { height: 52px; background: var(--cb); border-bottom: 1px solid var(--br); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-left { display: flex; align-items: center; gap: .15rem; }
+    .brand { font-weight: 700; font-size: .95rem; color: var(--tx); margin-right: .75rem; letter-spacing: -.01em; }
+    .nav-left a { color: var(--tm); font-size: .875rem; padding: .375rem .75rem; border-radius: 6px; border-bottom: 2px solid transparent; transition: color .15s; }
+    .nav-left a:hover { color: var(--tx); }
+    .nav-left a.active { color: var(--cp); border-bottom-color: var(--cp); font-weight: 500; }
+
+    /* ── Main ────────────────────────────────────────────────────────────── */
+    main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ── Cards ───────────────────────────────────────────────────────────── */
+    .card { background: var(--cb); border: 1px solid var(--br); border-radius: var(--r); box-shadow: var(--sh); margin-bottom: .875rem; }
+    .card-header { display: flex; align-items: center; gap: .45rem; padding: .75rem 1rem; flex-wrap: wrap; }
+    .card-body { padding: .875rem 1rem; border-top: 1px solid var(--br); }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; gap: .3rem; padding: .45rem .9rem; border-radius: 6px; border: 1px solid transparent; cursor: pointer; font-size: .875rem; font-weight: 500; transition: background .15s, border-color .15s, color .15s; white-space: nowrap; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary { background: var(--cp); color: #fff; border-color: var(--cp); }
+    .btn-primary:hover:not(:disabled) { background: var(--cp-h); border-color: var(--cp-h); }
+    .btn-outline { background: transparent; color: var(--tx); border-color: var(--br); }
+    .btn-outline:hover:not(:disabled) { border-color: #9ca3af; background: #f9fafb; }
+    .btn-ghost { background: transparent; border-color: transparent; color: var(--tm); }
+    .btn-ghost:hover:not(:disabled) { background: #f3f4f6; color: var(--tx); }
+    .btn-danger { background: transparent; color: var(--er); border-color: #fca5a5; }
+    .btn-danger:hover:not(:disabled) { background: #fef2f2; }
+    .btn-sm { padding: .3rem .65rem; font-size: .8rem; }
+    .btn-xs { padding: .15rem .4rem; font-size: .75rem; }
+
+    /* ── Badges ──────────────────────────────────────────────────────────── */
+    .badge { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .75rem; font-weight: 500; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-green { background: #d1fae5; color: #065f46; }
+
+    /* ── Chips ───────────────────────────────────────────────────────────── */
+    .chip { display: inline-flex; align-items: center; gap: .3rem; background: #f3f4f6; border-radius: 999px; padding: .2rem .65rem; font-size: .82rem; border: 1px solid var(--br); }
+    .chip-remove { all: unset; cursor: pointer; color: var(--tm); font-size: 1.1rem; line-height: 1; display: flex; align-items: center; }
+    .chip-remove:hover { color: var(--er); }
+
+    /* ── Form Elements ───────────────────────────────────────────────────── */
+    .form-label { display: block; font-size: .82rem; font-weight: 600; color: var(--tm); margin-bottom: .3rem; text-transform: uppercase; letter-spacing: .04em; }
+    .form-input { width: 100%; padding: .45rem .75rem; border: 1px solid var(--br); border-radius: 6px; background: var(--cb); color: var(--tx); outline: none; transition: border-color .15s, box-shadow .15s; }
+    .form-input:focus { border-color: var(--cp); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+    .form-group { margin-bottom: .875rem; }
+    .form-check { display: inline-flex; align-items: center; gap: .45rem; cursor: pointer; font-size: .875rem; }
+    .form-check input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--cp); }
+
+    /* ── Toast ───────────────────────────────────────────────────────────── */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; display: flex; align-items: center; gap: .75rem; padding: .7rem 1.1rem; border-radius: 8px; color: #fff; font-size: .875rem; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,.2); min-width: 200px; max-width: 420px; }
+    .toast-ok { background: var(--ok); }
+    .toast-err { background: var(--er); }
+    .toast-msg { flex: 1; }
+    .toast-close { all: unset; cursor: pointer; opacity: .8; font-size: 1.15rem; line-height: 1; }
+    .toast-close:hover { opacity: 1; }
+
+    /* ── Lookup Dropdown ─────────────────────────────────────────────────── */
+    .lookup-rel { position: relative; }
+    .lookup-list { position: absolute; top: 100%; left: 0; right: 0; z-index: 200; background: var(--cb); border: 1px solid var(--br); border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,.1); max-height: 220px; overflow-y: auto; margin-top: 3px; }
+    .lookup-item { padding: .5rem .75rem; cursor: pointer; font-size: .875rem; border-bottom: 1px solid var(--br); }
+    .lookup-item:last-child { border-bottom: none; }
+    .lookup-item:hover { background: #f3f4f6; }
+
+    /* ── Utility ─────────────────────────────────────────────────────────── */
+    .muted { color: var(--tm); }
+    .null-val { color: var(--tm); }
+    .error-val { color: var(--er); font-size: .875rem; margin-top: .4rem; }
+    .flex-row { display: flex; gap: .5rem; align-items: center; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .page-header h2 { font-size: 1.2rem; font-weight: 700; }
+    hr { border: none; border-top: 1px solid var(--br); margin: .75rem 0; }
+
+    /* ── Modal ───────────────────────────────────────────────────────────── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-box { background: var(--cb); border-radius: 12px; box-shadow: 0 20px 48px rgba(0,0,0,.22); width: 100%; max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-box-sm { max-width: 560px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.25rem; border-bottom: 1px solid var(--br); flex-shrink: 0; }
+    .modal-header strong { font-size: .95rem; font-weight: 700; }
+    .modal-body { padding: 1.25rem; overflow-y: auto; flex: 1; }
+    .modal-footer { padding: .875rem 1.25rem; border-top: 1px solid var(--br); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+
+    /* ── Step Bar ────────────────────────────────────────────────────────── */
+    .step-bar { display: flex; align-items: center; margin-bottom: 1.5rem; }
+    .step-node { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+    .step-circle { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; }
+    .step-active .step-circle { background: var(--cp); color: #fff; }
+    .step-done .step-circle { background: var(--ok); color: #fff; }
+    .step-pending .step-circle { background: #e5e7eb; color: var(--tm); }
+    .step-label { font-size: .8rem; font-weight: 500; }
+    .step-active .step-label { color: var(--cp); }
+    .step-done .step-label { color: var(--ok); }
+    .step-pending .step-label { color: var(--tm); }
+    .step-line { flex: 1; height: 2px; background: var(--br); margin: 0 .6rem; }
+    .step-line.done { background: var(--ok); }
+
+    /* ── Score Builder (Two-Panel) ───────────────────────────────────────── */
+    .score-builder-grid { display: grid; grid-template-columns: 1fr 260px; gap: 1rem; align-items: start; }
+    @media (max-width: 620px) { .score-builder-grid { grid-template-columns: 1fr; } }
+
+    /* ── Operator Toolbar ────────────────────────────────────────────────── */
+    .op-toolbar { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .875rem; }
+    .op-btn { padding: .28rem .52rem; font-size: .82rem; font-weight: 600; font-family: "SF Mono","Cascadia Code",monospace; background: #f3f4f6; border: 1px solid var(--br); border-radius: 5px; cursor: pointer; color: var(--tx); transition: background .1s; }
+    .op-btn:hover { background: #e5e7eb; }
+
+    /* ── Metric Palette ──────────────────────────────────────────────────── */
+    .metric-palette { border: 1px solid var(--br); border-radius: 8px; display: flex; flex-direction: column; background: #fafafa; overflow: hidden; }
+    .palette-header { padding: .45rem .75rem; font-size: .72rem; font-weight: 700; color: var(--tm); letter-spacing: .07em; border-bottom: 1px solid var(--br); background: #f3f4f6; }
+    .palette-filter { padding: .4rem .6rem; border-bottom: 1px solid var(--br); }
+    .palette-filter input { width: 100%; padding: .28rem .5rem; border: 1px solid var(--br); border-radius: 5px; font-size: .8rem; outline: none; background: var(--cb); }
+    .palette-filter input:focus { border-color: var(--cp); }
+    .metric-grid { padding: .4rem; display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; height: 240px; overflow-y: auto; align-content: start; }
+    .metric-chip { font-size: .76rem; background: var(--cb); border: 1px solid var(--br); border-radius: 4px; padding: .2rem .4rem; cursor: pointer; color: var(--tx); transition: background .1s, color .1s, border-color .1s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .metric-chip:hover { background: var(--cp); color: #fff; border-color: var(--cp); }
+    .palette-empty { padding: 1rem; font-size: .8rem; color: var(--tm); text-align: center; grid-column: 1/-1; }
+    .palette-loading { padding: 1rem; font-size: .82rem; color: var(--tm); text-align: center; }
+
+    /* ── Added Scores List ───────────────────────────────────────────────── */
+    .score-item { display: flex; align-items: center; gap: .5rem; padding: .35rem .6rem; background: #f9fafb; border: 1px solid var(--br); border-radius: 6px; margin-bottom: .3rem; }
+    .score-item-expr { flex: 1; font-size: .8rem; color: var(--tm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── Results Table ───────────────────────────────────────────────────── */
+    .results-table-wrap { overflow-x: auto; margin-top: .875rem; border: 1px solid var(--br); border-radius: var(--r); }
+    .results-table-wrap table { margin: 0; }
+    .cell-positive { background: rgba(22,163,74,.08); }
+    .cell-negative { background: rgba(220,38,38,.08); }
+    .sort-btn { all: unset; cursor: pointer; margin-left: .3rem; font-size: .82rem; color: var(--tm); }
+    .sort-btn.active { color: var(--cp); font-weight: 700; }
+
+    /* ── Review Panel ────────────────────────────────────────────────────── */
+    .review-score { background: #f9fafb; border: 1px solid var(--br); border-radius: 6px; padding: .625rem .875rem; margin-bottom: .5rem; }
+
+    /* ── Collections ─────────────────────────────────────────────────────── */
+    .ticker-pill { display: inline-flex; align-items: center; gap: .3rem; background: #f3f4f6; border: 1px solid var(--br); border-radius: 999px; padding: .18rem .6rem; font-size: .8rem; }
+    .ticker-pill-remove { all: unset; cursor: pointer; color: var(--tm); font-size: 1rem; line-height: 1; display: flex; align-items: center; }
+    .ticker-pill-remove:hover { color: var(--er); }
+    .coll-tickers { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .75rem; }
+    .add-mode-toggle { display: flex; gap: .3rem; margin-bottom: .6rem; }
+
+    /* ── Score Detail ────────────────────────────────────────────────────── */
+    .detail-section { border: 1px solid var(--br); border-radius: 6px; padding: .75rem; margin-bottom: .75rem; }
+    .detail-section:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body x-data="app()" x-cloak>
+
+<!-- ── Top Nav ──────────────────────────────────────────────────────────── -->
+<nav class="topnav">
+  <div class="nav-left">
+    <span class="brand">study-notebook</span>
+    <a :class="{active: page==='analyses'}" @click="setPage('analyses')">Analyses</a>
+    <a :class="{active: page==='collections'}" @click="setPage('collections')">Collections</a>
+    <a :class="{active: page==='tickers'}" @click="setPage('tickers')">Tickers</a>
+  </div>
+  <div>
+    <button class="btn btn-primary btn-sm" @click="openWizard()">+ New Analysis</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ── Toast ────────────────────────────────────────────────────────────── -->
+<div x-show="toast" :class="toast?.ok ? 'toast toast-ok' : 'toast toast-err'">
+  <span class="toast-msg" x-text="toast?.msg"></span>
+  <button class="toast-close" @click="dismissToast()">×</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- ANALYSES TAB                                                           -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section x-show="page==='analyses'">
+  <div class="page-header">
+    <h2>Analyses</h2>
+  </div>
+
+  <div x-show="analyses.length===0" class="muted" style="padding:2rem 0;text-align:center;">
+    No analyses yet. Click "+ New Analysis" to get started.
+  </div>
+
+  <template x-for="a in analyses" :key="a.id">
+    <div class="card">
+      <div class="card-header">
+        <strong x-text="a.name" style="font-size:.95rem;"></strong>
+        <template x-for="s in a.scores" :key="s.name">
+          <span class="badge badge-blue" x-text="s.name"></span>
+          <span x-show="s.normalize" class="badge badge-green">normalized</span>
+        </template>
+        <span style="flex:1"></span>
+        <button class="btn btn-ghost btn-sm" @click="toggleDetails(a.id)">
+          <span x-text="openDetails[a.id] ? 'ⓘ Hide' : 'ⓘ Details'"></span>
+        </button>
+        <button class="btn btn-outline btn-sm" @click="toggleRealize(a.id)">
+          <span x-text="openRealize===a.id ? '▴ Hide' : '▸ Run'"></span>
+        </button>
+        <button class="btn btn-danger btn-sm" @click="deleteAnalysis(a.id, a.name)">Delete</button>
+      </div>
+
+      <!-- Details panel -->
+      <div x-show="openDetails[a.id]" class="card-body">
+        <template x-for="s in a.scores" :key="s.name">
+          <div style="margin-bottom:.625rem;">
+            <span class="badge badge-blue" x-text="s.name"></span>
+            <span x-show="s.normalize" class="badge badge-green">normalized</span>
+            <div style="margin-top:.25rem;font-size:.875rem;">
+              <span class="muted">Expression: </span><code x-text="s.expression"></code>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Realize panel -->
+      <div x-show="openRealize===a.id" class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.875rem;">
+          <div>
+            <label class="form-label">Tickers (comma-separated)</label>
+            <input class="form-input" type="text" x-model="realize.tickerInput" placeholder="AAPL, MSFT, GOOG" />
+          </div>
+          <div x-show="collections.length>0">
+            <label class="form-label">Collections</label>
+            <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.1rem;">
+              <template x-for="c in collections" :key="c.name">
+                <label class="form-check">
+                  <input type="checkbox" :value="c.name" x-model="realize.selectedCollections" />
+                  <span x-text="c.name"></span>
+                </label>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:.875rem;">
+          <label class="form-check">
+            <input type="checkbox" x-model="realize.forceRefresh" />
+            Force refresh data
+          </label>
+        </div>
+        <button class="btn btn-primary" :disabled="realize.running" @click="runRealize(a.id)">
+          <span x-text="realize.running ? 'Running…' : 'Run →'"></span>
+        </button>
+        <p x-show="realize.error" class="error-val" x-text="realize.error"></p>
+
+        <!-- Results table -->
+        <div x-show="realize.results && realize.results.length>0" class="results-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:2rem;color:var(--tm);">#</th>
+                <th>Ticker</th>
+                <template x-for="col in realizeColumns()" :key="col">
+                  <th>
+                    <span x-text="col"></span>
+                    <button class="sort-btn" :class="realize.sortCol===col ? 'active' : ''"
+                      @click="sortByCol(col)"
+                      x-text="realize.sortCol===col ? (realize.sortDir==='asc' ? '↑' : '↓') : '↕'"></button>
+                  </th>
+                </template>
+                <th>Error</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(r, i) in sortedResults()" :key="r.ticker_symbol">
+                <tr>
+                  <td class="muted" style="font-size:.8rem;text-align:right;" x-text="i+1"></td>
+                  <td><strong x-text="r.ticker_symbol"></strong></td>
+                  <template x-for="col in realizeColumns()" :key="col">
+                    <td :class="scoreClass(col, r.scores[col])">
+                      <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="fmtFloat(r.scores[col])"></span>
+                      <span x-show="r.scores[col] === null || r.scores[col] === undefined" class="null-val">—</span>
+                    </td>
+                  </template>
+                  <td>
+                    <span x-show="r.error" class="error-val" x-text="r.error"></span>
+                    <span x-show="!r.error" class="null-val">—</span>
+                  </td>
+                  <td>
+                    <button x-show="r.score_details && Object.keys(r.score_details).length > 0"
+                      class="btn btn-ghost btn-xs"
+                      @click="realize.detailTicker = r.ticker_symbol"
+                      title="Score breakdown">ⓘ</button>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </template>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- ANALYSIS WIZARD MODAL                                                  -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" x-show="wizard.open" @click.self="closeWizard()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <strong>New Analysis</strong>
+      <button class="btn btn-ghost btn-sm" @click="closeWizard()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Step indicator -->
+      <div class="step-bar">
+        <div class="step-node" :class="wizard.step > 1 ? 'step-done' : 'step-active'">
+          <div class="step-circle" x-text="wizard.step > 1 ? '✓' : '1'"></div>
+          <span class="step-label">Name</span>
+        </div>
+        <div class="step-line" :class="wizard.step > 1 ? 'done' : ''"></div>
+        <div class="step-node" :class="wizard.step > 2 ? 'step-done' : wizard.step===2 ? 'step-active' : 'step-pending'">
+          <div class="step-circle" x-text="wizard.step > 2 ? '✓' : '2'"></div>
+          <span class="step-label">Scores</span>
+        </div>
+        <div class="step-line" :class="wizard.step > 2 ? 'done' : ''"></div>
+        <div class="step-node" :class="wizard.step===3 ? 'step-active' : 'step-pending'">
+          <div class="step-circle">3</div>
+          <span class="step-label">Review</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Name -->
+      <div x-show="wizard.step===1">
+        <div class="form-group">
+          <label class="form-label">Analysis name</label>
+          <input class="form-input" type="text" x-model="wizard.draft.name"
+            placeholder="e.g. Value Analysis" @keydown.enter="wizardNext()" autofocus />
+        </div>
+        <p x-show="wizard.nameError" class="error-val" x-text="wizard.nameError"></p>
+      </div>
+
+      <!-- Step 2: Scores -->
+      <div x-show="wizard.step===2">
+        <!-- Added scores list -->
+        <div x-show="wizard.draft.scores.length>0" style="margin-bottom:.875rem;">
+          <template x-for="(s, i) in wizard.draft.scores" :key="i">
+            <div class="score-item">
+              <span class="badge badge-blue" x-text="s.name"></span>
+              <span x-show="s.normalize" class="badge badge-green">norm</span>
+              <span class="score-item-expr"><code x-text="s.expression"></code></span>
+              <button class="chip-remove" @click="wizard.draft.scores.splice(i,1)" title="Remove">×</button>
+            </div>
+          </template>
+          <hr style="margin:.625rem 0 .875rem;" />
+        </div>
+
+        <!-- Two-panel score builder -->
+        <div class="score-builder-grid">
+          <!-- Left panel -->
+          <div>
+            <div class="form-group">
+              <label class="form-label">Score name</label>
+              <input class="form-input" type="text" x-model="wizard.scoreForm.name" placeholder="e.g. pe_score" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expression</label>
+              <textarea class="form-input" x-ref="scoreExpr" x-model="wizard.scoreForm.expression"
+                rows="5" placeholder="e.g. trailingPE / bookValue"></textarea>
+            </div>
+            <!-- Operator toolbar -->
+            <div class="op-toolbar">
+              <button class="op-btn" type="button" @click="insertOp('+')">+</button>
+              <button class="op-btn" type="button" @click="insertOp('-')">−</button>
+              <button class="op-btn" type="button" @click="insertOp('*')">×</button>
+              <button class="op-btn" type="button" @click="insertOp('/')">÷</button>
+              <button class="op-btn" type="button" @click="insertOp('(')">(</button>
+              <button class="op-btn" type="button" @click="insertOp(')')">)</button>
+              <button class="op-btn" type="button" @click="insertOp('log()')">log()</button>
+              <button class="op-btn" type="button" @click="insertOp('sqrt()')">sqrt()</button>
+              <button class="op-btn" type="button" @click="insertOp('abs()')">abs()</button>
+            </div>
+            <div style="margin-bottom:.875rem;">
+              <label class="form-check">
+                <input type="checkbox" x-model="wizard.scoreForm.normalize" />
+                Normalize across tickers
+              </label>
+            </div>
+            <p x-show="wizard.scoreError" class="error-val" x-text="wizard.scoreError"></p>
+            <button class="btn btn-outline" type="button" @click="addScoreToDraft()">+ Add score</button>
+          </div>
+
+          <!-- Right panel: Metric palette -->
+          <div class="metric-palette">
+            <div class="palette-header">METRICS</div>
+            <div class="palette-filter">
+              <input type="text" x-model="wizard.metricsFilter" placeholder="filter…" />
+            </div>
+            <div x-show="wizard.metricsLoading" class="palette-loading">Loading…</div>
+            <div x-show="!wizard.metricsLoading" class="metric-grid">
+              <template x-for="m in filteredMetrics()" :key="m">
+                <span class="metric-chip" @click="insertAtCursor(m)" x-text="m" :title="'Insert: '+m"></span>
+              </template>
+              <div x-show="filteredMetrics().length===0" class="palette-empty">
+                <span x-text="wizard.metricsAvail.length===0 ? 'No metrics loaded' : 'No matches'"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div x-show="wizard.step===3">
+        <p style="margin-bottom:.5rem;font-size:.875rem;"><strong>Name:</strong> <span x-text="wizard.draft.name"></span></p>
+        <p style="margin-bottom:.625rem;font-size:.875rem;"><strong>Scores:</strong></p>
+        <template x-for="s in wizard.draft.scores" :key="s.name">
+          <div class="review-score">
+            <span class="badge badge-blue" x-text="s.name"></span>
+            <span x-show="s.normalize" class="badge badge-green">normalized</span>
+            <div style="margin-top:.3rem;font-size:.875rem;">
+              <span class="muted">Expression: </span><code x-text="s.expression"></code>
+            </div>
+          </div>
+        </template>
+        <p x-show="wizard.draft.scores.length===0" class="error-val">Add at least one score.</p>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <div>
+        <button x-show="wizard.step > 1" class="btn btn-outline" @click="wizard.step--">← Back</button>
+      </div>
+      <div>
+        <button x-show="wizard.step < 3" class="btn btn-primary" @click="wizardNext()">Next →</button>
+        <button x-show="wizard.step===3" class="btn btn-primary"
+          :disabled="wizard.saving || wizard.draft.scores.length===0"
+          @click="saveAnalysis()">
+          <span x-text="wizard.saving ? 'Saving…' : 'Save →'"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- SCORE DETAIL MODAL                                                     -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" x-show="realize.detailTicker !== null" @click.self="realize.detailTicker = null">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <strong x-text="(realize.detailTicker || '') + ' — Score breakdown'"></strong>
+      <button class="btn btn-ghost btn-sm" @click="realize.detailTicker = null">✕</button>
+    </div>
+    <div class="modal-body">
+      <template x-if="getDetailResult()">
+        <div>
+          <template x-for="[scoreName, detail] in Object.entries(getDetailResult().score_details)" :key="scoreName">
+            <div class="detail-section">
+              <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.5rem;">
+                <strong x-text="scoreName"></strong>
+                <span x-show="detail.normalize" class="badge badge-green">normalized</span>
+              </div>
+              <div style="font-size:.875rem;margin-bottom:.5rem;">
+                <span class="muted">Expression: </span><code x-text="detail.expression"></code>
+              </div>
+              <table style="font-size:.82rem;margin-bottom:.5rem;">
+                <thead><tr><th>Variable</th><th>Raw value</th></tr></thead>
+                <tbody>
+                  <template x-for="[k, v] in Object.entries(detail.variables)" :key="k">
+                    <tr>
+                      <td><code x-text="k"></code></td>
+                      <td :class="v === null ? 'null-val' : ''" x-text="v === null ? '—' : fmtFloat(v)"></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+              <p style="font-size:.875rem;"><strong>Raw result:</strong>
+                <span :class="detail.raw_result === null ? 'null-val' : ''"
+                      x-text="detail.raw_result === null ? '—' : fmtFloat(detail.raw_result)"></span>
+              </p>
+              <template x-if="detail.normalize">
+                <p style="font-size:.875rem;margin-top:.25rem;"><strong>Normalized result:</strong>
+                  <span :class="detail.result === null ? 'null-val' : ''"
+                        x-text="detail.result === null ? '—' : fmtFloat(detail.result)"></span>
+                </p>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- COLLECTIONS TAB                                                        -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section x-show="page==='collections'">
+  <div class="page-header">
+    <h2>Collections</h2>
+  </div>
+
+  <!-- New collection form -->
+  <div class="flex-row" style="max-width:480px;margin-bottom:1.5rem;">
+    <input class="form-input" type="text" x-model="newCollName"
+      placeholder="New collection name" @keydown.enter="createCollection()" style="flex:1;" />
+    <button class="btn btn-primary" @click="createCollection()">Create</button>
+  </div>
+
+  <div x-show="collections.length===0" class="muted" style="padding:2rem 0;text-align:center;">
+    No collections yet.
+  </div>
+
+  <template x-for="c in collections" :key="c.name">
+    <div class="card">
+      <div class="card-header">
+        <strong x-text="c.name"></strong>
+        <span class="muted" style="font-size:.8rem;" x-text="c.tickers.length + ' ticker(s)'"></span>
+        <span style="flex:1"></span>
+        <button class="btn btn-ghost btn-sm" @click="toggleCollection(c.name)">
+          <span x-text="openCollections[c.name] ? '▴ Collapse' : '▸ Expand'"></span>
+        </button>
+        <button class="btn btn-danger btn-sm" @click="deleteCollection(c.name)">Delete</button>
+      </div>
+
+      <div x-show="openCollections[c.name]" class="card-body">
+        <!-- Ticker pills -->
+        <div class="coll-tickers" x-show="c.tickers.length>0">
+          <template x-for="t in c.tickers" :key="t.symbol">
+            <span class="ticker-pill">
+              <strong x-text="t.symbol"></strong>
+              <span x-show="t.name" class="muted" style="font-size:.75rem;" x-text="t.name"></span>
+              <button class="ticker-pill-remove" @click="removeTickerFromCollection(c.name, t.symbol)" title="Remove">×</button>
+            </span>
+          </template>
+        </div>
+        <p x-show="c.tickers.length===0" class="muted" style="font-size:.85rem;margin-bottom:.75rem;">
+          No tickers in this collection.
+        </p>
+
+        <!-- Add ticker: mode toggle -->
+        <div class="add-mode-toggle">
+          <button class="btn btn-sm" :class="(addMode[c.name]||'bulk')==='bulk' ? 'btn-primary' : 'btn-outline'"
+            @click="setAddMode(c.name, 'bulk')">Bulk</button>
+          <button class="btn btn-sm" :class="(addMode[c.name]||'bulk')==='search' ? 'btn-primary' : 'btn-outline'"
+            @click="setAddMode(c.name, 'search')">Search</button>
+        </div>
+
+        <!-- Bulk mode -->
+        <div x-show="(addMode[c.name]||'bulk')==='bulk'" class="flex-row" style="max-width:480px;">
+          <input class="form-input" type="text" placeholder="AAPL, MSFT, GOOG"
+            x-model="bulkTickerInput[c.name]"
+            @keydown.enter="bulkAddTickersToCollection(c.name)" style="flex:1;" />
+          <button class="btn btn-outline" @click="bulkAddTickersToCollection(c.name)">Add</button>
+        </div>
+
+        <!-- Search mode -->
+        <div x-show="(addMode[c.name]||'bulk')==='search'" class="lookup-rel" style="max-width:480px;">
+          <div class="flex-row">
+            <input class="form-input" type="text" placeholder="Search ticker…"
+              x-model="addTickerQuery[c.name]"
+              @keydown.enter="lookupForCollection(c.name)"
+              @input.debounce.400ms="lookupForCollection(c.name)" style="flex:1;" />
+            <button class="btn btn-outline" @click="lookupForCollection(c.name)">Search</button>
+          </div>
+          <div class="lookup-list" x-show="collLookupResults[c.name] && collLookupResults[c.name].length>0">
+            <template x-for="r in (collLookupResults[c.name] || [])" :key="r.symbol">
+              <div class="lookup-item" @click="addTickerToCollection(c.name, r)">
+                <strong x-text="r.symbol"></strong> —
+                <span x-text="r.shortName"></span>
+                <small class="muted" x-text="' ' + r.exchange"></small>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- TICKERS TAB                                                            -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section x-show="page==='tickers'">
+  <div class="page-header">
+    <h2>Tickers</h2>
+  </div>
+
+  <!-- Lookup -->
+  <div class="lookup-rel" style="max-width:480px;margin-bottom:1.5rem;">
+    <div class="flex-row">
+      <input class="form-input" type="text" x-model="tickerQuery"
+        placeholder="Search tickers (e.g. Apple)" @keydown.enter="lookupTickers()" style="flex:1;" />
+      <button class="btn btn-primary" :disabled="tickerSearching" @click="lookupTickers()">
+        <span x-text="tickerSearching ? '…' : 'Search'"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Lookup results -->
+  <div x-show="tickerLookup.length>0" style="margin-bottom:1.5rem;">
+    <h3 style="font-size:.9rem;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.625rem;">
+      Search results
+    </h3>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Symbol</th><th>Name</th><th>Exchange</th><th>Type</th><th>Add to collection</th></tr>
+        </thead>
+        <tbody>
+          <template x-for="r in tickerLookup" :key="r.symbol">
+            <tr>
+              <td><strong x-text="r.symbol"></strong></td>
+              <td x-text="r.shortName"></td>
+              <td x-text="r.exchange"></td>
+              <td x-text="r.quoteType"></td>
+              <td>
+                <select x-show="collections.length>0" class="form-input"
+                  style="width:auto;padding:.28rem .5rem;font-size:.82rem;"
+                  @change="addTickerFromLookup(r, $event.target.value); $event.target.value='';">
+                  <option value="">— pick —</option>
+                  <template x-for="c in collections" :key="c.name">
+                    <option :value="c.name" x-text="c.name"></option>
+                  </template>
+                </select>
+                <span x-show="collections.length===0" class="muted" style="font-size:.8rem;">No collections</span>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Saved tickers -->
+  <h3 style="font-size:.9rem;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.625rem;">
+    Saved tickers
+  </h3>
+  <div x-show="tickers.length===0" class="muted" style="padding:1rem 0;">No saved tickers.</div>
+  <div class="card" x-show="tickers.length>0">
+    <table>
+      <thead><tr><th>Symbol</th><th>Name</th></tr></thead>
+      <tbody>
+        <template x-for="t in tickers" :key="t.symbol">
+          <tr>
+            <td><strong x-text="t.symbol"></strong></td>
+            <td x-text="t.name || '—'"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<script>
+function app() {
+  return {
+    page: 'analyses',
+    toast: null,
+    toastTimer: null,
+
+    // Analyses
+    analyses: [],
+    openDetails: {},
+    openRealize: null,
+    realize: {
+      tickerInput: '',
+      selectedCollections: [],
+      forceRefresh: false,
+      running: false,
+      results: null,
+      error: null,
+      detailTicker: null,
+      sortCol: null,
+      sortDir: 'asc',
+    },
+
+    // Wizard
+    wizard: {
+      open: false,
+      step: 1,
+      draft: { name: '', scores: [] },
+      scoreForm: { name: '', expression: '', normalize: false },
+      metricsAvail: [],
+      metricsFilter: '',
+      metricsLoading: false,
+      nameError: null,
+      scoreError: null,
+      saving: false,
+    },
+
+    // Collections
+    collections: [],
+    newCollName: '',
+    addTickerQuery: {},
+    collLookupResults: {},
+    bulkTickerInput: {},
+    openCollections: {},
+    addMode: {},
+
+    // Tickers
+    tickers: [],
+    tickerQuery: '',
+    tickerLookup: [],
+    tickerSearching: false,
+
+    // ── init ────────────────────────────────────────────────────────────
+    async init() {
+      this.$watch('wizard.step', v => {
+        if (v === 2) this.ensureMetrics();
+      });
+      await Promise.all([this.loadAnalyses(), this.loadCollections(), this.loadTickers()]);
+    },
+
+    // ── navigation ──────────────────────────────────────────────────────
+    setPage(p) { this.page = p; },
+
+    // ── toast ───────────────────────────────────────────────────────────
+    showToast(msg, ok = true) {
+      if (this.toastTimer) clearTimeout(this.toastTimer);
+      this.toast = { msg, ok };
+      if (ok) {
+        this.toastTimer = setTimeout(() => { this.toast = null; }, 4000);
+      }
+      // Error toasts persist until dismissed
+    },
+
+    dismissToast() {
+      if (this.toastTimer) clearTimeout(this.toastTimer);
+      this.toast = null;
+    },
+
+    // ── helpers ─────────────────────────────────────────────────────────
+    fmtFloat(v) {
+      if (v === null || v === undefined) return '—';
+      return Number(v).toFixed(2);
+    },
+
+    realizeColumns() {
+      if (!this.realize.results || this.realize.results.length === 0) return [];
+      const cols = new Set();
+      for (const r of this.realize.results) {
+        for (const k of Object.keys(r.scores || {})) cols.add(k);
+      }
+      return [...cols];
+    },
+
+    isNormalizedCol(col) {
+      if (!this.openRealize) return false;
+      const a = this.analyses.find(a => a.id === this.openRealize);
+      if (!a) return false;
+      const s = (a.scores || []).find(s => s.name === col);
+      return s ? s.normalize : false;
+    },
+
+    scoreClass(col, val) {
+      if (val === null || val === undefined) return '';
+      if (!this.isNormalizedCol(col)) return '';
+      return val >= 0 ? 'cell-positive' : 'cell-negative';
+    },
+
+    sortByCol(col) {
+      if (this.realize.sortCol === col) {
+        this.realize.sortDir = this.realize.sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.realize.sortCol = col;
+        this.realize.sortDir = 'asc';
+      }
+    },
+
+    sortedResults() {
+      if (!this.realize.results) return [];
+      if (!this.realize.sortCol) return this.realize.results;
+      const col = this.realize.sortCol;
+      const dir = this.realize.sortDir === 'asc' ? 1 : -1;
+      return [...this.realize.results].sort((a, b) => {
+        const av = a.scores?.[col] ?? null;
+        const bv = b.scores?.[col] ?? null;
+        if (av === null && bv === null) return 0;
+        if (av === null) return 1;
+        if (bv === null) return -1;
+        return (av - bv) * dir;
+      });
+    },
+
+    getDetailResult() {
+      if (!this.realize.detailTicker || !this.realize.results) return null;
+      return this.realize.results.find(r => r.ticker_symbol === this.realize.detailTicker) || null;
+    },
+
+    async apiFetch(url, opts = {}) {
+      const resp = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
+      if (!resp.ok) {
+        let detail = resp.statusText;
+        try { const j = await resp.json(); detail = j.detail || detail; } catch {}
+        throw new Error(detail);
+      }
+      if (resp.status === 204) return null;
+      return resp.json();
+    },
+
+    // ── analyses ────────────────────────────────────────────────────────
+    async loadAnalyses() {
+      try { this.analyses = await this.apiFetch('/analyses'); } catch (e) { this.showToast(e.message, false); }
+    },
+
+    toggleDetails(id) {
+      this.openDetails = { ...this.openDetails, [id]: !this.openDetails[id] };
+    },
+
+    toggleRealize(id) {
+      if (this.openRealize === id) {
+        this.openRealize = null;
+      } else {
+        this.openRealize = id;
+        this.realize = { tickerInput: '', selectedCollections: [], forceRefresh: false, running: false, results: null, error: null, detailTicker: null, sortCol: null, sortDir: 'asc' };
+      }
+    },
+
+    async deleteAnalysis(id, name) {
+      if (!window.confirm(`Delete analysis "${name}"?`)) return;
+      try {
+        await this.apiFetch(`/analyses/${id}`, { method: 'DELETE' });
+        this.showToast('Analysis deleted');
+        await this.loadAnalyses();
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async runRealize(id) {
+      this.realize.running = true;
+      this.realize.results = null;
+      this.realize.error = null;
+      try {
+        const tickers = this.realize.tickerInput
+          .split(',').map(s => s.trim()).filter(Boolean);
+        const body = {
+          tickers,
+          collections: this.realize.selectedCollections,
+          force_refresh: this.realize.forceRefresh,
+        };
+        this.realize.results = await this.apiFetch(`/analyses/${id}/realize`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        });
+      } catch (e) {
+        this.realize.error = e.message;
+      } finally {
+        this.realize.running = false;
+      }
+    },
+
+    // ── wizard ──────────────────────────────────────────────────────────
+    openWizard() {
+      this.wizard.open = true;
+      this.wizard.step = 1;
+      this.wizard.draft = { name: '', scores: [] };
+      this.wizard.scoreForm = { name: '', expression: '', normalize: false };
+      // Preserve metricsAvail for session caching
+      this.wizard.metricsFilter = '';
+      this.wizard.metricsLoading = false;
+      this.wizard.nameError = null;
+      this.wizard.scoreError = null;
+      this.wizard.saving = false;
+    },
+
+    closeWizard() { this.wizard.open = false; },
+
+    wizardNext() {
+      if (this.wizard.step === 1) {
+        if (!this.wizard.draft.name.trim()) {
+          this.wizard.nameError = 'Name is required.';
+          return;
+        }
+        this.wizard.nameError = null;
+        this.wizard.step = 2;
+      } else if (this.wizard.step === 2) {
+        this.wizard.step = 3;
+      }
+    },
+
+    addScoreToDraft() {
+      this.wizard.scoreError = null;
+      const sf = this.wizard.scoreForm;
+      if (!sf.name.trim()) { this.wizard.scoreError = 'Score name is required.'; return; }
+      if (!sf.expression.trim()) { this.wizard.scoreError = 'Expression is required.'; return; }
+      this.wizard.draft.scores.push({
+        name: sf.name.trim(),
+        expression: sf.expression.trim(),
+        normalize: sf.normalize,
+      });
+      this.wizard.scoreForm = { name: '', expression: '', normalize: false };
+    },
+
+    async ensureMetrics() {
+      if (this.wizard.metricsAvail.length > 0 || this.wizard.metricsLoading) return;
+      this.wizard.metricsLoading = true;
+      try {
+        this.wizard.metricsAvail = await this.apiFetch('/metrics?ticker=AAPL');
+      } catch (e) {
+        this.showToast('Could not load metrics: ' + e.message, false);
+      } finally {
+        this.wizard.metricsLoading = false;
+      }
+    },
+
+    filteredMetrics() {
+      const f = (this.wizard.metricsFilter || '').toLowerCase();
+      if (!f) return this.wizard.metricsAvail;
+      return this.wizard.metricsAvail.filter(m => m.toLowerCase().includes(f));
+    },
+
+    insertAtCursor(text) {
+      const el = this.$refs.scoreExpr;
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const expr = this.wizard.scoreForm.expression;
+      const before = expr.slice(0, start);
+      const after = expr.slice(end);
+      const sep = before && !before.endsWith(' ') ? ' ' : '';
+      const newVal = before + sep + text + after;
+      this.wizard.scoreForm.expression = newVal;
+      this.$nextTick(() => {
+        const pos = (before + sep + text).length;
+        el.setSelectionRange(pos, pos);
+        el.focus();
+      });
+    },
+
+    insertOp(op) {
+      const el = this.$refs.scoreExpr;
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const expr = this.wizard.scoreForm.expression;
+      const before = expr.slice(0, start);
+      const after = expr.slice(end);
+      const sep = before && !before.endsWith(' ') ? ' ' : '';
+      const newVal = before + sep + op + after;
+      this.wizard.scoreForm.expression = newVal;
+      this.$nextTick(() => {
+        // For function ops like log(), sqrt(), abs() — position cursor inside parens
+        const parenIdx = op.indexOf('()');
+        const pos = parenIdx >= 0
+          ? (before + sep).length + parenIdx + 1
+          : (before + sep + op).length;
+        el.setSelectionRange(pos, pos);
+        el.focus();
+      });
+    },
+
+    async saveAnalysis() {
+      if (this.wizard.draft.scores.length === 0) return;
+      this.wizard.saving = true;
+      try {
+        await this.apiFetch('/analyses', {
+          method: 'POST',
+          body: JSON.stringify({ name: this.wizard.draft.name, scores: this.wizard.draft.scores }),
+        });
+        this.closeWizard();
+        await this.loadAnalyses();
+        this.showToast('Analysis saved');
+      } catch (e) {
+        this.showToast(e.message, false);
+      } finally {
+        this.wizard.saving = false;
+      }
+    },
+
+    // ── collections ─────────────────────────────────────────────────────
+    async loadCollections() {
+      try { this.collections = await this.apiFetch('/collections'); } catch (e) { this.showToast(e.message, false); }
+    },
+
+    toggleCollection(name) {
+      this.openCollections = { ...this.openCollections, [name]: !this.openCollections[name] };
+    },
+
+    setAddMode(collName, mode) {
+      this.addMode = { ...this.addMode, [collName]: mode };
+    },
+
+    async createCollection() {
+      const name = this.newCollName.trim();
+      if (!name) return;
+      try {
+        await this.apiFetch('/collections', { method: 'POST', body: JSON.stringify({ name }) });
+        this.newCollName = '';
+        await this.loadCollections();
+        // Auto-expand new collection
+        this.openCollections = { ...this.openCollections, [name]: true };
+        this.showToast(`Collection "${name}" created`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async deleteCollection(name) {
+      if (!window.confirm(`Delete collection "${name}" and all its tickers?`)) return;
+      try {
+        await this.apiFetch(`/collections/${encodeURIComponent(name)}`, { method: 'DELETE' });
+        await this.loadCollections();
+        this.showToast(`Collection "${name}" deleted`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async lookupForCollection(collName) {
+      const q = (this.addTickerQuery[collName] || '').trim();
+      if (!q) { this.collLookupResults = { ...this.collLookupResults, [collName]: [] }; return; }
+      try {
+        const res = await this.apiFetch(`/tickers/lookup?q=${encodeURIComponent(q)}&count=6`);
+        this.collLookupResults = { ...this.collLookupResults, [collName]: res };
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async bulkAddTickersToCollection(collName) {
+      const raw = (this.bulkTickerInput[collName] || '').trim();
+      if (!raw) return;
+      const symbols = raw.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+      if (!symbols.length) return;
+      try {
+        await this.apiFetch(`/collections/${encodeURIComponent(collName)}/tickers/bulk`, {
+          method: 'POST',
+          body: JSON.stringify({ symbols }),
+        });
+        this.bulkTickerInput = { ...this.bulkTickerInput, [collName]: '' };
+        await this.loadCollections();
+        await this.loadTickers();
+        this.showToast(`${symbols.length} ticker(s) added to ${collName}`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async addTickerToCollection(collName, r) {
+      try {
+        await this.apiFetch(`/collections/${encodeURIComponent(collName)}/tickers`, {
+          method: 'POST',
+          body: JSON.stringify({ symbol: r.symbol, name: r.shortName }),
+        });
+        this.collLookupResults = { ...this.collLookupResults, [collName]: [] };
+        this.addTickerQuery = { ...this.addTickerQuery, [collName]: '' };
+        await this.loadCollections();
+        await this.loadTickers();
+        this.showToast(`${r.symbol} added to ${collName}`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async removeTickerFromCollection(collName, symbol) {
+      try {
+        await this.apiFetch(`/collections/${encodeURIComponent(collName)}/tickers/${encodeURIComponent(symbol)}`, { method: 'DELETE' });
+        await this.loadCollections();
+        this.showToast(`${symbol} removed from ${collName}`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    // ── tickers ─────────────────────────────────────────────────────────
+    async loadTickers() {
+      try { this.tickers = await this.apiFetch('/tickers'); } catch (e) { this.showToast(e.message, false); }
+    },
+
+    async lookupTickers() {
+      const q = this.tickerQuery.trim();
+      if (!q) return;
+      this.tickerSearching = true;
+      try {
+        this.tickerLookup = await this.apiFetch(`/tickers/lookup?q=${encodeURIComponent(q)}&count=8`);
+      } catch (e) { this.showToast(e.message, false); } finally { this.tickerSearching = false; }
+    },
+
+    async addTickerFromLookup(r, collName) {
+      if (!collName) return;
+      try {
+        await this.apiFetch(`/collections/${encodeURIComponent(collName)}/tickers`, {
+          method: 'POST',
+          body: JSON.stringify({ symbol: r.symbol, name: r.shortName }),
+        });
+        await this.loadCollections();
+        await this.loadTickers();
+        this.showToast(`${r.symbol} added to ${collName}`);
+      } catch (e) { this.showToast(e.message, false); }
+    },
+  };
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary - Statement Lens</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232733;
+    --border: #2d3148;
+    --text: #e4e6f0;
+    --text-dim: #8b8fa3;
+    --accent: #6c8aff;
+    --green: #27ae60;
+    --red: #c0392b;
+    --yellow: #f39c12;
+    --orange: #e67e22;
+    --gray: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-header {
+    padding: 0 1.2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.75rem;
+  }
+  .sidebar-header h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .sidebar-header .back-link {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+  .sidebar-header .back-link:hover { color: var(--accent); }
+
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li a {
+    display: block;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    transition: background 0.15s, color 0.15s;
+  }
+  .sidebar-nav li a:hover {
+    background: var(--surface2);
+    color: var(--text);
+    text-decoration: none;
+  }
+  .sidebar-nav li a.active {
+    color: var(--accent);
+    background: rgba(108, 138, 255, 0.08);
+    border-right: 2px solid var(--accent);
+  }
+  .sidebar-count {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: 0.3rem;
+  }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 1.5rem 2rem;
+    max-width: 900px;
+  }
+
+  /* Search */
+  .search-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding: 0 0 1rem;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--accent); }
+  .search-bar input::placeholder { color: var(--text-dim); }
+
+  .result-count {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 0.4rem;
+  }
+
+  /* Category header */
+  .category-header {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 2rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .category-header:first-of-type { margin-top: 0.5rem; }
+
+  /* Entry card */
+  .entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 0.75rem;
+    scroll-margin-top: 4rem;
+  }
+  .entry:target {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .entry-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .entry-short {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+    font-style: italic;
+  }
+
+  .entry-section {
+    margin-bottom: 0.6rem;
+  }
+  .entry-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 0.2rem;
+  }
+  .entry-section p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--yellow);
+    margin-bottom: 0.6rem;
+    display: inline-block;
+  }
+  .formula-box a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Example box */
+  .example-box {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* Related terms */
+  .related-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+  }
+  .related-tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    transition: background 0.15s;
+  }
+  .related-tag:hover {
+    background: var(--border);
+    text-decoration: none;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    .sidebar-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      padding: 0 0.8rem;
+    }
+    .sidebar-nav li a {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+    }
+    .sidebar-nav li a.active { border-right: none; }
+    .main { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h1>Glossary</h1>
+      <a href="/" class="back-link">&larr; Back to Statement Lens</a>
+    </div>
+    <ul class="sidebar-nav" id="categoryNav"></ul>
+  </nav>
+
+  <main class="main">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search terms (e.g. Revenue, P/E, Cash Flow...)" autofocus>
+      <div class="result-count" id="resultCount"></div>
+    </div>
+    <div id="glossaryContent"></div>
+  </main>
+</div>
+
+<script>
+let glossaryData = {};
+let categories = [];
+let allTerms = [];
+
+async function loadGlossary() {
+  try {
+    const resp = await fetch('/api/glossary');
+    glossaryData = await resp.json();
+
+    // Build sorted term list and category index
+    const catMap = {};
+    for (const [term, entry] of Object.entries(glossaryData)) {
+      const cat = entry.category || 'Other';
+      if (!catMap[cat]) catMap[cat] = [];
+      catMap[cat].push({ term, ...entry });
+    }
+
+    // Category display order
+    const catOrder = [
+      'Income Statement', 'Balance Sheet', 'Cash Flow',
+      'Valuation', 'Profitability', 'Financial Health',
+      'Growth', 'Dividends', 'Price & Trading', 'Company Profile', 'Other'
+    ];
+
+    categories = catOrder.filter(c => catMap[c]);
+    allTerms = [];
+    for (const cat of categories) {
+      for (const entry of catMap[cat]) {
+        allTerms.push({ ...entry, category: cat });
+      }
+    }
+
+    buildCategoryNav(catMap);
+    renderEntries(allTerms);
+
+    // Scroll to anchor if present
+    if (location.hash) {
+      setTimeout(() => {
+        const el = document.getElementById(location.hash.slice(1));
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  } catch (err) {
+    document.getElementById('glossaryContent').innerHTML =
+      '<div class="no-results">Failed to load glossary data.</div>';
+  }
+}
+
+function buildCategoryNav(catMap) {
+  const nav = document.getElementById('categoryNav');
+  nav.innerHTML = '';
+  for (const cat of categories) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#cat-' + slugify(cat);
+    a.textContent = cat;
+    const count = document.createElement('span');
+    count.className = 'sidebar-count';
+    count.textContent = '(' + catMap[cat].length + ')';
+    a.appendChild(count);
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = document.getElementById('cat-' + slugify(cat));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.appendChild(a);
+    nav.appendChild(li);
+  }
+}
+
+function renderEntries(terms) {
+  const container = document.getElementById('glossaryContent');
+  const countEl = document.getElementById('resultCount');
+
+  if (!terms.length) {
+    container.innerHTML = '<div class="no-results">No matching terms found.</div>';
+    countEl.textContent = '0 results';
+    return;
+  }
+
+  countEl.textContent = terms.length + ' term' + (terms.length !== 1 ? 's' : '');
+
+  // Group by category
+  const groups = {};
+  for (const t of terms) {
+    if (!groups[t.category]) groups[t.category] = [];
+    groups[t.category].push(t);
+  }
+
+  let html = '';
+  const catOrder = categories.filter(c => groups[c]);
+
+  for (const cat of catOrder) {
+    html += '<h2 class="category-header" id="cat-' + slugify(cat) + '">' + esc(cat) + '</h2>';
+    for (const entry of groups[cat]) {
+      html += renderEntry(entry);
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+function renderEntry(entry) {
+  const id = slugify(entry.term);
+  let html = '<div class="entry" id="' + id + '">';
+  html += '<div class="entry-name">' + esc(entry.term) + '</div>';
+  html += '<div class="entry-short">' + esc(entry.short) + '</div>';
+
+  if (entry.explanation) {
+    html += '<div class="entry-section">';
+    html += '<div class="entry-section-label">Explanation</div>';
+    html += '<p>' + esc(entry.explanation) + '</p>';
+    html += '</div>';
+  }
+
+  if (entry.formula) {
+    html += '<div class="entry-section">';
+    html += '<div class="entry-section-label">Formula</div>';
+    html += '<div class="formula-box">' + renderFormulaWithLinks(entry.formula, entry.components) + '</div>';
+    html += '</div>';
+  }
+
+  if (entry.example) {
+    html += '<div class="entry-section">';
+    html += '<div class="entry-section-label">Example</div>';
+    html += '<div class="example-box">' + esc(entry.example) + '</div>';
+    html += '</div>';
+  }
+
+  if (entry.related && entry.related.length) {
+    html += '<div class="entry-section">';
+    html += '<div class="entry-section-label">Related Terms</div>';
+    html += '<div class="related-list">';
+    for (const rel of entry.related) {
+      html += '<a href="#' + slugify(rel) + '" class="related-tag">' + esc(rel) + '</a>';
+    }
+    html += '</div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function renderFormulaWithLinks(formula, components) {
+  if (!components || !components.length) return esc(formula);
+
+  let result = esc(formula);
+  for (const comp of components) {
+    const escaped = esc(comp);
+    const slug = slugify(comp);
+    result = result.replace(escaped, '<a href="#' + slug + '">' + escaped + '</a>');
+  }
+  return result;
+}
+
+function slugify(str) {
+  return str.replace(/[^a-zA-Z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function esc(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Client-side search
+const searchInput = document.getElementById('searchInput');
+let searchTimer = null;
+
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(doSearch, 200);
+});
+
+function doSearch() {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    renderEntries(allTerms);
+    return;
+  }
+
+  const matched = allTerms.filter(t => {
+    return t.term.toLowerCase().includes(q) ||
+           t.short.toLowerCase().includes(q) ||
+           (t.explanation && t.explanation.toLowerCase().includes(q)) ||
+           t.category.toLowerCase().includes(q);
+  });
+
+  renderEntries(matched);
+}
+
+// Highlight active category on scroll
+function updateActiveCategory() {
+  const headers = document.querySelectorAll('.category-header');
+  const links = document.querySelectorAll('.sidebar-nav a');
+  let current = '';
+
+  for (const h of headers) {
+    const rect = h.getBoundingClientRect();
+    if (rect.top <= 120) current = h.id;
+  }
+
+  links.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+
+document.querySelector('.main').addEventListener('scroll', updateActiveCategory);
+window.addEventListener('scroll', updateActiveCategory);
+
+loadGlossary();
+</script>
+</body>
+</html>

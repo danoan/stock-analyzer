@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Collections{% endblock %}
+
+{% block content %}
+<div class="flex-between mb-3">
+  <h2>Ticker Collections</h2>
+  <a href="/jobs" class="btn btn-outline btn-sm">← Saved Jobs</a>
+</div>
+
+<!-- New Collection form -->
+<div class="card mb-4">
+  <div class="card-header" style="font-weight:600">New Collection</div>
+  <div class="card-body">
+    <form method="post" action="/collections" class="form-row">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input name="name" class="form-input" placeholder="e.g. CAC 40" required>
+      </div>
+      <div class="form-group" style="flex:2">
+        <label class="form-label">Tickers (comma-separated)</label>
+        <input name="tickers" class="form-input" placeholder="AAPL, GOOG, MSFT">
+      </div>
+      <div class="form-group" style="flex:0 0 auto">
+        <label class="form-label" style="visibility:hidden">submit</label>
+        <button type="submit" class="btn btn-primary btn-block">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if collections %}
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th># Tickers</th>
+        <th>Tickers</th>
+        <th>Created</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in collections %}
+      <tr>
+        <td><strong>{{ c.name }}</strong></td>
+        <td>{{ c.tickers | length }}</td>
+        <td>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.35rem">
+            {% for t in c.tickers | sort %}
+            <span class="badge badge-gray">{{ t }}</span>
+            {% endfor %}
+          </div>
+          <!-- Add tickers inline form -->
+          <form method="post" action="/collections/{{ c.id }}/tickers"
+                style="display:flex;gap:.5rem;margin-top:.35rem">
+            <input name="tickers" class="form-input"
+                   placeholder="Add tickers: AAPL, GOOG" style="min-width:180px">
+            <button type="submit" class="btn btn-sm btn-outline" style="flex-shrink:0">+ Add</button>
+          </form>
+        </td>
+        <td class="muted text-sm">
+          {{ c.created_at.strftime('%Y-%m-%d') if c.created_at and c.created_at.strftime is defined else c.created_at }}
+        </td>
+        <td class="text-end">
+          <form method="post" action="/collections/{{ c.id }}/delete" style="display:inline"
+                onsubmit="return confirm('Delete collection {{ c.name | e }}?')">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+  No collections yet. Create one above to group tickers and assign them to jobs.
+</div>
+{% endif %}
+{% endblock %}

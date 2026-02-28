@@ -1,0 +1,339 @@
+Name	Code	Last	Cur	M. cap.	Industry
+LVMH Moet Hennessy Louis Vuitton SE	MC XPAR	558.00	EUR	324,473	 Apparel
+Hermes International SCA	RMS XPAR	2,106.00	EUR	260,918	 Textile & Leather
+L'Oreal SA	OR XPAR	397.10	EUR	251,688	 Personal Products
+Airbus SE	AIR XPAR	183.14	EUR	176,498	 Aerospace & Defense
+Schneider Electric SE	SU XPAR	259.75	EUR	173,516	 Building Electrical Products
+Safran SA	SAF XPAR	346.00	EUR	170,019	 Aerospace & Defense
+TotalEnergies SE	TTE XPAR	66.14	EUR	165,187	 Integrated Oil & Gas
+EssilorLuxottica SA	EL XPAR	236.00	EUR	130,016	 Medical Equipment
+BNP Paribas SA	BNP XPAR	95.85	EUR	124,667	 Global Systemically Important Banks (G-SIBs)
+L'Air Liquide Societe Anonyme pour l'Etude et l'Exploitation des Procedes Georges Claude SA	AI XPAR	174.76	EUR	119,489	 Specialty Chemicals
+Sanofi SA	SAN XPAR	80.76	EUR	113,601	 Major Diversified Pharmaceuticals
+Christian Dior SE	CDI XPAR	529.00	EUR	111,826	 Investment Holding Companies
+AXA SA	CS XPAR	39.82	EUR	98,051	 Multiline Insurance & Brokers
+Vinci SA	DG XPAR	140.90	EUR	91,860	 Engineering & Construction
+Engie SA	ENGI XPAR	26.52	EUR	75,302	 Multiline Utilities
+Credit Agricole SA	ACA XPAR	18.72	EUR	66,208	 Global Systemically Important Banks (G-SIBs)
+Societe Generale SA	GLE XPAR	74.42	EUR	65,258	 Global Systemically Important Banks (G-SIBs)
+Thales SA	HO XPAR	253.50	EUR	63,419	 Aerospace & Defense
+Danone SA	BN XPAR	72.04	EUR	56,028	 Branded & Packaged Foods
+Orange SA	ORA XPAR	17.73	EUR	55,609	 Integrated Telecommunications Services
+Compagnie de Saint Gobain SA	SGO XPAR	88.50	EUR	52,724	 Construction Materials
+Legrand SA	LR XPAR	154.15	EUR	47,574	 Building Electrical Products
+Kering SA	KER XPAR	285.95	EUR	40,164	 Apparel
+Veolia Environnement SA	VIE XPAR	34.56	EUR	29,675	 Water
+Dassault Systemes SE	DSY XPAR	17.29	EUR	27,040	 Design & Engineering Software
+Pernod Ricard SA	RI XPAR	83.80	EUR	25,754	 Distillers & Wineries
+Bouygues SA	EN XPAR	51.36	EUR	23,134	 Engineering & Construction
+Publicis Groupe SA	PUB XPAR	71.92	EUR	21,906	 Marketing & Advertising
+Sartorius Stedim Biotech SA	DIM XPAR	176.70	EUR	20,822	 Medical Equipment
+Capgemini SE	CAP XPAR	101.90	EUR	20,753	 Technology Consulting & Systems Integration
+Amundi SA	AMUN XPAR	79.10	EUR	19,134	 Wealth & Asset Management
+Unibail-Rodamco-Westfield SE	URW XPAR	104.70	EUR	17,633	 Retail REITs
+Bollore SE	BOL XPAR	4.86	EUR	16,065	 Courier, Postal, Air Freight & Land-based Logistics
+Eiffage SA	FGR XPAR	142.80	EUR	16,055	 Building & Real Estate Construction
+Ipsen SA	IPN XPAR	157.00	EUR	15,370	 Specialty & Generic Pharmaceuticals
+Euronext NV	ENX XPAR	123.80	EUR	15,102	 Financial & Commodity Market Operators & Service Providers
+Bureau Veritas SA	BVI XPAR	27.42	EUR	14,457	 Business Support Services
+Eurofins Scientific SE	ERF XPAR	66.32	EUR	14,159	 Business Support Services
+Aeroports de Paris SA	ADP XPAR	120.80	EUR	13,798	 Airport Operators & Services
+Biomerieux SA	BIM XPAR	94.70	EUR	13,252	 Medical Equipment
+Rexel SA	RXL XPAR	36.67	EUR	12,801	 Building & Industrial Electricals
+Getlink SE	GET XPAR	17.77	EUR	11,449	 Rail Track & Highway
+Klepierre SA	LI XPAR	34.44	EUR	11,438	 Retail REITs
+Renault SA	RNO XPAR	32.01	EUR	11,049	 Traditional & Diversified Automakers
+Abivax SA	ABVX XPAR	110.20	EUR	10,473	 Clinical-Stage & Pre-Revenue Biotechnology
+Spie SA	SPIE XPAR	51.25	EUR	10,377	 Electrical & Mechanical Engineering Services
+Itissalat Al Maghrib Ste SA	IAM XPAR	9.90	EUR	10,252	 Integrated Telecommunications Services
+Sodexo SA	SW XPAR	47.38	EUR	8,216	 Restaurants
+Gaztransport et Technigaz SA	GTT XPAR	189.30	EUR	8,180	 Oil & Gas Engineering
+Covivio SA	COV XPAR	60.80	EUR	7,749	 Office REITs
+Elis SA	ELIS XPAR	27.46	EUR	7,479	 Business Support Services
+Neoen SA	NEOEN XPAR	39.00	EUR	7,447	 Independent Power Producers
+Gecina SA	GFC XPAR	76.80	EUR	6,624	 Office REITs
+LA FRANÇAISE DES JEUX SOCIÉTÉ ANONYME	FDJU XPAR	33.00	EUR	6,606	 Casino & Gaming
+Compagnie De l'odet SE	ODET XPAR	1,306.00	EUR	6,516	 Courier, Postal, Air Freight & Land-based Logistics
+Nexans SA	NEX XPAR	122.90	EUR	6,393	 Power Transmission & Distribution
+Scor SE	SCR XPAR	29.60	EUR	6,271	 Reinsurance
+ALD SA	AYV XPAR	5.64	EUR	5,423	 Corporate Financial Services
+Arkema SA	AKE XPAR	60.10	EUR	5,366	 Specialty Chemicals
+Vallourec SA	VK XPAR	19.36	EUR	5,332	 Iron & Steel
+Edenred SE	EDEN XPAR	18.20	EUR	5,000	 Fintech
+Wendel SE	MF XPAR	87.75	EUR	4,506	 Investment Holding Companies
+Rubis SCA	RUI XPAR	35.52	EUR	4,371	 Oil and Gas Transportation Services
+Covivio Hotels SCA	COVH XPAR	23.00	EUR	4,281	 Hospitality REITs
+JCDecaux SE	DEC XPAR	16.94	EUR	4,276	 Marketing & Advertising
+Vicat SA	VCT XPAR	74.60	EUR	3,941	 Construction Materials
+Societe Anonyme des Bains de Mer et du Cercle des Etrangers a Monaco SA	BAIN XPAR	133.00	EUR	3,856	 Casino & Gaming
+Eurazeo SE	RF XPAR	48.20	EUR	3,852	 Investment Management & Fund Operators
+Trigano SA	TRI XPAR	168.00	EUR	3,846	 Traditional & Diversified Automakers
+Societe Fonciere Lyonnaise SA	FLY XPAR	73.80	EUR	3,735	 Office REITs
+Virbac SA	VIRP XPAR	365.00	EUR	3,638	 Specialty & Generic Pharmaceuticals
+Teleperformance SE	TEP XPAR	50.22	EUR	3,514	 Business Process Outsourcing (BPO)
+Tikehau Capital SCA	TKO XPAR	17.32	EUR	3,453	 Wealth & Asset Management
+LISI	FII XPAR	62.20	EUR	3,403	 Aerospace & Defense
+Altarea SCA	ALTA XPAR	121.60	EUR	3,377	 Residential Construction & Development
+SEB SA	SK XPAR	51.00	EUR	3,366	 Appliances, Tools & Housewares
+Faurecia SE	FRVIA XPAR	12.73	EUR	3,202	 Automotive Parts & Components
+Lagardere SA	MMB XPAR	18.44	EUR	3,175	 Other Retailers
+SES SA	SESG XPAR	6.50	EUR	3,161	 Integrated Telecommunications Services
+ID Logistics SAS	IDL XPAR	401.50	EUR	3,112	 Courier, Postal, Air Freight & Land-based Logistics
+Unibel SA	UNBL XPAR	1,180.00	EUR	2,957	 Branded & Packaged Foods
+SES-imagotag	VU XPAR	144.20	EUR	2,916	 Integrated Hardware & Software
+Carmila SA	CARM XPAR	17.90	EUR	2,891	 Retail REITs
+Remy Cointreau SA	RCO XPAR	43.50	EUR	2,829	 Distillers & Wineries
+Verallia SA	VRLA XPAR	20.44	EUR	2,804	 Containers & Packaging
+Sopra Steria Group SA	SOP XPAR	118.80	EUR	2,766	 Technology Consulting & Systems Integration
+Societe BIC SA	BB XPAR	57.70	EUR	2,765	 Household Products
+Coface SA	COFA XPAR	15.76	EUR	2,744	 Property & Casualty Insurance
+Soc Indust Financiere Artois SA	ARTO XPAR	8,500.00	EUR	2,666	 Investment Holding Companies
+Vivendi SE	VIV XPAR	2.22	EUR	2,584	 Broadcasting
+Interparfums SA	ITP XPAR	24.88	EUR	2,506	 Personal Products
+Exail Technologies	EXA XPAR	121.20	EUR	2,455	 Aerospace & Defense
+Alten SA	ATE XPAR	57.20	EUR	2,451	 Technology Consulting & Systems Integration
+Imerys SA	NK XPAR	24.24	EUR	2,350	 Specialty Chemicals
+Antin Infrastructure Partners SAS	ANTIN XPAR	10.08	EUR	2,126	 Investment Management & Fund Operators
+Argan SA	ARG XPAR	69.40	EUR	2,112	 Industrial & Logistics REITs
+Peugeot Invest SA	PEUG XPAR	70.70	EUR	2,105	 Investment Holding Companies
+Believe SA	BLV XPAR	17.20	EUR	2,041	 Digital Content & Streaming (Non-Gaming)
+Robertet SA	RBT XPAR	864.00	EUR	2,029	 Specialty Chemicals
+Robertet SA	CBE XPAR	784.60	EUR	2,029	 Specialty Chemicals
+Exclusive Networks SAS	EXN XPAR	18.96	EUR	2,024	 Technology Consulting & Systems Integration
+Etablissements Maurel et Prom SA	MAU XPAR	8.80	EUR	2,017	 Oil and Gas Exploration & Production
+Caisse Reg Credit Agric Mut Nord France	CNDF XPAR	28.01	EUR	1,945	 Major Regional & National Banks
+Icade SA	ICAD XPAR	21.08	EUR	1,913	 Building & Real Estate Construction
+Electricité de Strasbourg	ELEC XPAR	218.00	EUR	1,892	 Multiline Utilities
+Valeo SE	FR XPAR	12.65	EUR	1,872	 Automotive Parts & Components
+Stef SA	STF XPAR	126.40	EUR	1,870	 Ground Freight & Logistics
+Television Francaise 1 SA	TFI XPAR	7.12	EUR	1,787	 Broadcasting
+Derichebourg SA	DBG XPAR	9.46	EUR	1,763	 Environmental Services & Equipment
+Metropole Television SA	MMT XPAR	11.46	EUR	1,718	 Broadcasting
+Compagnie Plastic Omnium SE	OPM XPAR	9.88	EUR	1,676	 Automotive Parts & Components
+Compagnie des Alpes SA	CDA XPAR	28.05	EUR	1,654	 Theme Parks & Resorts
+Eramet SA	ERA XPAR	52.20	EUR	1,649	 Diversified Miners
+Korian SE	CLARI XPAR	3.91	EUR	1,625	 Healthcare Facilities & Services
+Ovh Groupe SA	OVH XPAR	8.70	EUR	1,602	 Infrastructure & Data Platforms
+Ipsos SA	IPS XPAR	30.38	EUR	1,580	 Business Information & Analytics
+Soitec SA	SOI XPAR	39.23	EUR	1,553	 Semiconductors
+Ramsay Generale de Sante SA	GDS XPAR	10.80	EUR	1,430	 Healthcare Facilities & Services
+Wavestone SA	WAVE XPAR	46.20	EUR	1,371	 IT & Business Consulting
+Eutelsat Communications SA	ETL XPAR	2.24	EUR	1,332	 Integrated Telecommunications Services
+Tarkett SA	TKTT XPAR	17.00	EUR	1,312	 Construction Materials
+Viel & Cie	VIL XPAR	17.45	EUR	1,308	 Investment Banking & Brokerage Services
+Mercialys SA	MERY XPAR	12.00	EUR	1,306	 Retail REITs
+Planisware SA	PLNW XPAR	15.08	EUR	1,274	
+Altamir	LTA XPAR	28.60	EUR	1,259	 Collective Investments
+Nanobiotix SA	NANO XPAR	21.30	EUR	1,237	 Biotechnology
+Fnac Darty SA	FNAC XPAR	35.35	EUR	1,225	 Computer & Electronics Retailers
+Vétoquinol	VETO XPAR	85.20	EUR	1,205	 Specialty & Generic Pharmaceuticals
+GL Events SA	GLO XPAR	33.50	EUR	1,180	 Business Support Services
+Altareit SCA	AREIT XPAR	570.00	EUR	1,174	 Diversified & Other REITs
+Frey SA	FREY XPAR	30.80	EUR	1,157	 Retail REITs
+Caiss Regio Credi Agric Mutuel Paris Idf	CAF XPAR	119.20	EUR	1,115	 Major Regional & National Banks
+Voltalia	VLTSA XPAR	6.94	EUR	1,067	 Independent Power Producers
+Manitou BF SA	MTU XPAR	23.55	EUR	1,066	 Construction & Mining Machinery
+Neurones SA	NRO XPAR	33.90	EUR	1,008	 IT Services & Consulting
+Pierre et Vacances SA	VAC XPAR	1.82	EUR	1,001	 Hotels & Cruise Lines
+TotalEnergies EP Gabon	EC XPAR	187.50	EUR	999	 Oil and Gas Exploration & Production
+Bassac	BASS XPAR	53.80	EUR	983	 Residential Construction & Development
+Atos SE	ATO XPAR	36.40	EUR	975	 IT Outsourcing & Infrastructure Management
+Medincell SA	MEDCL XPAR	24.68	EUR	943	 Clinical-Stage & Pre-Revenue Biotechnology
+Savencia SA	SAVE XPAR	59.60	EUR	929	 Branded & Packaged Foods
+Axway Software SA	74SW XPAR	27.00	EUR	926	 Development, DevOps & IT Operations
+Inventiva SA	IVA XPAR	5.65	EUR	920	 Clinical-Stage & Pre-Revenue Biotechnology
+Burelle SA	BUR XPAR	417.00	EUR	869	 Automotive Parts & Components
+Lectra SA	LSS XPAR	19.06	EUR	860	 Design & Engineering Software
+Thermador Groupe SA	THEP XPAR	77.90	EUR	842	 Construction Supplies & Fixtures
+Elior Group SA	ELIOR XPAR	2.75	EUR	833	 Business Support Services
+Mersen SA	MRN XPAR	27.45	EUR	800	 Industrial Electrical Components
+Synergie	SDG XPAR	28.90	EUR	786	 Employment Services
+Groupe Crit SA	CEN XPAR	60.40	EUR	772	 Employment Services
+Bénéteau	BEN XPAR	7.72	EUR	757	 Recreational Products
+Kaufman & Broad SA	KOF XPAR	32.10	EUR	751	 Residential Construction & Development
+Assystem SA	ASY XPAR	42.80	EUR	738	 Architectural & Engineering Design
+Dbv Technologies SA	DBV XPAR	3.58	EUR	727	 Pharmaceuticals
+X Fab Silicon Foundries EV	XFAB XPAR	4.65	EUR	717	 Semiconductors
+Aubay SA	AUB XPAR	44.50	EUR	702	 Technology Consulting & Systems Integration
+Oeneo SA	SBT XPAR	9.18	EUR	700	 Containers & Packaging
+Waga Energy SA	WAGA XPAR	22.00	EUR	694	 Renewable Fuels
+Ubisoft Entertainment SA	UBI XPAR	4.14	EUR	650	 Interactive Entertainment (Gaming)
+NRJ Group SA	NRG XPAR	7.10	EUR	642	 Broadcasting
+Societe de la Tour Eiffel SA	EIFF XPAR	4.11	EUR	638	 Office REITs
+Laurent Perrier SA	LPE XPAR	93.80	EUR	631	 Distillers & Wineries
+Esso Societe Anonyme Francaise SA	NAE XPAR	41.68	EUR	622	 Oil and Gas Refining
+IDI SCA	IDIP XPAR	72.60	EUR	611	 Investment Holding Companies
+Soc D Explosifs Produits Chimiques SA	EXPL XPAR	241.00	EUR	610	 Specialty Chemicals
+Equasens SA	EQS XPAR	34.25	EUR	609	 HealthTech & Life Sciences Software
+Séché Environnement	SCHP XPAR	63.30	EUR	597	 Environmental Services & Equipment
+Lumibird SA	LBIRD XPAR	22.50	EUR	591	 Electronic Equipment
+Nexity SA	NXI XPAR	9.01	EUR	591	 Residential Construction & Development
+Figeac Aero SARL	FGA XPAR	10.80	EUR	573	 Aerospace & Defense
+Boiron SA	BOI XPAR	27.20	EUR	570	 Specialty & Generic Pharmaceuticals
+SMCP SA	SMCP XPAR	6.26	EUR	569	 Apparel
+Jacquet Metals SA	JCQ XPAR	23.20	EUR	557	 Diversified Industrial Goods Wholesalers
+Malteries Franco Belges SA	MALT XPAR	975.00	EUR	555	 Agricultural Commodity Processing
+Quadient SA	QDT XPAR	12.98	EUR	527	 Office Equipment
+Samse SA	SAMS XPAR	125.50	EUR	502	 Home Improvement Products & Services Retailers
+ZCCM Investments Holdings PLC	MLZAM XMLI	2.56	EUR	500	 Diversified Miners
+Fiducial Real Estate SA	ORIA XPAR	168.00	EUR	483	 Office REITs
+Caisse Regionale de Credit Agricole Mutuel Brie Picardie	CRBP2 XPAR	28.76	EUR	477	 Major Regional & National Banks
+Worldline SA	WLN XPAR	1.42	EUR	467	 Fintech
+Genfit SA	GNFT XPAR	8.71	EUR	462	 Biotechnology
+Tonnellerie Francois Freres SA	TFF XPAR	18.25	EUR	462	 Containers & Packaging
+Valneva SE	VLA XPAR	4.85	EUR	451	 Biotechnology
+Immobilière Dassault	IMDA XPAR	50.40	EUR	447	 Office REITs
+Patrimoine et Commerce SCA	PAT XPAR	24.30	EUR	446	 Retail REITs
+Fonciere Inea SA	INEA XPAR	34.50	EUR	438	 Office REITs
+Olympique Lyonnais Groupe SA	EFG XPAR	2.12	EUR	434	 Sports Teams & Clubs
+Fermiere du Casino Municipal Cannes SA	FCMC XPAR	2,220.00	EUR	416	 Casino & Gaming
+Aramis Group SAS	ARAMI XPAR	4.13	EUR	407	 Car retailers
+Chargeurs SA	CRI XPAR	9.94	EUR	405	 Textile & Leather
+Selectirente SA	SELER XPAR	82.00	EUR	402	 Retail REITs
+ABC Arbitrage SA	ABCA XPAR	5.72	EUR	395	 Investment Banking & Capital Markets
+Gérard Perrier Industrie	PERR XPAR	87.00	EUR	387	 Electrical & Mechanical Engineering Services
+Bonduelle SA	BON XPAR	10.16	EUR	381	 Branded & Packaged Foods
+Gaumont SA	GAM XPAR	102.00	EUR	374	 Entertainment Production
+Marie Brizard Wine and Spirits SA	MBWS XPAR	2.67	EUR	359	 Distillers & Wineries
+Amplitude Surgical SA	AMPLI XPAR	6.25	EUR	353	 Medical Equipment
+Sword Group SE	SWP XPAR	31.20	EUR	351	 Technology Consulting & Systems Integration
+LNA Sante SA	LNA XPAR	26.30	EUR	322	 Healthcare Facilities & Services
+Roche Bobois SA	RBO XPAR	27.50	EUR	320	 Home Furnishings Retailers
+Bourse Direct	BSD XPAR	5.18	EUR	315	 Financial & Commodity Market Operators & Service Providers
+Exel Industries SA	EXE XPAR	37.70	EUR	302	 Agricultural & Forestry Machinery
+Infotel SA	INF XPAR	35.00	EUR	294	 Technology Consulting & Systems Integration
+Groupe Pizzorno Environnement SA	GPE XPAR	61.40	EUR	281	 Environmental Services & Equipment
+Caisse regionale de Credit Agricole Mutuel d'Ille-et-Vilaine	CIV XPAR	107.38	EUR	277	 Banks
+Parrot SA	PARRO XPAR	6.82	EUR	259	 Aerospace & Defense
+Latecoere SA	LAT XPAR	0.02	EUR	257	 Aerospace & Defense
+Teract SA	TRACT XPAR	3.13	EUR	256	 Home Improvement Products & Services Retailers
+Euroapi SAS	EAPI XPAR	2.14	EUR	243	 Specialty & Generic Pharmaceuticals
+Akwel SA	AKW XPAR	7.32	EUR	235	 Automotive Parts & Components
+Linedata Services SA	LIN XPAR	40.10	EUR	232	 FinTech & Financial Services Software
+Bastide le Confort Medical SA	BLC XPAR	26.10	EUR	211	 Healthcare Facilities & Services
+La Francaise de l Energie SA	FDE XPAR	32.70	EUR	205	 Oil and Gas Exploration & Production
+Arverne Group SAS	ARVEN XPAR	5.25	EUR	204	 Corporate Financial Services
+Groupe Partouche SA	PARP XPAR	18.00	EUR	204	 Casino & Gaming
+Atland SA	ATLD XPAR	39.60	EUR	203	 Diversified & Other REITs
+Credit Agricole du Morbihan SC	CMO XPAR	110.98	EUR	197	 Banks
+Guerbet SA	GBT XPAR	13.24	EUR	196	 Specialty & Generic Pharmaceuticals
+Caisse Reg Cred Agric Mut Atlantique Ven	CRAV XPAR	135.38	EUR	190	 Banks
+Caisse Regionale de Credit Agricole Mutuel de Normandie Seine SC	CCN XPAR	145.50	EUR	179	 Banks
+Groupe SFPI SA	SFPI XPAR	1.63	EUR	179	 Construction Supplies & Fixtures
+Caisse Regionale De Credit Agricole Mutuel Toulouse 31	CAT31 XPAR	110.00	EUR	175	 Banks
+Verneuil Finance	AAA XPAR	3.15	EUR	173	 Business Support Services
+Bleecker SA	BLEE XPAR	128.00	EUR	169	 Diversified & Other REITs
+Cegedim	CGM XPAR	10.40	EUR	166	 Software
+Caisse Regionale de Credit Agricole Mutuel du Languedoc	CRLA XPAR	78.83	EUR	165	 Banks
+Cbo Territoria SA	CBOT XPAR	4.04	EUR	165	 Diversified & Other REITs
+Deezer SA	DEEZR XPAR	1.15	EUR	164	 Online Services
+Adocia SA	ADOC XPAR	6.86	EUR	160	 Biotechnology
+Innate Pharma SA	IPH XPAR	1.41	EUR	155	 Biotechnology
+Soc Centrale Bois Scieries Manche SA	CBSM XPAR	9.50	EUR	151	 Diversified & Other REITs
+Caisse Reg Cred Agric Mut Tourain Poitou	CRTO XPAR	124.68	EUR	148	 Corporate Financial Services
+Lhyfe SA	LHYFE XPAR	2.55	EUR	144	 Electric Utilities
+Caisse Regionale De Credit Agricole Mutuel Sud Rhone Alpes	CRSU XPAR	200.50	EUR	141	 Banks
+Abionyx Pharma SA	ABNX XPAR	3.37	EUR	139	 Biotechnology
+Nicox	ALCOX ALXP	3.34	EUR	132	 Pharmaceuticals
+Maat Pharma SA	MAAT XPAR	7.16	EUR	131	 Pharmaceuticals
+Affluent Medical SAS	CVX XPAR	2.81	EUR	130	 Medical Equipment
+Transgene SA	TNG XPAR	0.77	EUR	128	 Biotechnology
+Vranken Pommery Monopole SA	POMRY XPAR	11.35	EUR	118	 Distillers & Wineries
+Balyo SA	BALYO XPAR	0.60	EUR	117	 Electronic Equipment
+Cr Credit Agricole Mutuel Loire Hte Loir	CRLO XPAR	100.16	EUR	117	 Banks
+Solutions 30 SE	S30 XPAR	0.89	EUR	114	 IT Services & Consulting
+Gea Grenobloise Electronique Automatisme SA	GEA XPAR	88.50	EUR	114	 Computer Hardware
+OSE Immunotherapeutics SA	OSE XPAR	4.24	EUR	113	 Biotechnology
+Crosswood SA	CROS XPAR	9.05	EUR	113	 Diversified & Other REITs
+Adl Partner SA	DKUPL XPAR	25.10	EUR	112	 Marketing & Advertising
+Fonciere Volta SA	SPEL XPAR	9.05	EUR	112	 Diversified & Other REITs
+Forestiere Equatoriale SA	FORE XPAR	675.00	EUR	112	 Rail Track & Highway
+SergeFerrari Group	SEFER XPAR	8.32	EUR	110	 Construction Supplies & Fixt
+Casino Guichard Perrachon SA	CO XPAR	0.24	EUR	110	 Food Retail & Distribution
+Credit Agricole Alpes Provence	CRAP XPAR	136.56	EUR	108	 Banks
+Catana Group SA	CATG XPAR	3.32	EUR	106	 Recreational Products
+Les Docks des Petroles d Ambes SA	DPAM XPAR	945.00	EUR	104	 Oil and Gas Transportation Services
+AB Science SA	AB XPAR	1.33	EUR	104	 Pharmaceuticals
+St Dupont SA	DPT XPAR	0.09	EUR	101	 Business Support Supplies
+Televerbier SA	TVRB XPAR	61.00	EUR	100	 Leisure
+SRP Groupe SA	SRP XPAR	0.70	EUR	98	 Discount Stores
+Cie Industrielle Financiere Entreprise SA	INFE XPAR	71.00	EUR	98	 Engineering & Construction
+Ateme SA	ATEME XPAR	6.60	EUR	89	 Networking & Communications
+Abeo SA	ABEO XPAR	8.80	EUR	85	 Recreational Products
+Cafom SA	CAFO XPAR	7.92	EUR	83	 Home Improvement Products & Services Retailers
+High Co SA	HCO XPAR	3.68	EUR	82	 Marketing & Advertising
+Hoffmann Green Cement Technologies SAS	ALHGR ALXP	4.70	EUR	81	 Construction Materials
+Coheris SA	COH XPAR	10.40	EUR	80	 Software
+Saint Jean Groupe	SABE XPAR	20.60	EUR	79	 Food Processing
+Haulotte Group SA	PIG XPAR	2.15	EUR	78	 Heavy Machinery & Vehicles
+CeGeREAL	VTR XPAR	3.82	EUR	76	 Office REITs
+Guillemot Corporation SA	GUI XPAR	4.10	EUR	70	 Computer Hardware
+Solocal Group SA	LOCAL XPAR	4.45	EUR	70	 Online Services
+Ekinops SA	EKI XPAR	2.13	EUR	69	 Networking & Communications
+Fiducial Office Solutions SA	SACI XPAR	26.80	EUR	68	 Office Equipment
+Mcphy Energy SA	ALMCP ALXP	2.06	EUR	68	 Industrial Machinery & Equipment
+Lacroix Group SA	LACR XPAR	14.40	EUR	68	 Electrical Equipment
+Vantiva SA	VANTI XPAR	0.11	EUR	66	 Entertainment Production
+Aurea SA	AURE XPAR	5.98	EUR	65	 Environmental Services & Equipment
+Plastiques du Val de Loire SA	PVL XPAR	2.55	EUR	65	 Commodity Chemicals
+Maisons du Monde SA	MDM XPAR	1.40	EUR	64	 Home Furnishings Retailers
+Aerkomm Inc	AKOM XPAR	2.80	EUR	64	 Integrated Telecommunications Services
+Societe de Tayninh SA	TBSO XPAR	5.70	EUR	61	 Diversified & Other REITs
+Bogart SA	JBOG XPAR	3.36	EUR	58	 Personal Products
+Hydrogene De France SA	HDF XPAR	3.42	EUR	58	 Engineering & Construction
+Paris Realty Fund SA	PAR XPAR	28.60	EUR	52	 Diversified & Other REITs
+Acanthe Developpement SE	ACAN XPAR	0.24	EUR	46	 Office REITs
+Artea SA	ARTE XPAR	8.00	EUR	45	 Diversified & Other REITs
+Touax Sgtr Cite Sgt Cmte Taf Slm Touage Investissements Reunies SCA	TOUP XPAR	5.48	EUR	44	 Marine Port
+Memscap SA	MEMS XPAR	4.62	EUR	43	 Semiconductors
+Cnova NV	CNV XPAR	0.09	EUR	37	 Online Services
+Forsee Power SA	FORSE XPAR	0.26	EUR	36	 Electrical Equipment
+Prodways Group SA	PWG XPAR	0.79	EUR	35	 Electronic Equipment
+Graines Voltz SA	GRVO XPAR	19.80	EUR	34	 Fishing & Farming
+Nacon SAS	NACON XPAR	0.26	EUR	33	 Software
+Claranova SE	CLA XPAR	1.07	EUR	33	 Software
+Mauna Kea Technologies SAS	ALMKT ALXP	1.04	EUR	32	 Medical Equipment
+Sogeclair SA	ALSOG ALXP	22.90	EUR	28	 Aerospace & Defense
+Fermentalg SA	ALGAE ALXP	0.50	EUR	25	 Specialty Chemicals
+Media 6 SA	EDI XPAR	9.10	EUR	23	 Marketing & Advertising
+Artmarket.com SA	PRC XPAR	2.92	EUR	22	 Consumer Publishing
+Aelis Farma SA	AELIS XPAR	1.43	EUR	22	 Pharmaceuticals
+Xilam Animation SA	XIL XPAR	3.00	EUR	20	 Entertainment Production
+Bigben Interactive SA	BIG XPAR	0.46	EUR	20	 Toys
+Passat SA	PSAT XPAR	4.36	EUR	20	 Appliances, Tools & Housewares
+Verimatrix SA	VMX XPAR	0.19	EUR	19	 Software
+Financiere Marjos SA	FINM XPAR	0.81	EUR	19	 Apparel
+Gensight Biologics SA	SIGHT XPAR	0.08	EUR	18	 Biotechnology
+Poxel SA	POXEL XPAR	0.27	EUR	17	 Biotechnology
+Les Hotels de Paris SA	HDP XPAR	1.95	EUR	17	 Hotels & Cruise Lines
+Soditech SA	SEC XPAR	6.10	EUR	16	 Aerospace & Defense
+Electricite et Eaux De Madagascar SA	EEM XPAR	2.36	EUR	15	 Diversified & Other REITs
+Compagnie Financiere de l'Afrique de l'Ouest Africain SA	FOAF XPAR	20.20	EUR	15	
+F I P P SA	FIPP XPAR	0.11	EUR	15	 Investment Management & Fund Operators
+Orege SA	OREGE XPAR	0.26	EUR	15	 Environmental Services & Equipment
+Eurasia Fonciere Investissements SA	EFI XPAR	0.19	EUR	14	 Diversified & Other REITs
+AdUx	ALDUX ALXP	1.56	EUR	12	 Marketing & Advertising
+Societe Francaise de Casinos SA	SFCA XPAR	1.85	EUR	11	 Casino & Gaming
+Alliance Developpement Capital SIIC SE	ALDV XPAR	0.06	EUR	10	 Residential REITs
+Courtois SA	COUR XPAR	116.00	EUR	9	 Diversified & Other REITs
+Avenir Telecom SA	AVT XPAR	0.11	EUR	9	 Computer & Electronics Retailers
+Finatis SA	FNTS XPAR	1.37	EUR	9	 Food Retail & Distribution
+Augros Cosmetic Packaging SA	AUGR XPAR	5.95	EUR	8	 Containers & Packaging
+Hubwoo	PROAC XPAR	0.05	EUR	7	 Online Services
+Union Technologies Informatique Group	FPG XPAR	0.12	EUR	7	 IT Services & Consulting
+Groupe JAJ SA	GJAJ XPAR	1.22	EUR	5	 Apparel
+NR 21 SA	NR21 XPAR	49.80	EUR	4	 Shell Companies
+Acteos SA	EOS XPAR	0.91	EUR	3	 IT Services & Consulting
+La Chausseria	CHSR XPAR	6.50	EUR	3	 Apparel
+Intexa SA	ITXT XPAR	2.50	EUR	2	 Textile & Leather
+Barbara Bui SA	BUI XPAR	3.80	EUR	2	 Apparel
+Rallye SA	RAL XPAR	0.04	EUR	2	 Food Retail & Distribution
+Fayenceri Sarreguemin Digoin Vitry Franc SA	FSDV XPAR	16.90	EUR	2	 Appliances, Tools & Housewares
+Carpinienne de Participations SA	CARP XPAR	5.80	EUR	2	 Corporate Financial Services
+Selcodis SA	SLCO XPAR	0.29	EUR	2	 Investment Holding Companies
+Fonciere Euris SA	EURS XPAR	0.16	EUR	1	 Food Retail & Distribution
+Transition Evergreen SA	EGR XPAR	3.14	EUR	1	 Computer Hardware
+CFI - Compagnie Foncière Internationale	CFI XPAR	1.57	EUR	1	 Diversified & Other REITs
+Geneuro SA	GNRO XPAR	0.03	EUR	1	 Biotechnology
+Myhotelmatch SA	MHM XPAR	0.24	EUR	0	 Diversified & Other REITs
+Foncière 7 Investissement	LEBL XPAR	0.30	EUR	0	 Diversified & Other REITs

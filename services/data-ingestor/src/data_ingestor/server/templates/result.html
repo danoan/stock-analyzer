@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Step 3: Result{% endblock %}
+
+{% block steps %}
+<div class="step-bar mb-4">
+  <div class="step-node step-done"><div class="step-circle">1</div><span class="step-label"><a href="/" style="color:inherit">Source</a></span></div>
+  <div class="step-line done"></div>
+  <div class="step-node step-done"><div class="step-circle">2</div><span class="step-label">Preview &amp; Map</span></div>
+  <div class="step-line done"></div>
+  <div class="step-node step-active"><div class="step-circle">3</div><span class="step-label">Result</span></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:560px;margin:0 auto">
+  {% if error %}
+  <div class="alert alert-error">
+    <h5>Ingestion Failed</h5>
+    <p class="mb-0"><code>{{ error }}</code></p>
+  </div>
+  {% else %}
+  <div class="alert alert-success">
+    <h5>Ingestion Complete</h5>
+    <p>
+      Inserted <strong>{{ row_count }}</strong> row{{ 's' if row_count != 1 else '' }}
+      into table <code>{{ table_name }}</code>.
+    </p>
+    <p class="mb-0">
+      Ticker: <strong>{{ ticker }}</strong> &nbsp;|&nbsp;
+      Method: <strong>{{ method }}</strong>
+    </p>
+  </div>
+  {% endif %}
+  <a href="/" class="btn btn-primary">← Start over</a>
+  {% if not error %}
+  <a href="/jobs" class="btn btn-outline ms-2">View Jobs</a>
+  {% endif %}
+
+  {% if not error %}
+  <div class="card mt-3">
+    <div class="card-header">Save as Job</div>
+    <div class="card-body">
+      <p class="muted text-sm mb-3">
+        Save this configuration as a reusable job to re-run for multiple tickers
+        without going through the wizard again.
+      </p>
+      <form method="post" action="/jobs">
+        <div class="form-group">
+          <label for="job_name" class="form-label">Job name <span style="color:var(--er)">*</span></label>
+          <input type="text" class="form-input" id="job_name" name="job_name" required
+                 placeholder="e.g. income_stmt_weekly">
+        </div>
+        <div class="form-group">
+          <label for="tickers" class="form-label">Tickers (comma-separated)</label>
+          <input type="text" class="form-input" id="tickers" name="tickers"
+                 value="{{ ticker }}" placeholder="AAPL, MSFT, GOOG">
+        </div>
+        <input type="hidden" name="config_json" value="{{ config_json | e }}">
+        <button type="submit" class="btn btn-primary">Save Job</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

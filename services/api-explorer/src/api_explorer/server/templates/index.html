@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yfinance Explorer</title>
+<style>
+  :root {
+    --cp:  #2563eb; --cp-h: #1d4ed8;
+    --cb:  #ffffff;
+    --bg:  #f8f9fa;
+    --tx:  #111827; --tm: #6b7280;
+    --br:  #e5e7eb;
+    --ok:  #16a34a;
+    --er:  #dc2626;
+    --r:   8px;
+    --sh:  0 1px 3px rgba(0,0,0,.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; background: var(--bg); color: var(--tx); }
+  input, textarea, select, button { font: inherit; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--br); font-size: .875rem; }
+  th { font-weight: 600; font-size: .8rem; color: var(--tm); text-transform: uppercase; letter-spacing: .04em; }
+  tr:hover td { background: #f3f4f6; }
+
+  .topnav { background: var(--cb); border-bottom: 1px solid var(--br); height: 52px; position: sticky; top: 0; z-index: 100; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-size: 1.3rem; font-weight: 700; color: var(--tx); }
+  .ticker-form { display: flex; gap: .5rem; align-items: center; }
+  .ticker-wrapper { position: relative; }
+  .ticker-form input#ticker {
+    padding: .4rem .8rem; font-size: .875rem; border: 1px solid var(--br); border-radius: 6px;
+    width: 200px; text-transform: uppercase;
+  }
+  .ticker-form input#ticker:focus { outline: none; border-color: var(--cp); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+  .ticker-form button {
+    padding: .4rem 1rem; font-size: .9rem; border: 1px solid var(--cp); border-radius: 6px;
+    background: var(--cp); color: #fff; cursor: pointer; font-weight: 600;
+  }
+  .ticker-form button:hover { background: var(--cp-h); }
+  .ticker-label { font-size: .85rem; color: var(--tm); }
+  .lookup-toggle { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--tm); cursor: pointer; user-select: none; }
+  .lookup-toggle input { cursor: pointer; accent-color: var(--cp); }
+
+  .suggestions {
+    position: absolute; top: 100%; left: 0; z-index: 200; margin-top: 3px;
+    min-width: 480px; width: max-content;
+    background: #fff; border-radius: 6px; border: 1px solid var(--br); box-shadow: 0 8px 20px rgba(0,0,0,.1);
+    max-height: 360px; overflow-y: auto; display: none;
+  }
+  .suggestions.visible { display: block; }
+  .suggestion-item {
+    padding: .55rem .8rem; cursor: pointer;
+    display: flex; flex-wrap: wrap; column-gap: .6rem; row-gap: .1rem;
+    font-size: .875rem; color: var(--tx); border-bottom: 1px solid var(--br);
+  }
+  .suggestion-item:nth-child(odd) { background: var(--bg); }
+  .suggestion-item:nth-child(even) { background: #fff; }
+  .suggestion-item:hover, .suggestion-item.selected { background: #f3f4f6; }
+  .suggestion-item .sym { font-weight: 700; min-width: 80px; color: var(--tx); }
+  .suggestion-item .name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .suggestion-item .meta-row {
+    width: 100%; display: flex; gap: .8rem; font-size: .72rem; color: var(--tm); padding-left: 80px;
+  }
+  .suggestion-item .meta-row span { white-space: nowrap; }
+  .suggestion-spinner { padding: .6rem; text-align: center; color: var(--tm); font-size: .8rem; }
+  .suggestion-empty { padding: .6rem; text-align: center; color: var(--tm); font-size: .8rem; font-style: italic; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 1rem 2rem; }
+
+  .tabs { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 1px solid var(--br); }
+  .tab {
+    padding: .6rem 1.5rem; cursor: pointer; font-weight: 500; font-size: .875rem;
+    border: none; border-bottom: 2px solid transparent;
+    background: transparent; color: var(--tm); position: relative; bottom: -1px;
+  }
+  .tab.active { background: transparent; color: var(--cp); border-bottom-color: var(--cp); }
+  .tab:hover:not(.active) { color: var(--tx); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .methods { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+  .method-btn {
+    padding: .35rem .8rem; font-size: .8rem; border: 1px solid var(--br); border-radius: 6px;
+    background: var(--cb); color: var(--tx); cursor: pointer; transition: all .15s;
+  }
+  .method-btn:hover { background: #f3f4f6; color: var(--tx); border-color: #9ca3af; }
+  .method-btn.active { background: var(--cp); color: #fff; border-color: var(--cp); }
+  .method-btn.loading { opacity: .5; pointer-events: none; }
+
+  #result { background: var(--cb); border-radius: var(--r); padding: 1rem; min-height: 100px; box-shadow: var(--sh); border: 1px solid var(--br); overflow-x: auto; }
+  #result .error { color: var(--er); font-weight: 600; }
+  #result .empty { color: var(--tm); font-style: italic; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--br); border-top-color: var(--cp); border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .result-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; min-height: 1.4rem; }
+  .result-header { font-size: .9rem; color: var(--tm); }
+  .view-toggle { display: none; gap: .3rem; }
+  .view-toggle.visible { display: flex; }
+  .view-btn {
+    padding: .2rem .7rem; font-size: .75rem; border: 1px solid var(--br); border-radius: 6px;
+    background: var(--cb); cursor: pointer; font-weight: 600; color: var(--tx);
+  }
+  .view-btn.active { background: var(--cp); color: #fff; border-color: var(--cp); }
+  .cache-bar { font-size: .8rem; padding: .4rem .8rem; border-radius: 6px; margin-bottom: .5rem; display: none; align-items: center; gap: .6rem; }
+  .cache-bar.visible { display: flex; }
+  .cache-bar.cached { background: #fef9c3; color: #854d0e; border: 1px solid #fde68a; }
+  .cache-bar.live { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .cache-bar .refresh-btn {
+    padding: .2rem .6rem; font-size: .75rem; border: 1px solid currentColor; border-radius: 6px;
+    background: transparent; color: inherit; cursor: pointer; font-weight: 600;
+  }
+  .cache-bar .refresh-btn:hover { background: rgba(0,0,0,.08); }
+  #result pre.json-view {
+    background: #1e1e2e; color: #cdd6f4; padding: 1rem; border-radius: 4px;
+    font-size: .78rem; overflow-x: auto; white-space: pre;
+    font-family: "Fira Code", "Cascadia Code", Consolas, monospace; margin: 0;
+  }
+  #result pre.json-view .jk { color: #89b4fa; }
+  #result pre.json-view .js { color: #a6e3a1; }
+  #result pre.json-view .jn { color: #fab387; }
+  #result pre.json-view .jb { color: #f38ba8; }
+  #result pre.json-view .jnull { color: #6c7086; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="brand">yfinance Explorer</span>
+  <div class="ticker-form">
+    <span class="ticker-label">Ticker:</span>
+    <div class="ticker-wrapper">
+      <input type="text" id="ticker" placeholder="AAPL" value="AAPL" autocomplete="off">
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+    <button onclick="setTicker()">Set</button>
+    <label class="lookup-toggle">
+      <input type="checkbox" id="lookup-enabled" checked>
+      Lookup
+    </label>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="tabs">
+    {% for cat in categories %}
+    <div class="tab {% if loop.first %}active{% endif %}" data-tab="{{ cat }}">{{ cat }}</div>
+    {% endfor %}
+  </div>
+
+  {% for cat, methods in categories.items() %}
+  <div class="tab-content {% if loop.first %}active{% endif %}" id="tab-{{ cat }}">
+    <div class="methods">
+      {% for m in methods %}
+      <button class="method-btn" data-method="{{ m }}">{{ m }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="result-meta">
+    <div id="result-header" class="result-header"></div>
+    <div id="view-toggle" class="view-toggle">
+      <button class="view-btn active" id="btn-table" onclick="switchView('table')">Table</button>
+      <button class="view-btn" id="btn-json" onclick="switchView('json')">JSON</button>
+    </div>
+  </div>
+  <div id="cache-bar" class="cache-bar"></div>
+  <div id="result"><p class="empty">Select a ticker and click a method above to view data.</p></div>
+</div>
+
+<script>
+let currentTicker = document.getElementById('ticker').value.trim().toUpperCase() || 'AAPL';
+let activeBtn = null;
+let currentMethod = null;
+
+// --- View toggle state ---
+let viewMode = 'table';
+let cachedHtml = null;
+let cachedJsonPayload = null;
+
+// --- Lookup / autocomplete state ---
+let lookupTimer = null;
+let lookupAbort = null;
+let selectedIdx = -1;
+let suggestionItems = [];
+
+const tickerInput = document.getElementById('ticker');
+const suggestionsDiv = document.getElementById('suggestions');
+const lookupCheckbox = document.getElementById('lookup-enabled');
+
+function setTicker(symbol) {
+  const input = tickerInput;
+  if (symbol) input.value = symbol;
+  currentTicker = input.value.trim().toUpperCase();
+  input.value = currentTicker;
+  hideSuggestions();
+  if (activeBtn) activeBtn.classList.remove('active');
+  activeBtn = null;
+  currentMethod = null;
+  cachedHtml = null;
+  cachedJsonPayload = null;
+  document.getElementById('view-toggle').classList.remove('visible');
+  document.getElementById('result').innerHTML = '<p class="empty">Ticker set to ' + currentTicker + '. Click a method to view data.</p>';
+  document.getElementById('result-header').textContent = '';
+  document.getElementById('cache-bar').className = 'cache-bar';
+  document.getElementById('cache-bar').innerHTML = '';
+}
+
+function hideSuggestions() {
+  suggestionsDiv.classList.remove('visible');
+  suggestionsDiv.innerHTML = '';
+  selectedIdx = -1;
+  suggestionItems = [];
+}
+
+function showSuggestions(results) {
+  suggestionsDiv.innerHTML = '';
+  selectedIdx = -1;
+
+  if (!results.length) {
+    suggestionsDiv.innerHTML = '<div class="suggestion-empty">No results</div>';
+    suggestionsDiv.classList.add('visible');
+    suggestionItems = [];
+    return;
+  }
+
+  results.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = 'suggestion-item';
+    div.innerHTML =
+      '<span class="sym">' + r.symbol + '</span>' +
+      '<span class="name">' + (r.shortName || '') + '</span>' +
+      '<div class="meta-row"><span>' + r.exchange + '</span><span>' + r.quoteType + '</span></div>';
+    div.addEventListener('mousedown', e => {
+      e.preventDefault();
+      setTicker(r.symbol);
+    });
+    suggestionsDiv.appendChild(div);
+  });
+
+  suggestionItems = suggestionsDiv.querySelectorAll('.suggestion-item');
+  suggestionsDiv.classList.add('visible');
+}
+
+async function doLookup(query) {
+  if (lookupAbort) lookupAbort.abort();
+  lookupAbort = new AbortController();
+
+  suggestionsDiv.innerHTML = '<div class="suggestion-spinner"><div class="spinner"></div></div>';
+  suggestionsDiv.classList.add('visible');
+
+  try {
+    const resp = await fetch('/api/lookup', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({query: query, count: 8, cache_only: !lookupCheckbox.checked}),
+      signal: lookupAbort.signal,
+    });
+    const data = await resp.json();
+    showSuggestions(data.results);
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      hideSuggestions();
+    }
+  }
+}
+
+tickerInput.addEventListener('input', () => {
+  clearTimeout(lookupTimer);
+  const q = tickerInput.value.trim();
+  if (q.length < 1) { hideSuggestions(); return; }
+  lookupTimer = setTimeout(() => doLookup(q), 300);
+});
+
+tickerInput.addEventListener('keydown', e => {
+  if (suggestionsDiv.classList.contains('visible') && suggestionItems.length) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, suggestionItems.length - 1);
+      suggestionItems.forEach((el, i) => el.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+      suggestionItems.forEach((el, i) => el.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIdx >= 0) {
+        const sym = suggestionItems[selectedIdx].querySelector('.sym').textContent;
+        setTicker(sym);
+      } else {
+        setTicker();
+      }
+      return;
+    } else if (e.key === 'Escape') {
+      hideSuggestions();
+      return;
+    }
+  } else if (e.key === 'Enter') {
+    setTicker();
+  }
+});
+
+tickerInput.addEventListener('blur', () => {
+  setTimeout(hideSuggestions, 150);
+});
+
+tickerInput.addEventListener('focus', () => {
+  if (lookupCheckbox.checked && tickerInput.value.trim().length >= 1 && suggestionItems.length) {
+    suggestionsDiv.classList.add('visible');
+  }
+});
+
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+function syntaxHighlight(obj) {
+  const s = JSON.stringify(obj, null, 2);
+  return s.replace(
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    m => {
+      if (/^"/.test(m)) return m.endsWith(':') ? '<span class="jk">' + m + '</span>' : '<span class="js">' + m + '</span>';
+      if (/true|false/.test(m)) return '<span class="jb">' + m + '</span>';
+      if (m === 'null') return '<span class="jnull">' + m + '</span>';
+      return '<span class="jn">' + m + '</span>';
+    }
+  );
+}
+
+function switchView(mode) {
+  if (mode === viewMode) return;
+  viewMode = mode;
+  document.getElementById('btn-table').classList.toggle('active', mode === 'table');
+  document.getElementById('btn-json').classList.toggle('active', mode === 'json');
+  if (mode === 'table' && cachedHtml !== null) {
+    document.getElementById('result').innerHTML = cachedHtml;
+  } else if (mode === 'json' && cachedJsonPayload !== null) {
+    document.getElementById('result').innerHTML = '<pre class="json-view">' + syntaxHighlight(cachedJsonPayload) + '</pre>';
+  }
+}
+
+async function fetchData(method, forceRefresh = false) {
+  if (!currentTicker) { alert('Enter a ticker first'); return; }
+
+  const resultDiv = document.getElementById('result');
+  const headerDiv = document.getElementById('result-header');
+  const cacheBar = document.getElementById('cache-bar');
+
+  resultDiv.innerHTML = '<div class="spinner"></div>';
+  headerDiv.textContent = currentTicker + ' / ' + method;
+  cacheBar.className = 'cache-bar';
+  cacheBar.innerHTML = '';
+
+  if (!forceRefresh) {
+    document.querySelectorAll('.method-btn').forEach(b => {
+      if (b.dataset.method === method) {
+        if (activeBtn) activeBtn.classList.remove('active');
+        activeBtn = b;
+        b.classList.add('active', 'loading');
+      }
+    });
+  } else if (activeBtn) {
+    activeBtn.classList.add('loading');
+  }
+  currentMethod = method;
+
+  const body = JSON.stringify({ticker: currentTicker, method: method, force_refresh: forceRefresh});
+  const opts = {method: 'POST', headers: {'Content-Type': 'application/json'}, body};
+
+  try {
+    const [htmlResp, jsonResp] = await Promise.all([
+      fetch('/api/data', opts),
+      fetch('/api/data/json', opts),
+    ]);
+    const [htmlData, jsonData] = await Promise.all([htmlResp.json(), jsonResp.json()]);
+
+    cachedHtml = htmlData.html;
+    cachedJsonPayload = jsonData.data;
+
+    if (viewMode === 'json') {
+      resultDiv.innerHTML = '<pre class="json-view">' + syntaxHighlight(cachedJsonPayload) + '</pre>';
+    } else {
+      resultDiv.innerHTML = cachedHtml;
+    }
+
+    document.getElementById('view-toggle').classList.add('visible');
+
+    const ref = htmlData.from_cache ? htmlData : jsonData;
+    if (ref.from_cache) {
+      const date = new Date(ref.cached_at).toLocaleString();
+      cacheBar.className = 'cache-bar cached visible';
+      cacheBar.innerHTML = 'Cached &mdash; fetched on ' + date +
+        ' <button class="refresh-btn" onclick="fetchData(\'' + method + '\', true)">Refresh</button>';
+    } else {
+      cacheBar.className = 'cache-bar live visible';
+      cacheBar.innerHTML = 'Live data &mdash; fetched just now';
+    }
+  } catch (err) {
+    resultDiv.innerHTML = '<p class="error">Request failed: ' + err.message + '</p>';
+  } finally {
+    if (activeBtn) activeBtn.classList.remove('loading');
+  }
+}
+
+// Method buttons
+document.querySelectorAll('.method-btn').forEach(btn => {
+  btn.addEventListener('click', () => fetchData(btn.dataset.method));
+});
+</script>
+
+</body>
+</html>

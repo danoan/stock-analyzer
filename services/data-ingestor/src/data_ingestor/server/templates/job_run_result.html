@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Job Result{% endblock %}
+
+{% block content %}
+<div class="flex-between mb-3">
+  <h2>Job: {{ job.name }}</h2>
+  <a href="/jobs" class="btn btn-outline btn-sm">← Back to Jobs</a>
+</div>
+
+<div class="mb-3">
+  {% if status == 'ok' %}
+    <span class="badge badge-green" style="font-size:.875rem">All tickers succeeded</span>
+  {% elif status == 'partial' %}
+    <span class="badge badge-yellow" style="font-size:.875rem">Partial success</span>
+  {% else %}
+    <span class="badge badge-red" style="font-size:.875rem">All tickers failed</span>
+  {% endif %}
+  &nbsp;
+  <strong>{{ total_rows }}</strong> row{{ 's' if total_rows != 1 else '' }} inserted in total.
+</div>
+
+<div class="table-wrapper mb-4">
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>Rows inserted</th>
+        <th>Error</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr class="{{ 'row-error' if r.error else 'row-success' }}">
+        <td><strong>{{ r.ticker }}</strong></td>
+        <td>{{ r.rows }}</td>
+        <td>
+          {% if r.error %}
+            <code>{{ r.error }}</code>
+          {% else %}
+            <span style="color:var(--ok)">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="/jobs" class="btn btn-outline">← Back to Jobs</a>
+<a href="/" class="btn btn-outline ms-2">← Start over</a>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Ingestor{% block title_suffix %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-left">
+    <span class="brand">Data Ingestor</span>
+    <span class="muted text-sm">API → Postgres</span>
+  </div>
+  <div style="display:flex;gap:.5rem">
+    <a href="/jobs" class="btn btn-outline btn-sm">Saved Jobs</a>
+    <a href="/collections" class="btn btn-outline btn-sm">Collections</a>
+  </div>
+</nav>
+<main class="app-container">
+  {% block steps %}{% endblock %}
+  {% block content %}{% endblock %}
+</main>
+<script>
+function openModal(id) {
+  document.getElementById(id).classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape')
+    document.querySelectorAll('.modal-overlay.is-open')
+      .forEach(m => { m.classList.remove('is-open'); document.body.style.overflow=''; });
+});
+</script>
+</body>
+</html>

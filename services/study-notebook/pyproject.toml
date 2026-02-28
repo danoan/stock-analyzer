@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "study-notebook"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "aiofiles",
+    "peewee",
+    "pydantic",
+    "pydantic-settings",
+    "httpx",
+    "typer",
+    "rich",
+    "simpleeval",
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "ruff",
+    "pyright",
+    "pytest",
+    "pytest-httpx",
+]
+
+[project.scripts]
+study-notebook = "study_notebook.cli.main:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+study_notebook = ["server/static/**/*"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+venvPath = "."
+venv = ".venv"
+include = ["src", "test"]
+# Peewee uses heavy metaclass magic that pyright cannot fully resolve
+reportAttributeAccessIssue = "warning"
+reportArgumentType = "warning"
