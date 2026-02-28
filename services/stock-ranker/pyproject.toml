@@ -1,21 +1,22 @@
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "api-explorer"
+name = "stock-ranker"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi",
     "uvicorn",
-    "yfinance",
-    "pandas",
+    "aiofiles",
     "peewee",
     "pydantic",
     "pydantic-settings",
-    "jinja2",
-    "matplotlib",
+    "httpx",
+    "typer",
+    "rich",
+    "simpleeval",
 ]
 
 [project.optional-dependencies]
@@ -24,26 +25,30 @@ dev = [
     "ruff",
     "pyright",
     "pytest",
+    "pytest-httpx",
 ]
+
+[project.scripts]
+stock-ranker = "stock_ranker.cli.main:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-api_explorer = ["server/templates/**/*"]
+stock_ranker = ["server/static/**/*"]
 
 [tool.ruff]
-target-version = "py312"
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "W"]
+select = ["E", "F", "I", "UP"]
 
 [tool.pyright]
 pythonVersion = "3.12"
+pythonPlatform = "Linux"
 venvPath = "."
-venv = "venv"
-typeCheckingMode = "basic"
-
-[tool.pytest.ini_options]
-testpaths = ["test"]
+venv = ".venv"
+include = ["src", "test"]
+# Peewee uses heavy metaclass magic that pyright cannot fully resolve
+reportAttributeAccessIssue = "warning"
+reportArgumentType = "warning"

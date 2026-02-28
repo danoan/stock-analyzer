@@ -2,14 +2,20 @@ services:
   postgres:
     image: postgres:17
     container_name: postgres
-    ports:
-      - "5432:5432"
+    # Port 5432 is NOT exposed to the host.
+    # Connect via: docker exec -it postgres psql -U $POSTGRES_USER -d $POSTGRES_DB
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     environment:
-      POSTGRES_DB: stock_analyzer
-      POSTGRES_USER: stock_user
-      POSTGRES_PASSWORD: stock_password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      INGESTOR_DB_USER: ${INGESTOR_DB_USER}
+      INGESTOR_DB_PASSWORD: ${INGESTOR_DB_PASSWORD}
+      METABASE_DB_USER: ${METABASE_DB_USER}
+      METABASE_DB_PASSWORD: ${METABASE_DB_PASSWORD}
+    networks: [db-net]
     restart: unless-stopped
 
   metabase:
@@ -24,8 +30,87 @@ services:
       MB_DB_FILE: /metabase-data/metabase.db
     depends_on:
       - postgres
+    networks: [db-net]
     restart: unless-stopped
+
+  api-explorer:
+    build: ./services/api-explorer
+    container_name: api-explorer
+    ports:
+      - "8000:8000"
+    volumes:
+      - api-explorer-data:/app/data
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      DB_PATH: /app/data/cache.db
+    networks: [app-net]
+    restart: unless-stopped
+
+  data-ingestor:
+    build: ./services/data-ingestor
+    container_name: data-ingestor
+    ports:
+      - "8001:8001"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8001
+      API_EXPLORER_URL: http://api-explorer:8000
+      DB_DSN: postgresql://${INGESTOR_DB_USER}:${INGESTOR_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      - postgres
+      - api-explorer
+    networks: [db-net, app-net]
+    restart: unless-stopped
+
+  stock-ranker:
+    build: ./services/stock-ranker
+    container_name: stock-ranker
+    ports:
+      - "8002:8002"
+    volumes:
+      - stock-ranker-data:/app/data
+    environment:
+      API_EXPLORER_URL: http://api-explorer:8000
+      DB_PATH: /app/data/study_notebook.db
+      PORT: 8002
+    depends_on:
+      - api-explorer
+    networks: [app-net]
+    restart: unless-stopped
+
+  fundascope:
+    build: ./services/fundascope
+    container_name: fundascope
+    ports:
+      - "8003:8003"
+    volumes:
+      - fundascope-data:/app/data
+    environment:
+      API_EXPLORER_URL: http://api-explorer:8000
+      HOST: 0.0.0.0
+      PORT: 8003
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: gpt-4o
+      OPENAI_MAX_TOKENS: 600
+    depends_on:
+      - api-explorer
+    networks: [app-net]
+    restart: unless-stopped
+
+  portal:
+    build: ./services/portal
+    container_name: portal
+    networks: [app-net]
+    restart: unless-stopped
+
+networks:
+  db-net:
+  app-net:
 
 volumes:
   postgres-data:
   metabase-data:
+  api-explorer-data:
+  stock-ranker-data:
+  fundascope-data:

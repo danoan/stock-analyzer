@@ -176,7 +176,7 @@ async def api_chat(req: ChatRequest):
 
 
 def main():
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host=config.host, port=config.port)
 
 
 if __name__ == "__main__":

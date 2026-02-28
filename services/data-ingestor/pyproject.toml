@@ -28,6 +28,9 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+data_ingestor = ["server/static/**/*", "server/templates/**/*"]
+
 [tool.ruff]
 target-version = "py312"
 line-length = 100

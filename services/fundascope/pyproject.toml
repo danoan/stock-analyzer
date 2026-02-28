@@ -24,6 +24,9 @@ dependencies = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+fundascope = ["server/templates/**/*"]
+
 [project.scripts]
 fundascope = "fundascope.server.app:main"
 
