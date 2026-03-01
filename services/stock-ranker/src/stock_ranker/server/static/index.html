@@ -135,13 +135,13 @@
     .op-btn:hover { background: #e5e7eb; }
 
     /* ── Metric Palette ──────────────────────────────────────────────────── */
-    .metric-palette { border: 1px solid var(--br); border-radius: 8px; display: flex; flex-direction: column; background: #fafafa; overflow: hidden; }
+    .metric-palette { border: 1px solid var(--br); border-radius: 8px; display: flex; flex-direction: column; background: #fafafa; overflow: hidden; min-height: 310px; }
     .palette-header { padding: .45rem .75rem; font-size: .72rem; font-weight: 700; color: var(--tm); letter-spacing: .07em; border-bottom: 1px solid var(--br); background: #f3f4f6; }
     .palette-filter { padding: .4rem .6rem; border-bottom: 1px solid var(--br); }
     .palette-filter input { width: 100%; padding: .28rem .5rem; border: 1px solid var(--br); border-radius: 5px; font-size: .8rem; outline: none; background: var(--cb); }
     .palette-filter input:focus { border-color: var(--cp); }
-    .metric-grid { padding: .4rem; display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; height: 240px; overflow-y: auto; align-content: start; }
-    .metric-chip { font-size: .76rem; background: var(--cb); border: 1px solid var(--br); border-radius: 4px; padding: .2rem .4rem; cursor: pointer; color: var(--tx); transition: background .1s, color .1s, border-color .1s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .metric-grid { padding: .4rem; display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; height: 240px; min-height: 240px; align-content: start; flex-shrink: 0; }
+    .metric-chip { font-size: .76rem; background: var(--cb); border: 1px solid var(--br); border-radius: 4px; padding: .2rem .4rem; cursor: pointer; color: var(--tx); transition: background .1s, color .1s, border-color .1s; white-space: nowrap; text-overflow: ellipsis; }
     .metric-chip:hover { background: var(--cp); color: #fff; border-color: var(--cp); }
     .palette-empty { padding: 1rem; font-size: .8rem; color: var(--tm); text-align: center; grid-column: 1/-1; }
     .palette-loading { padding: 1rem; font-size: .82rem; color: var(--tm); text-align: center; }
@@ -368,6 +368,7 @@
               <span class="badge badge-blue" x-text="s.name"></span>
               <span x-show="s.normalize" class="badge badge-green">norm</span>
               <span class="score-item-expr"><code x-text="s.expression"></code></span>
+              <button class="chip-remove" @click="editScore(i)" title="Edit" style="font-size:.95rem;">✎</button>
               <button class="chip-remove" @click="wizard.draft.scores.splice(i,1)" title="Remove">×</button>
             </div>
           </template>
@@ -406,7 +407,9 @@
               </label>
             </div>
             <p x-show="wizard.scoreError" class="error-val" x-text="wizard.scoreError"></p>
-            <button class="btn btn-outline" type="button" @click="addScoreToDraft()">+ Add score</button>
+            <button class="btn btn-outline" type="button" @click="addScoreToDraft()">
+              <span x-text="wizard.editingScoreIndex !== null ? 'Update score' : '+ Add score'"></span>
+            </button>
           </div>
 
           <!-- Right panel: Metric palette -->
@@ -703,6 +706,7 @@ function app() {
       editId: null,
       draft: { name: '', scores: [] },
       scoreForm: { name: '', expression: '', normalize: false },
+      editingScoreIndex: null,   // null = add mode, int = edit mode
       metricsAvail: [],
       metricsFilter: '',
       metricsLoading: false,
@@ -880,6 +884,7 @@ function app() {
         ? { name: a.name, scores: a.scores.map(s => ({ ...s })) }
         : { name: '', scores: [] };
       this.wizard.scoreForm = { name: '', expression: '', normalize: false };
+      this.wizard.editingScoreIndex = null;
       // Preserve metricsAvail for session caching
       this.wizard.metricsFilter = '';
       this.wizard.metricsLoading = false;
@@ -903,16 +908,25 @@ function app() {
       }
     },
 
+    editScore(i) {
+      const s = this.wizard.draft.scores[i];
+      this.wizard.scoreForm = { name: s.name, expression: s.expression, normalize: s.normalize };
+      this.wizard.editingScoreIndex = i;
+      this.wizard.scoreError = null;
+    },
+
     addScoreToDraft() {
       this.wizard.scoreError = null;
       const sf = this.wizard.scoreForm;
       if (!sf.name.trim()) { this.wizard.scoreError = 'Score name is required.'; return; }
       if (!sf.expression.trim()) { this.wizard.scoreError = 'Expression is required.'; return; }
-      this.wizard.draft.scores.push({
-        name: sf.name.trim(),
-        expression: sf.expression.trim(),
-        normalize: sf.normalize,
-      });
+      const score = { name: sf.name.trim(), expression: sf.expression.trim(), normalize: sf.normalize };
+      if (this.wizard.editingScoreIndex !== null) {
+        this.wizard.draft.scores[this.wizard.editingScoreIndex] = score;
+        this.wizard.editingScoreIndex = null;
+      } else {
+        this.wizard.draft.scores.push(score);
+      }
       this.wizard.scoreForm = { name: '', expression: '', normalize: false };
     },
 
