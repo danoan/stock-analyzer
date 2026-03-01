@@ -191,6 +191,35 @@ def _split_additive_terms(expression: str) -> list[str]:
     return segments
 
 
+def _extract_weight_and_base(term: str) -> tuple[float, str]:
+    """Separate a numeric leading coefficient from an additive term.
+
+    '0.7 * pe'        → (0.7,  'pe')
+    '0.3 * (1.0/pe)'  → (0.3,  '1.0/pe')
+    'pe'              → (1.0,  'pe')
+    '+ 0.3 * eps'     → (0.3,  'eps')
+    '- 0.3 * eps'     → (-0.3, 'eps')
+    '+ eps'           → (1.0,  'eps')
+    '- eps'           → (-1.0, 'eps')
+    """
+    t = term.strip()
+    sign = 1.0
+    if t.startswith('+'):
+        t = t[1:].strip()
+    elif t.startswith('-'):
+        t = t[1:].strip()
+        sign = -1.0
+
+    m = re.match(r'^(\d+(?:\.\d+)?)\s*\*\s*(.+)$', t, re.DOTALL)
+    if m:
+        coeff = float(m.group(1))
+        base = m.group(2).strip()
+        if base.startswith('(') and base.endswith(')'):
+            base = base[1:-1].strip()
+        return sign * coeff, base
+    return sign, t
+
+
 def compute_score(
     score: Score, info_data: dict[str, Any]
 ) -> tuple[float | None, ScoreDetail]:
@@ -260,16 +289,20 @@ def realize_analysis(
             # Evaluate and normalize each additive term independently
             term_norm_cols: list[list[float | None]] = []
             for term_expr in terms:
-                term_ids = _extract_identifiers(term_expr)
+                weight, base_expr = _extract_weight_and_base(term_expr)
+                term_ids = _extract_identifiers(base_expr)
                 term_vals: list[float | None] = []
                 for sym in tickers:
                     if sym in raw_details:
                         term_vars = {k: raw_details[sym].variables.get(k) for k in term_ids}
-                        val = evaluate_expression(term_expr, term_vars)
+                        val = evaluate_expression(base_expr, term_vars)
                     else:
                         val = None
                     term_vals.append(val)
-                term_norm_cols.append(_normalize_values(term_vals))
+                normalized = _normalize_values(term_vals)
+                term_norm_cols.append(
+                    [None if v is None else weight * v for v in normalized]
+                )
 
             for i, symbol in enumerate(tickers):
                 if symbol in raw_details:

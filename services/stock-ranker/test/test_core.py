@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from stock_ranker.core.api import (
+    _extract_weight_and_base,
     _normalize_values,
     _split_additive_terms,
     _to_numeric,
@@ -538,3 +539,59 @@ def test_realize_analysis_fetch_error_captured():
     assert len(results) == 1
     assert results[0].error == "timeout"
     assert results[0].scores == {}
+
+
+# ---------------------------------------------------------------------------
+# _extract_weight_and_base
+# ---------------------------------------------------------------------------
+
+
+def test_extract_weight_and_base_no_coefficient():
+    assert _extract_weight_and_base("pe") == (1.0, "pe")
+    assert _extract_weight_and_base("1.0/pe") == (1.0, "1.0/pe")
+    assert _extract_weight_and_base("+ pe") == (1.0, "pe")
+    assert _extract_weight_and_base("- pe") == (-1.0, "pe")
+
+
+def test_extract_weight_and_base_with_coefficient():
+    w, b = _extract_weight_and_base("0.7 * pe")
+    assert w == pytest.approx(0.7)
+    assert b == "pe"
+
+    w, b = _extract_weight_and_base("0.3 * (1.0/pe)")
+    assert w == pytest.approx(0.3)
+    assert b == "1.0/pe"
+
+    w, b = _extract_weight_and_base("+ 0.5 * eps")
+    assert w == pytest.approx(0.5)
+    assert b == "eps"
+
+    w, b = _extract_weight_and_base("- 0.5 * eps")
+    assert w == pytest.approx(-0.5)
+    assert b == "eps"
+
+
+# ---------------------------------------------------------------------------
+# realize_analysis — weighted normalization
+# ---------------------------------------------------------------------------
+
+
+def test_realize_analysis_normalize_weighted():
+    # pe:  AAPL=10, MSFT=20  → 1/pe: 0.1, 0.05 → normalized base: [1.0, 0.0]
+    # eps: AAPL=5,  MSFT=15  → normalized base: [0.0, 1.0]
+    # score = 0.7*(1/pe) + 0.3*eps
+    # AAPL: 0.7*1.0 + 0.3*0.0 = 0.70
+    # MSFT: 0.7*0.0 + 0.3*1.0 = 0.30
+    score = Score(name="S", expression="0.7 * (1.0/pe) + 0.3 * eps", normalize=True)
+    analysis = create_analysis(Analysis(name="WeightedNorm", scores=[score]))
+    ticker_data = {"AAPL": {"pe": 10.0, "eps": 5.0}, "MSFT": {"pe": 20.0, "eps": 15.0}}
+
+    def mock_fetch(symbol, force_refresh=False):
+        return ticker_data[symbol]
+
+    with patch("stock_ranker.core.api.fetch_info", side_effect=mock_fetch):
+        results = realize_analysis(analysis, ["AAPL", "MSFT"])
+
+    by_symbol = {r.ticker_symbol: r for r in results}
+    assert by_symbol["AAPL"].scores["S"] == pytest.approx(0.70)
+    assert by_symbol["MSFT"].scores["S"] == pytest.approx(0.30)
