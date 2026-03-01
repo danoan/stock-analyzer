@@ -296,7 +296,7 @@
                   <td><strong x-text="r.ticker_symbol"></strong></td>
                   <template x-for="col in realizeColumns()" :key="col">
                     <td :class="scoreClass(col, r.scores[col])">
-                      <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="fmtFloat(r.scores[col])"></span>
+                      <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="isNormalizedCol(col) ? fmtFloat(r.scores[col]) : fmtRaw(r.scores[col])"></span>
                       <span x-show="r.scores[col] === null || r.scores[col] === undefined" class="null-val">—</span>
                     </td>
                   </template>
@@ -491,14 +491,14 @@
                   <template x-for="[k, v] in Object.entries(detail.variables)" :key="k">
                     <tr>
                       <td><code x-text="k"></code></td>
-                      <td :class="v === null ? 'null-val' : ''" x-text="v === null ? '—' : fmtFloat(v)"></td>
+                      <td :class="v === null ? 'null-val' : ''" x-text="v === null ? '—' : fmtRaw(v)"></td>
                     </tr>
                   </template>
                 </tbody>
               </table>
               <p style="font-size:.875rem;"><strong>Raw result:</strong>
                 <span :class="detail.raw_result === null ? 'null-val' : ''"
-                      x-text="detail.raw_result === null ? '—' : fmtFloat(detail.raw_result)"></span>
+                      x-text="detail.raw_result === null ? '—' : fmtRaw(detail.raw_result)"></span>
               </p>
               <template x-if="detail.normalize">
                 <p style="font-size:.875rem;margin-top:.25rem;"><strong>Normalized result:</strong>
@@ -760,6 +760,16 @@ function app() {
     fmtFloat(v) {
       if (v === null || v === undefined) return '—';
       return Number(v).toFixed(2);
+    },
+
+    fmtRaw(v) {
+      if (v === null || v === undefined) return '—';
+      const n = Number(v);
+      const abs = Math.abs(n);
+      if (abs >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+      if (abs >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+      if (abs >= 1e3) return (n / 1e3).toFixed(2) + 'K';
+      return n.toFixed(2);
     },
 
     realizeColumns() {

@@ -7,6 +7,7 @@ import pytest
 
 from stock_ranker.core.api import (
     _normalize_values,
+    _split_additive_terms,
     _to_numeric,
     add_ticker_to_collection,
     compute_score,
@@ -470,6 +471,61 @@ def test_realize_analysis_normalize_score():
     # raw_result is preserved in detail
     assert by_symbol["AAPL"].score_details["NormPE"].raw_result == pytest.approx(0.0)
     assert by_symbol["MSFT"].score_details["NormPE"].raw_result == pytest.approx(10.0)
+
+
+def test_realize_analysis_normalize_per_metric():
+    # Two metrics: pe and pb, each normalized independently before evaluating pe + pb.
+    # pe:  AAPL=0,  MSFT=10  → normalized: AAPL=0.0, MSFT=1.0
+    # pb:  AAPL=10, MSFT=20  → normalized: AAPL=0.0, MSFT=1.0
+    # result: AAPL=0.0+0.0=0.0, MSFT=1.0+1.0=2.0
+    score = Score(name="S", expression="pe + pb", normalize=True)
+    analysis = create_analysis(Analysis(name="NormPerMetric", scores=[score]))
+    ticker_data = {"AAPL": {"pe": 0.0, "pb": 10.0}, "MSFT": {"pe": 10.0, "pb": 20.0}}
+
+    def mock_fetch(symbol, force_refresh=False):
+        return ticker_data[symbol]
+
+    with patch("stock_ranker.core.api.fetch_info", side_effect=mock_fetch):
+        results = realize_analysis(analysis, ["AAPL", "MSFT"])
+
+    by_symbol = {r.ticker_symbol: r for r in results}
+    assert by_symbol["AAPL"].scores["S"] == pytest.approx(0.0)
+    assert by_symbol["MSFT"].scores["S"] == pytest.approx(2.0)
+    # raw values preserved
+    assert by_symbol["AAPL"].score_details["S"].raw_result == pytest.approx(10.0)
+    assert by_symbol["MSFT"].score_details["S"].raw_result == pytest.approx(30.0)
+    assert by_symbol["AAPL"].score_details["S"].variables["pe"] == pytest.approx(0.0)
+    assert by_symbol["AAPL"].score_details["S"].variables["pb"] == pytest.approx(10.0)
+
+
+def test_realize_analysis_normalize_single_term_transform():
+    # 5/priceToBook is one term — it should be evaluated first, then normalized.
+    # AAPL ptb=5 → 5/5=1.0  MSFT ptb=1 → 5/1=5.0
+    # Normalized [1.0, 5.0] → AAPL=0.0, MSFT=1.0
+    score = Score(name="S", expression="5/priceToBook", normalize=True)
+    analysis = create_analysis(Analysis(name="NormTransform", scores=[score]))
+    ticker_data = {"AAPL": {"priceToBook": 5.0}, "MSFT": {"priceToBook": 1.0}}
+
+    def mock_fetch(symbol, force_refresh=False):
+        return ticker_data[symbol]
+
+    with patch("stock_ranker.core.api.fetch_info", side_effect=mock_fetch):
+        results = realize_analysis(analysis, ["AAPL", "MSFT"])
+
+    by_symbol = {r.ticker_symbol: r for r in results}
+    assert by_symbol["AAPL"].scores["S"] == pytest.approx(0.0)
+    assert by_symbol["MSFT"].scores["S"] == pytest.approx(1.0)
+    assert by_symbol["AAPL"].score_details["S"].raw_result == pytest.approx(1.0)
+    assert by_symbol["MSFT"].score_details["S"].raw_result == pytest.approx(5.0)
+
+
+def test_split_additive_terms():
+    assert _split_additive_terms("pe") == ["pe"]
+    assert _split_additive_terms("pe + pb") == ["pe", "+ pb"]
+    assert _split_additive_terms("pe - pb") == ["pe", "- pb"]
+    assert _split_additive_terms("-pe + pb") == ["-pe", "+ pb"]
+    assert _split_additive_terms("5*pe + 3/pb") == ["5*pe", "+ 3/pb"]
+    assert _split_additive_terms("5*(pe + pb)") == ["5*(pe + pb)"]
 
 
 def test_realize_analysis_fetch_error_captured():

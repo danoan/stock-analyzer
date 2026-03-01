@@ -158,6 +158,39 @@ def _normalize_values(values: list[float | None]) -> list[float | None]:
     return result
 
 
+def _split_additive_terms(expression: str) -> list[str]:
+    """Split expression into additive terms at the top level (depth 0).
+
+    'pe + 5/priceToBook'  → ['pe', '+ 5/priceToBook']
+    '-pe + pb'            → ['-pe', '+ pb']
+    '5*(pe + pb)'         → ['5*(pe + pb)']   # inner + not split
+    """
+    depth = 0
+    split_at: list[int] = []
+    for i, c in enumerate(expression):
+        if c in '([':
+            depth += 1
+        elif c in ')]':
+            depth -= 1
+        elif c in '+-' and depth == 0 and i > 0:
+            split_at.append(i)
+
+    if not split_at:
+        return [expression.strip()]
+
+    segments: list[str] = []
+    prev = 0
+    for pos in split_at:
+        seg = expression[prev:pos].strip()
+        if seg:
+            segments.append(seg)
+        prev = pos
+    seg = expression[prev:].strip()
+    if seg:
+        segments.append(seg)
+    return segments
+
+
 def compute_score(
     score: Score, info_data: dict[str, Any]
 ) -> tuple[float | None, ScoreDetail]:
@@ -222,22 +255,35 @@ def realize_analysis(
             raw_details[symbol] = detail
 
         if score.normalize and raw_results:
-            # Normalize across all tickers (including those with errors → treat as None)
-            all_raw = [raw_results.get(sym) for sym in tickers]
-            normalized = _normalize_values(all_raw)
+            terms = _split_additive_terms(score.expression)
+
+            # Evaluate and normalize each additive term independently
+            term_norm_cols: list[list[float | None]] = []
+            for term_expr in terms:
+                term_ids = _extract_identifiers(term_expr)
+                term_vals: list[float | None] = []
+                for sym in tickers:
+                    if sym in raw_details:
+                        term_vars = {k: raw_details[sym].variables.get(k) for k in term_ids}
+                        val = evaluate_expression(term_expr, term_vars)
+                    else:
+                        val = None
+                    term_vals.append(val)
+                term_norm_cols.append(_normalize_values(term_vals))
+
             for i, symbol in enumerate(tickers):
                 if symbol in raw_details:
-                    norm_val = normalized[i]
+                    parts = [col[i] for col in term_norm_cols]
+                    norm_result = None if any(p is None for p in parts) else sum(parts)  # type: ignore[arg-type]
                     detail = raw_details[symbol]
-                    # Replace result with normalized value
                     raw_details[symbol] = ScoreDetail(
                         expression=detail.expression,
                         normalize=detail.normalize,
                         variables=detail.variables,
                         raw_result=detail.raw_result,
-                        result=norm_val,
+                        result=norm_result,
                     )
-                    raw_results[symbol] = norm_val
+                    raw_results[symbol] = norm_result
 
         for symbol in ticker_info:
             scores_dict[symbol][score.name] = raw_results[symbol]
