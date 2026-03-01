@@ -72,7 +72,7 @@ async def preview(
     except Exception as exc:
         error = str(exc)
 
-    table_name = f"{ticker}_{method}".lower()
+    table_name = method.lower()
     payload_json_out = json.dumps(payload)
 
     ptype = payload.get("type", "")
@@ -321,6 +321,15 @@ async def jobs_run(
             "total_rows": total_rows,
         },
     )
+
+
+@app.post("/jobs/{job_id}/rename", response_class=RedirectResponse)
+async def jobs_rename(
+    job_id: int,
+    name: Annotated[str, Form()],
+) -> RedirectResponse:
+    jobs.rename_job(job_id, name.strip(), settings.db_dsn)
+    return RedirectResponse(url="/jobs", status_code=303)
 
 
 @app.post("/jobs/{job_id}/delete", response_class=RedirectResponse)

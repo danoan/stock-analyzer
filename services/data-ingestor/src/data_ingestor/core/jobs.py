@@ -56,6 +56,14 @@ def get_job(job_id: int, dsn: str) -> dict:
     return dict(row)
 
 
+def rename_job(job_id: int, new_name: str, dsn: str) -> None:
+    sql = "UPDATE _da_jobs SET name = %s WHERE id = %s"
+    with psycopg2.connect(dsn) as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, (new_name, job_id))
+        conn.commit()
+
+
 def delete_job(job_id: int, dsn: str) -> None:
     sql = "DELETE FROM _da_jobs WHERE id = %s"
     with psycopg2.connect(dsn) as conn:

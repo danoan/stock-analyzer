@@ -27,7 +27,13 @@
       {% set cfg = job.config %}
       {% set effective = job.effective_tickers %}
       <tr>
-        <td><strong>{{ job.name }}</strong></td>
+        <td>
+          <strong class="job-name" data-id="{{ job.id }}" data-original="{{ job.name | e }}"
+                  title="Click to rename" style="cursor:pointer">{{ job.name }}</strong>
+          <form method="post" action="/jobs/{{ job.id }}/rename" style="display:none" id="renameForm{{ job.id }}">
+            <input name="name" id="renameInput{{ job.id }}">
+          </form>
+        </td>
         <td>
           <span class="muted text-sm">{{ effective | length }} ticker{{ 's' if effective | length != 1 else '' }}</span>
           {% if cfg.collections %}
@@ -61,15 +67,20 @@
           {% endif %}
         </td>
         <td>{{ job.last_run_rows if job.last_run_rows is not none else '—' }}</td>
-        <td class="text-end">
+        <td>
+          <div style="display:flex;justify-content:flex-end;align-items:center;gap:.25rem">
           <button type="button" class="btn btn-sm btn-primary"
-                  onclick="openModal('runModal{{ job.id }}')">
-            Run Now
+                  onclick="openModal('runModal{{ job.id }}')"
+                  title="Run Now">
+            <span class="icon icon-play" aria-hidden="true"></span>
           </button>
-          <form method="post" action="/jobs/{{ job.id }}/delete" style="display:inline;margin-left:.25rem"
+          <form method="post" action="/jobs/{{ job.id }}/delete" style="display:contents"
                 onsubmit="return confirm('Delete job {{ job.name | e }}?')">
-            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+              <span class="icon icon-trash" aria-hidden="true"></span>
+            </button>
           </form>
+          </div>
         </td>
       </tr>
       {% endfor %}
@@ -217,6 +228,42 @@
 {% endif %}
 
 <script>
+document.querySelectorAll('.job-name').forEach(function(el) {
+  el.addEventListener('click', function() {
+    const id = el.dataset.id;
+    const original = el.dataset.original;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = original;
+    input.className = 'form-input';
+    input.style.cssText = 'padding:.15rem .35rem;font-size:inherit;font-weight:600;width:auto';
+    el.replaceWith(input);
+    input.focus();
+    input.select();
+
+    function submit() {
+      const name = input.value.trim();
+      if (name && name !== original) {
+        const formInput = document.getElementById('renameInput' + id);
+        formInput.value = name;
+        document.getElementById('renameForm' + id).submit();
+      } else {
+        revert();
+      }
+    }
+
+    function revert() {
+      input.replaceWith(el);
+    }
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); submit(); }
+      if (e.key === 'Escape') { revert(); }
+    });
+    input.addEventListener('blur', revert);
+  });
+});
+
 function toggleAll(modalId, checked) {
   const modal = document.getElementById(modalId);
   modal.querySelectorAll('input[name="selected_tickers"]').forEach(cb => cb.checked = checked);
