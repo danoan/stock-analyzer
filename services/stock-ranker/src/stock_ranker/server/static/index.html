@@ -217,6 +217,7 @@
           <span x-show="s.normalize" class="badge badge-green">normalized</span>
         </template>
         <span style="flex:1"></span>
+        <button class="btn btn-ghost btn-sm" @click="openWizard(a)">Edit</button>
         <button class="btn btn-ghost btn-sm" @click="toggleDetails(a.id)">
           <span x-text="openDetails[a.id] ? 'ⓘ Hide' : 'ⓘ Details'"></span>
         </button>
@@ -325,7 +326,7 @@
 <div class="modal-overlay" x-show="wizard.open" @click.self="closeWizard()">
   <div class="modal-box">
     <div class="modal-header">
-      <strong>New Analysis</strong>
+      <strong x-text="wizard.editId !== null ? 'Edit Analysis' : 'New Analysis'"></strong>
       <button class="btn btn-ghost btn-sm" @click="closeWizard()">✕</button>
     </div>
     <div class="modal-body">
@@ -453,7 +454,7 @@
         <button x-show="wizard.step===3" class="btn btn-primary"
           :disabled="wizard.saving || wizard.draft.scores.length===0"
           @click="saveAnalysis()">
-          <span x-text="wizard.saving ? 'Saving…' : 'Save →'"></span>
+          <span x-text="wizard.saving ? 'Saving…' : (wizard.editId !== null ? 'Update →' : 'Save →')"></span>
         </button>
       </div>
     </div>
@@ -699,6 +700,7 @@ function app() {
     wizard: {
       open: false,
       step: 1,
+      editId: null,
       draft: { name: '', scores: [] },
       scoreForm: { name: '', expression: '', normalize: false },
       metricsAvail: [],
@@ -870,10 +872,13 @@ function app() {
     },
 
     // ── wizard ──────────────────────────────────────────────────────────
-    openWizard() {
+    openWizard(a = null) {
       this.wizard.open = true;
       this.wizard.step = 1;
-      this.wizard.draft = { name: '', scores: [] };
+      this.wizard.editId = a ? a.id : null;
+      this.wizard.draft = a
+        ? { name: a.name, scores: a.scores.map(s => ({ ...s })) }
+        : { name: '', scores: [] };
       this.wizard.scoreForm = { name: '', expression: '', normalize: false };
       // Preserve metricsAvail for session caching
       this.wizard.metricsFilter = '';
@@ -972,14 +977,17 @@ function app() {
     async saveAnalysis() {
       if (this.wizard.draft.scores.length === 0) return;
       this.wizard.saving = true;
+      const isEdit = this.wizard.editId !== null;
       try {
-        await this.apiFetch('/analyses', {
-          method: 'POST',
-          body: JSON.stringify({ name: this.wizard.draft.name, scores: this.wizard.draft.scores }),
-        });
+        const body = JSON.stringify({ name: this.wizard.draft.name, scores: this.wizard.draft.scores });
+        if (isEdit) {
+          await this.apiFetch(`/analyses/${this.wizard.editId}`, { method: 'PUT', body });
+        } else {
+          await this.apiFetch('/analyses', { method: 'POST', body });
+        }
         this.closeWizard();
         await this.loadAnalyses();
-        this.showToast('Analysis saved');
+        this.showToast(isEdit ? 'Analysis updated' : 'Analysis saved');
       } catch (e) {
         this.showToast(e.message, false);
       } finally {
