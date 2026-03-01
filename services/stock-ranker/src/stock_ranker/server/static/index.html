@@ -467,7 +467,11 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- SCORE DETAIL MODAL                                                     -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" x-show="realize.detailTicker !== null" @click.self="realize.detailTicker = null">
+<div class="modal-overlay" x-show="realize.detailTicker !== null"
+     @click.self="realize.detailTicker = null"
+     @keydown.window.escape="if (realize.detailTicker !== null) realize.detailTicker = null"
+     @keydown.window.arrow-left="if (realize.detailTicker !== null) navigateDetail(-1)"
+     @keydown.window.arrow-right="if (realize.detailTicker !== null) navigateDetail(1)">
   <div class="modal-box modal-box-sm">
     <div class="modal-header">
       <strong x-text="(realize.detailTicker || '') + ' — Score breakdown'"></strong>
@@ -822,6 +826,19 @@ function app() {
     getDetailResult() {
       if (!this.realize.detailTicker || !this.realize.results) return null;
       return this.realize.results.find(r => r.ticker_symbol === this.realize.detailTicker) || null;
+    },
+
+    navigateDetail(direction) {
+      const results = this.sortedResults().filter(
+        r => r.score_details && Object.keys(r.score_details).length > 0
+      );
+      if (!results.length || !this.realize.detailTicker) return;
+      const idx = results.findIndex(r => r.ticker_symbol === this.realize.detailTicker);
+      if (idx === -1) return;
+      const next = idx + direction;
+      if (next >= 0 && next < results.length) {
+        this.realize.detailTicker = results[next].ticker_symbol;
+      }
     },
 
     async apiFetch(url, opts = {}) {
