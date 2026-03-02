@@ -88,6 +88,7 @@ services:
       - fundascope-data:/app/data
     environment:
       API_EXPLORER_URL: http://api-explorer:8000
+      STOCK_RANKER_URL: http://stock-ranker:8002
       HOST: 0.0.0.0
       PORT: 8003
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -95,6 +96,7 @@ services:
       OPENAI_MAX_TOKENS: 600
     depends_on:
       - api-explorer
+      - stock-ranker
     networks: [app-net]
     restart: unless-stopped
 

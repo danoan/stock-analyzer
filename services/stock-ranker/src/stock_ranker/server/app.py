@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import pathlib
+from typing import Any
 
 import peewee
+import yaml
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -14,16 +16,20 @@ from stock_ranker.core.api import (
     create_collection,
     delete_analysis,
     delete_collection,
+    delete_spec,
     get_analysis,
     get_available_metrics,
     get_collection_by_name,
+    get_spec,
     list_all_tickers,
     list_analyses,
     list_collections,
+    list_specs,
     lookup_tickers,
     realize_analysis,
     remove_ticker_from_collection,
     update_analysis,
+    upsert_spec,
 )
 from stock_ranker.core.model import (
     Analysis,
@@ -33,13 +39,32 @@ from stock_ranker.core.model import (
     Ticker,
     init_db,
 )
+from stock_ranker.core.score_engine import (
+    evaluate_spec,
+    load_spec_from_str,
+    normalize_expression_results,
+)
 
 init_db()
 
 _STATIC = pathlib.Path(__file__).parent / "static"
+_SPECS_DIR = pathlib.Path(__file__).parent.parent / "core" / "specs"
 
 app = FastAPI(title="stock-ranker")
 app.mount("/static", StaticFiles(directory=_STATIC), name="static")
+
+
+def _seed_bundled_specs() -> None:
+    """Seed YAML spec files bundled with the package into the DB at startup."""
+    if not _SPECS_DIR.exists():
+        return
+    for yaml_file in _SPECS_DIR.glob("*.yaml"):
+        name = yaml_file.stem
+        content = yaml_file.read_text()
+        upsert_spec(name, content)
+
+
+_seed_bundled_specs()
 
 
 @app.get("/", include_in_schema=False)
@@ -64,6 +89,23 @@ class RealizeRequest(BaseModel):
     tickers: list[str] = []
     collections: list[str] = []
     force_refresh: bool = False
+
+
+class SpecUpsertRequest(BaseModel):
+    name: str
+    content: str  # raw YAML text
+
+
+class EvaluateRequest(BaseModel):
+    spec_name: str | None = None
+    spec: dict[str, Any] | None = None  # inline parsed spec
+    info: dict[str, Any]
+
+
+class EvaluateCollectionRequest(BaseModel):
+    spec_name: str | None = None
+    spec: dict[str, Any] | None = None
+    tickers_info: dict[str, dict[str, Any]]
 
 
 # ---------------------------------------------------------------------------
@@ -237,6 +279,100 @@ async def get_metrics(ticker: str = "AAPL") -> list[str]:
         return get_available_metrics(ticker)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Upstream error: {e}")
+
+
+# ---------------------------------------------------------------------------
+# Specs
+# ---------------------------------------------------------------------------
+
+
+@app.get("/specs", response_model=list[str])
+async def get_specs() -> list[str]:
+    return list_specs()
+
+
+@app.get("/specs/{name}")
+async def get_spec_by_name(name: str) -> Response:
+    content = get_spec(name)
+    if content is None:
+        raise HTTPException(status_code=404, detail=f"Spec '{name}' not found")
+    return Response(content=content, media_type="text/plain; charset=utf-8")
+
+
+@app.post("/specs", status_code=201)
+async def post_spec(req: SpecUpsertRequest) -> dict[str, str]:
+    try:
+        load_spec_from_str(req.content)  # validate before storing
+    except (ValueError, yaml.YAMLError) as e:
+        raise HTTPException(status_code=422, detail=f"Invalid spec: {e}")
+    upsert_spec(req.name, req.content)
+    return {"name": req.name}
+
+
+@app.put("/specs/{name}")
+async def put_spec(name: str, req: SpecUpsertRequest) -> dict[str, str]:
+    try:
+        load_spec_from_str(req.content)
+    except (ValueError, yaml.YAMLError) as e:
+        raise HTTPException(status_code=422, detail=f"Invalid spec: {e}")
+    upsert_spec(name, req.content)
+    return {"name": name}
+
+
+@app.delete("/specs/{name}", status_code=204)
+async def delete_spec_by_name(name: str) -> Response:
+    if not delete_spec(name):
+        raise HTTPException(status_code=404, detail=f"Spec '{name}' not found")
+    return Response(status_code=204)
+
+
+# ---------------------------------------------------------------------------
+# Score evaluation
+# ---------------------------------------------------------------------------
+
+
+def _resolve_spec(
+    spec_name: str | None, inline_spec: dict[str, Any] | None
+) -> dict[str, Any]:
+    """Resolve a spec from name or inline dict; raise HTTPException on failure."""
+    if inline_spec is not None:
+        return inline_spec
+    if spec_name is not None:
+        content = get_spec(spec_name)
+        if content is None:
+            raise HTTPException(status_code=404, detail=f"Spec '{spec_name}' not found")
+        try:
+            return load_spec_from_str(content)
+        except (ValueError, yaml.YAMLError) as e:
+            raise HTTPException(status_code=422, detail=f"Invalid spec: {e}")
+    raise HTTPException(status_code=422, detail="Provide either 'spec_name' or 'spec'")
+
+
+@app.post("/scores/evaluate")
+async def post_evaluate(req: EvaluateRequest) -> dict[str, Any]:
+    """Evaluate a scoring spec against a single ticker's info dict."""
+    spec = _resolve_spec(req.spec_name, req.spec)
+    return evaluate_spec(req.info, spec)
+
+
+@app.post("/scores/evaluate-collection")
+async def post_evaluate_collection(req: EvaluateCollectionRequest) -> dict[str, Any]:
+    """Evaluate a scoring spec across a collection of tickers, with normalization."""
+    spec = _resolve_spec(req.spec_name, req.spec)
+
+    # Evaluate each ticker
+    results_by_ticker: dict[str, Any] = {}
+    for ticker, info in req.tickers_info.items():
+        results_by_ticker[ticker] = evaluate_spec(info, spec)
+
+    # Apply normalization for expression scores that have normalize=True
+    for score_def in spec.get("scores", []):
+        if score_def.get("type") == "expression" and score_def.get("normalize"):
+            results_by_ticker = normalize_expression_results(
+                results_by_ticker, score_def["id"], score_def["expression"]
+            )
+
+    return results_by_ticker
 
 
 if __name__ == "__main__":

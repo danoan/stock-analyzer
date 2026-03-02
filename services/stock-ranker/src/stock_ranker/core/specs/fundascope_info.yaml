@@ -1,0 +1,121 @@
+grade_map:
+  score_to_grade:
+    - {gte: 4.5, grade: A}
+    - {gte: 3.5, grade: B}
+    - {gte: 2.5, grade: C}
+    - {gte: 1.5, grade: D}
+    - {else: true, grade: F}
+  grade_to_score: {A: 5, B: 4, C: 3, D: 2, F: 1}
+
+scores:
+  - type: threshold
+    id: valuation
+    label: Valuation
+    aggregate: mean
+    metrics:
+      - key: trailingPE
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 12, score: 5}
+          - {lt: 18, score: 4}
+          - {lt: 25, score: 3}
+          - {lt: 35, score: 2}
+          - {else: true, score: 1}
+      - key: pegRatio
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 1, score: 5}
+          - {lt: 1.5, score: 4}
+          - {lt: 2, score: 3}
+          - {lt: 3, score: 2}
+          - {else: true, score: 1}
+      - key: priceToBook
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 1.5, score: 5}
+          - {lt: 3, score: 4}
+          - {lt: 5, score: 3}
+          - {lt: 10, score: 2}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: profitability
+    label: Profitability
+    aggregate: mean
+    metrics:
+      - key: returnOnEquity
+        rules:
+          - {gt: 0.25, score: 5}
+          - {gt: 0.15, score: 4}
+          - {gt: 0.08, score: 3}
+          - {gt: 0, score: 2}
+          - {else: true, score: 1}
+      - key: operatingMargins
+        rules:
+          - {gt: 0.25, score: 5}
+          - {gt: 0.15, score: 4}
+          - {gt: 0.08, score: 3}
+          - {gt: 0, score: 2}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: financial_health
+    label: Financial Health
+    aggregate: mean
+    metrics:
+      - key: currentRatio
+        rules:
+          - {gt: 2.0, score: 5}
+          - {gt: 1.5, score: 4}
+          - {gt: 1.0, score: 3}
+          - {gt: 0.7, score: 2}
+          - {else: true, score: 1}
+      - key: debtToEquity
+        rules:
+          - {lt: 30, score: 5}
+          - {lt: 60, score: 4}
+          - {lt: 100, score: 3}
+          - {lt: 200, score: 2}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: growth
+    label: Growth
+    aggregate: mean
+    metrics:
+      - key: revenueGrowth
+        rules:
+          - {gt: 0.20, score: 5}
+          - {gt: 0.10, score: 4}
+          - {gt: 0.03, score: 3}
+          - {gt: 0, score: 2}
+          - {else: true, score: 1}
+      - key: earningsGrowth
+        rules:
+          - {gt: 0.25, score: 5}
+          - {gt: 0.10, score: 4}
+          - {gt: 0.03, score: 3}
+          - {gt: 0, score: 2}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: dividends
+    label: Dividends
+    aggregate: mean
+    condition:
+      require_any_truthy: [dividendYield, dividendRate]
+    metrics:
+      - key: dividendYield
+        rules:
+          - {gt: 0.04, score: 5}
+          - {gt: 0.025, score: 4}
+          - {gt: 0.01, score: 3}
+          - {gt: 0, score: 2}
+          - {else: true, score: 1}
+      - key: payoutRatio
+        rules:
+          - {gt: 0, lte: 0.4, score: 5}
+          - {lte: 0.6, score: 4}
+          - {lte: 0.8, score: 3}
+          - {lte: 1.0, score: 2}
+          - {else: true, score: 1}

@@ -17,6 +17,7 @@ dependencies = [
     "typer",
     "rich",
     "simpleeval",
+    "pyyaml>=6",
 ]
 
 [project.optional-dependencies]
@@ -35,7 +36,7 @@ stock-ranker = "stock_ranker.cli.main:app"
 where = ["src"]
 
 [tool.setuptools.package-data]
-stock_ranker = ["server/static/**/*"]
+stock_ranker = ["server/static/**/*", "core/specs/*.yaml"]
 
 [tool.ruff]
 line-length = 100

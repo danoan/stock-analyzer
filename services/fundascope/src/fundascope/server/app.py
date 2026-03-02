@@ -93,7 +93,12 @@ async def api_stock_info(req: StockInfoRequest):
         )
 
     try:
-        result = get_stock_info(ticker, force_refresh=req.force_refresh, api_explorer_url=config.api_explorer_url)
+        result = get_stock_info(
+            ticker,
+            force_refresh=req.force_refresh,
+            api_explorer_url=config.api_explorer_url,
+            stock_ranker_url=config.stock_ranker_url,
+        )
         return JSONResponse(result)
     except ValueError as e:
         return JSONResponse({"error": str(e)}, status_code=404)

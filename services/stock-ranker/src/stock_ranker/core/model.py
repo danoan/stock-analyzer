@@ -138,6 +138,15 @@ class RealizationDB(Model):
         table_name = "realization"
 
 
+class SpecDB(Model):
+    name = TextField(primary_key=True)
+    content = TextField()  # raw YAML text
+
+    class Meta:
+        database = db
+        table_name = "spec"
+
+
 # For tests that need an integer PK placeholder
 _REALIZATION_UNUSED_ID = IntegerField(null=True)
 
@@ -145,6 +154,6 @@ _REALIZATION_UNUSED_ID = IntegerField(null=True)
 def init_db() -> None:
     db.connect(reuse_if_open=True)
     db.create_tables(
-        [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB],
+        [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB, SpecDB],
         safe=True,
     )

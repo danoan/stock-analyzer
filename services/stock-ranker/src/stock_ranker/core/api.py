@@ -1,13 +1,10 @@
 from __future__ import annotations
 
 import json
-import math
-import re
 from datetime import UTC, datetime
 from typing import Any
 
 import httpx
-from simpleeval import EvalWithCompoundTypes, NameNotDefined
 
 from stock_ranker.core.model import (
     Analysis,
@@ -19,9 +16,18 @@ from stock_ranker.core.model import (
     RealizationResult,
     Score,
     ScoreDetail,
+    SpecDB,
     Ticker,
     TickerCollectionDB,
     TickerDB,
+)
+from stock_ranker.core.score_engine import (
+    _extract_identifiers,
+    _extract_weight_and_base,
+    _normalize_values,
+    _split_additive_terms,
+    _to_numeric,
+    evaluate_expression,
 )
 from stock_ranker.utils.config import settings
 
@@ -64,160 +70,10 @@ def get_available_metrics(sample_ticker: str = "AAPL") -> list[str]:
     return sorted(k for k, v in info.items() if isinstance(v, (int, float)) and v is not None)
 
 
-# ---------------------------------------------------------------------------
-# Expression evaluation
-# ---------------------------------------------------------------------------
-
-_ALLOWED_FUNCTIONS = {
-    "abs": abs,
-    "min": min,
-    "max": max,
-    "round": round,
-    "log": math.log,
-    "sqrt": math.sqrt,
-    "exp": math.exp,
-}
-
-
-def _extract_identifiers(expression: str) -> set[str]:
-    """Return variable names referenced in an expression, excluding known function names."""
-    reserved = set(_ALLOWED_FUNCTIONS.keys()) | {"True", "False", "None"}
-    return {m for m in re.findall(r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b", expression) if m not in reserved}
-
-
-def evaluate_expression(expression: str, variables: dict[str, float | None]) -> float | None:
-    """Evaluate a mathematical expression with the given variables.
-
-    Returns None if any variable is None/NaN/Inf, or on any evaluation error.
-    """
-    for v in variables.values():
-        if v is None:
-            return None
-        if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
-            return None
-
-    evaluator = EvalWithCompoundTypes(
-        names=variables,
-        functions=_ALLOWED_FUNCTIONS,
-    )
-    try:
-        result = evaluator.eval(expression)
-    except (NameNotDefined, Exception):
-        return None
-
-    if not isinstance(result, (int, float)):
-        return None
-    result = float(result)
-    if math.isnan(result) or math.isinf(result):
-        return None
-    return result
-
 
 # ---------------------------------------------------------------------------
 # Score computation
 # ---------------------------------------------------------------------------
-
-
-def _to_numeric(value: Any) -> float | None:
-    """Convert a value to float, returning None for non-numeric types."""
-    if value is None:
-        return None
-    if isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        f = float(value)
-        if math.isnan(f) or math.isinf(f):
-            return None
-        return f
-    return None
-
-
-def _normalize_values(values: list[float | None]) -> list[float | None]:
-    """Min-max normalize values to [0, 1].
-
-    - None stays None.
-    - If all values are None, returns all None.
-    - If span == 0, all non-None values become 0.5.
-    """
-    numeric = [v for v in values if v is not None]
-    if not numeric:
-        return [None] * len(values)
-
-    vmin = min(numeric)
-    vmax = max(numeric)
-    span = vmax - vmin
-
-    result: list[float | None] = []
-    for v in values:
-        if v is None:
-            result.append(None)
-        elif span == 0:
-            result.append(0.5)
-        else:
-            result.append((v - vmin) / span)
-    return result
-
-
-def _split_additive_terms(expression: str) -> list[str]:
-    """Split expression into additive terms at the top level (depth 0).
-
-    'pe + 5/priceToBook'  → ['pe', '+ 5/priceToBook']
-    '-pe + pb'            → ['-pe', '+ pb']
-    '5*(pe + pb)'         → ['5*(pe + pb)']   # inner + not split
-    """
-    depth = 0
-    split_at: list[int] = []
-    for i, c in enumerate(expression):
-        if c in '([':
-            depth += 1
-        elif c in ')]':
-            depth -= 1
-        elif c in '+-' and depth == 0 and i > 0:
-            split_at.append(i)
-
-    if not split_at:
-        return [expression.strip()]
-
-    segments: list[str] = []
-    prev = 0
-    for pos in split_at:
-        seg = expression[prev:pos].strip()
-        if seg:
-            segments.append(seg)
-        prev = pos
-    seg = expression[prev:].strip()
-    if seg:
-        segments.append(seg)
-    return segments
-
-
-def _extract_weight_and_base(term: str) -> tuple[float, str]:
-    """Separate a numeric leading coefficient from an additive term.
-
-    '0.7 * pe'        → (0.7,  'pe')
-    '0.3 * (1.0/pe)'  → (0.3,  '1.0/pe')
-    'pe'              → (1.0,  'pe')
-    '+ 0.3 * eps'     → (0.3,  'eps')
-    '- 0.3 * eps'     → (-0.3, 'eps')
-    '+ eps'           → (1.0,  'eps')
-    '- eps'           → (-1.0, 'eps')
-    """
-    t = term.strip()
-    sign = 1.0
-    if t.startswith('+'):
-        t = t[1:].strip()
-    elif t.startswith('-'):
-        t = t[1:].strip()
-        sign = -1.0
-
-    m = re.match(r'^(\d+(?:\.\d+)?)\s*\*\s*(.+)$', t, re.DOTALL)
-    if m:
-        coeff = float(m.group(1))
-        base = m.group(2).strip()
-        if base.startswith('(') and base.endswith(')'):
-            base = base[1:-1].strip()
-        return sign * coeff, base
-    return sign, t
 
 
 def compute_score(
@@ -472,3 +328,31 @@ def remove_ticker_from_collection(symbol: str, collection_name: str) -> bool:
 
 def list_all_tickers() -> list[Ticker]:
     return [Ticker(symbol=t.symbol, name=t.name) for t in TickerDB.select()]
+
+
+# ---------------------------------------------------------------------------
+# CRUD — Specs
+# ---------------------------------------------------------------------------
+
+
+def list_specs() -> list[str]:
+    """Return all stored spec names."""
+    return [s.name for s in SpecDB.select()]
+
+
+def get_spec(name: str) -> str | None:
+    """Return raw YAML content for a named spec, or None if not found."""
+    try:
+        return str(SpecDB.get_by_id(name).content)
+    except SpecDB.DoesNotExist:
+        return None
+
+
+def upsert_spec(name: str, content: str) -> None:
+    """Store or replace a named spec."""
+    SpecDB.insert(name=name, content=content).on_conflict_replace().execute()
+
+
+def delete_spec(name: str) -> bool:
+    count = SpecDB.delete().where(SpecDB.name == name).execute()
+    return count > 0

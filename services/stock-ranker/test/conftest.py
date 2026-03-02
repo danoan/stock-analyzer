@@ -10,12 +10,13 @@ from stock_ranker.core.model import (  # noqa: E402
     AnalysisDB,
     CollectionDB,
     RealizationDB,
+    SpecDB,
     TickerCollectionDB,
     TickerDB,
     db,
 )
 
-_ALL_TABLES = [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB]
+_ALL_TABLES = [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB, SpecDB]
 
 
 @pytest.fixture(autouse=True)

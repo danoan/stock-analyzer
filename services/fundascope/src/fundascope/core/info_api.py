@@ -3,6 +3,8 @@
 import json
 import math
 
+import httpx
+
 from fundascope.core.cache import get_cached, set_cached
 
 # ---------------------------------------------------------------------------
@@ -57,6 +59,15 @@ METRIC_TOOLTIPS = {
     "beta": "A measure of volatility relative to the market. Beta > 1 means more volatile than the market; < 1 means less volatile.",
     "fiftyDayAverage": "Average closing price over the last 50 trading days. A short-term trend indicator.",
     "twoHundredDayAverage": "Average closing price over the last 200 trading days. A long-term trend indicator.",
+}
+
+# Maps section title to the score id in the fundascope_info spec
+_SECTION_SCORE_ID: dict[str, str] = {
+    "Valuation": "valuation",
+    "Profitability": "profitability",
+    "Financial Health": "financial_health",
+    "Growth": "growth",
+    "Dividends": "dividends",
 }
 
 
@@ -135,252 +146,41 @@ def _fmt_date_ts(value):
 
 
 # ---------------------------------------------------------------------------
-# Metric extraction with formatting
+# Grading via stock-ranker score engine
 # ---------------------------------------------------------------------------
 
-def _extract_metric(info: dict, key: str, formatter=_fmt_plain) -> dict:
-    """Extract a single metric from info dict, format it, attach tooltip."""
-    raw = info.get(key)
-    return {
-        "key": key,
-        "raw": raw,
-        "formatted": formatter(raw),
-        "tooltip": METRIC_TOOLTIPS.get(key, ""),
-    }
+def _fetch_grades(info: dict, stock_ranker_url: str) -> tuple[dict[str, str | None], str]:
+    """Call stock-ranker POST /scores/evaluate and return (grades_by_id, overall_grade).
 
-
-# ---------------------------------------------------------------------------
-# Grading functions
-# ---------------------------------------------------------------------------
-
-def _grade_valuation(info: dict) -> str:
-    """Grade valuation based on P/E, PEG, and P/B."""
-    scores = []
-
-    pe = info.get("trailingPE")
-    if pe is not None and isinstance(pe, (int, float)) and not math.isnan(pe):
-        if pe < 0:
-            scores.append(1)
-        elif pe < 12:
-            scores.append(5)
-        elif pe < 18:
-            scores.append(4)
-        elif pe < 25:
-            scores.append(3)
-        elif pe < 35:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    peg = info.get("pegRatio")
-    if peg is not None and isinstance(peg, (int, float)) and not math.isnan(peg):
-        if peg < 0:
-            scores.append(1)
-        elif peg < 1:
-            scores.append(5)
-        elif peg < 1.5:
-            scores.append(4)
-        elif peg < 2:
-            scores.append(3)
-        elif peg < 3:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    pb = info.get("priceToBook")
-    if pb is not None and isinstance(pb, (int, float)) and not math.isnan(pb):
-        if pb < 0:
-            scores.append(1)
-        elif pb < 1.5:
-            scores.append(5)
-        elif pb < 3:
-            scores.append(4)
-        elif pb < 5:
-            scores.append(3)
-        elif pb < 10:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    if not scores:
-        return "C"
-    avg = sum(scores) / len(scores)
-    return _num_to_grade(avg)
-
-
-def _grade_profitability(info: dict) -> str:
-    """Grade profitability based on ROE and operating margins."""
-    scores = []
-
-    roe = info.get("returnOnEquity")
-    if roe is not None and isinstance(roe, (int, float)) and not math.isnan(roe):
-        if roe > 0.25:
-            scores.append(5)
-        elif roe > 0.15:
-            scores.append(4)
-        elif roe > 0.08:
-            scores.append(3)
-        elif roe > 0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    om = info.get("operatingMargins")
-    if om is not None and isinstance(om, (int, float)) and not math.isnan(om):
-        if om > 0.25:
-            scores.append(5)
-        elif om > 0.15:
-            scores.append(4)
-        elif om > 0.08:
-            scores.append(3)
-        elif om > 0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    if not scores:
-        return "C"
-    avg = sum(scores) / len(scores)
-    return _num_to_grade(avg)
-
-
-def _grade_financial_health(info: dict) -> str:
-    """Grade financial health based on current ratio and debt/equity."""
-    scores = []
-
-    cr = info.get("currentRatio")
-    if cr is not None and isinstance(cr, (int, float)) and not math.isnan(cr):
-        if cr > 2.0:
-            scores.append(5)
-        elif cr > 1.5:
-            scores.append(4)
-        elif cr > 1.0:
-            scores.append(3)
-        elif cr > 0.7:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    de = info.get("debtToEquity")
-    if de is not None and isinstance(de, (int, float)) and not math.isnan(de):
-        if de < 30:
-            scores.append(5)
-        elif de < 60:
-            scores.append(4)
-        elif de < 100:
-            scores.append(3)
-        elif de < 200:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    if not scores:
-        return "C"
-    avg = sum(scores) / len(scores)
-    return _num_to_grade(avg)
-
-
-def _grade_growth(info: dict) -> str:
-    """Grade growth based on revenue and earnings growth."""
-    scores = []
-
-    rg = info.get("revenueGrowth")
-    if rg is not None and isinstance(rg, (int, float)) and not math.isnan(rg):
-        if rg > 0.20:
-            scores.append(5)
-        elif rg > 0.10:
-            scores.append(4)
-        elif rg > 0.03:
-            scores.append(3)
-        elif rg > 0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    eg = info.get("earningsGrowth")
-    if eg is not None and isinstance(eg, (int, float)) and not math.isnan(eg):
-        if eg > 0.25:
-            scores.append(5)
-        elif eg > 0.10:
-            scores.append(4)
-        elif eg > 0.03:
-            scores.append(3)
-        elif eg > 0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    if not scores:
-        return "C"
-    avg = sum(scores) / len(scores)
-    return _num_to_grade(avg)
-
-
-def _grade_dividends(info: dict) -> str | None:
-    """Grade dividends. Returns None if no dividend."""
-    dy = info.get("dividendYield")
-    dr = info.get("dividendRate")
-    if not dy and not dr:
-        return None
-
-    scores = []
-
-    if dy is not None and isinstance(dy, (int, float)) and not math.isnan(dy):
-        if dy > 0.04:
-            scores.append(5)
-        elif dy > 0.025:
-            scores.append(4)
-        elif dy > 0.01:
-            scores.append(3)
-        elif dy > 0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    pr = info.get("payoutRatio")
-    if pr is not None and isinstance(pr, (int, float)) and not math.isnan(pr):
-        if 0 < pr <= 0.4:
-            scores.append(5)
-        elif pr <= 0.6:
-            scores.append(4)
-        elif pr <= 0.8:
-            scores.append(3)
-        elif pr <= 1.0:
-            scores.append(2)
-        else:
-            scores.append(1)
-
-    if not scores:
-        return "C"
-    avg = sum(scores) / len(scores)
-    return _num_to_grade(avg)
-
-
-def _num_to_grade(num: float) -> str:
-    if num >= 4.5:
-        return "A"
-    if num >= 3.5:
-        return "B"
-    if num >= 2.5:
-        return "C"
-    if num >= 1.5:
-        return "D"
-    return "F"
-
-
-def _grade_to_num(grade: str) -> float:
-    return {"A": 5, "B": 4, "C": 3, "D": 2, "F": 1}.get(grade, 3)
+    On failure returns empty grades and overall_grade="C".
+    """
+    try:
+        resp = httpx.post(
+            f"{stock_ranker_url}/scores/evaluate",
+            json={"spec_name": "fundascope_info", "info": info},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        grades_by_id: dict[str, str | None] = {
+            r["id"]: r.get("grade") for r in data.get("results", [])
+        }
+        overall_grade: str = data.get("overall_grade") or "C"
+        return grades_by_id, overall_grade
+    except Exception:
+        return {}, "C"
 
 
 # ---------------------------------------------------------------------------
 # Main build function
 # ---------------------------------------------------------------------------
 
-def build_info_analysis(info: dict) -> dict:
+def build_info_analysis(info: dict, stock_ranker_url: str) -> dict:
     """Build a structured analysis from yfinance Ticker.info data.
 
     Returns a dict with profile, scorecard (graded sections), and sections
     (each containing rows with label/formatted/tooltip for table rendering).
+    Grades are computed by calling the stock-ranker score engine.
     """
 
     # --- Company Profile ---
@@ -393,7 +193,10 @@ def build_info_analysis(info: dict) -> dict:
         "longBusinessSummary": info.get("longBusinessSummary", ""),
     }
 
-    # --- Section definitions: (title, keys_with_formatters, grade_fn) ---
+    # --- Fetch grades from stock-ranker ---
+    grades_by_id, overall_grade = _fetch_grades(info, stock_ranker_url)
+
+    # --- Section definitions: (title, keys_with_formatters) ---
     section_defs = [
         ("Valuation", [
             ("marketCap", "Market Cap", _fmt_number),
@@ -404,7 +207,7 @@ def build_info_analysis(info: dict) -> dict:
             ("priceToSalesTrailing12Months", "Price / Sales", _fmt_multiple),
             ("enterpriseToEbitda", "EV / EBITDA", _fmt_multiple),
             ("enterpriseToRevenue", "EV / Revenue", _fmt_multiple),
-        ], _grade_valuation),
+        ]),
         ("Profitability", [
             ("profitMargins", "Profit Margin", _fmt_ratio),
             ("operatingMargins", "Operating Margin", _fmt_ratio),
@@ -412,26 +215,26 @@ def build_info_analysis(info: dict) -> dict:
             ("ebitdaMargins", "EBITDA Margin", _fmt_ratio),
             ("returnOnEquity", "Return on Equity", _fmt_ratio),
             ("returnOnAssets", "Return on Assets", _fmt_ratio),
-        ], _grade_profitability),
+        ]),
         ("Financial Health", [
             ("currentRatio", "Current Ratio", _fmt_multiple),
             ("quickRatio", "Quick Ratio", _fmt_multiple),
             ("debtToEquity", "Debt / Equity", _fmt_plain),
             ("totalDebt", "Total Debt", _fmt_number),
             ("totalCash", "Total Cash", _fmt_number),
-        ], _grade_financial_health),
+        ]),
         ("Growth", [
             ("revenueGrowth", "Revenue Growth", _fmt_ratio),
             ("earningsGrowth", "Earnings Growth", _fmt_ratio),
             ("earningsQuarterlyGrowth", "Quarterly Earnings Growth", _fmt_ratio),
-        ], _grade_growth),
+        ]),
         ("Dividends", [
             ("dividendYield", "Dividend Yield", _fmt_ratio),
             ("dividendRate", "Dividend Rate", _fmt_price),
             ("payoutRatio", "Payout Ratio", _fmt_ratio),
             ("fiveYearAvgDividendYield", "5Y Avg Dividend Yield", _fmt_ratio),
             ("exDividendDate", "Ex-Dividend Date", _fmt_date_ts),
-        ], _grade_dividends),
+        ]),
         ("Price & Trading", [
             ("currentPrice", "Current Price", _fmt_price),
             ("fiftyTwoWeekHigh", "52-Week High", _fmt_price),
@@ -440,14 +243,15 @@ def build_info_analysis(info: dict) -> dict:
             ("beta", "Beta", _fmt_plain),
             ("fiftyDayAverage", "50-Day Average", _fmt_price),
             ("twoHundredDayAverage", "200-Day Average", _fmt_price),
-        ], None),  # no grade
+        ]),
     ]
 
     sections = []
     scorecard = []
 
-    for title, keys, grade_fn in section_defs:
-        grade = grade_fn(info) if grade_fn else None
+    for title, keys in section_defs:
+        score_id = _SECTION_SCORE_ID.get(title)
+        grade = grades_by_id.get(score_id) if score_id else None
 
         rows = []
         for key, label, fmt in keys:
@@ -467,12 +271,6 @@ def build_info_analysis(info: dict) -> dict:
 
         if grade is not None:
             scorecard.append({"label": title, "grade": grade})
-
-    # --- Overall Grade ---
-    graded = [s["grade"] for s in sections if s["grade"] is not None]
-    overall_grade = _num_to_grade(
-        sum(_grade_to_num(g) for g in graded) / len(graded)
-    ) if graded else "C"
 
     scorecard.insert(0, {"label": "Overall", "grade": overall_grade})
 
@@ -540,10 +338,13 @@ def _coerce_value(val_str: str):
     return val_str
 
 
-def get_stock_info(ticker_symbol: str, force_refresh: bool = False, api_explorer_url: str = "http://localhost:8000") -> dict:
+def get_stock_info(
+    ticker_symbol: str,
+    force_refresh: bool = False,
+    api_explorer_url: str = "http://localhost:8000",
+    stock_ranker_url: str = "http://localhost:8001",
+) -> dict:
     """Fetch stock info from api-explorer and build analysis."""
-    import httpx
-
     ticker_symbol = ticker_symbol.strip().upper()
     cache_key = "info_analysis"
 
@@ -571,6 +372,6 @@ def get_stock_info(ticker_symbol: str, force_refresh: bool = False, api_explorer
     if not info or not info.get("shortName"):
         raise ValueError(f"No info data found for {ticker_symbol}")
 
-    result = build_info_analysis(info)
+    result = build_info_analysis(info, stock_ranker_url)
     set_cached(ticker_symbol, cache_key, json.dumps(result))
     return result
