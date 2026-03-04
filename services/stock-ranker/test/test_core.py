@@ -16,22 +16,30 @@ from stock_ranker.core.api import (
     create_collection,
     delete_analysis,
     delete_collection,
+    delete_library_score,
     evaluate_expression,
     fetch_info,
     get_analysis,
     get_analysis_by_name,
     get_available_metrics,
     get_collection_by_name,
+    get_library_score,
     list_all_tickers,
     list_analyses,
     list_collections,
+    list_library_scores,
     lookup_tickers,
     realize_analysis,
     remove_ticker_from_collection,
+    run_score_test,
+    seed_library_from_spec,
     update_analysis,
+    upsert_library_score,
+    upsert_spec,
 )
 from stock_ranker.core.model import (
     Analysis,
+    LibraryScore,
     LookupResult,
     Score,
 )
@@ -595,3 +603,332 @@ def test_realize_analysis_normalize_weighted():
     by_symbol = {r.ticker_symbol: r for r in results}
     assert by_symbol["AAPL"].scores["S"] == pytest.approx(0.70)
     assert by_symbol["MSFT"].scores["S"] == pytest.approx(0.30)
+
+
+# ---------------------------------------------------------------------------
+# realize_analysis — spec threshold scores injected into expression variables
+# ---------------------------------------------------------------------------
+
+_SIMPLE_SPEC_YAML = """\
+scores:
+  - id: valuation
+    type: threshold
+    label: Valuation
+    metrics:
+      - key: trailingPE
+        rules:
+          - lte: 15
+            score: 5
+          - lte: 25
+            score: 3
+          - else: true
+            score: 1
+grade_map:
+  score_to_grade:
+    - lte: 2
+      grade: F
+    - lte: 3
+      grade: C
+    - else: true
+      grade: A
+  grade_to_score:
+    A: 5
+    C: 3
+    F: 1
+"""
+
+
+def test_realize_analysis_references_spec_threshold_score():
+    """An expression that references a spec threshold score ID should resolve correctly."""
+    upsert_spec("test_spec", _SIMPLE_SPEC_YAML)
+    # valuation score for AAPL: trailingPE=10 → score=5 (lte 15)
+    # Analysis score: valuation * 2 → should be 5 * 2 = 10.0
+    analysis = create_analysis(
+        Analysis(name="SpecRef", scores=[Score(name="S", expression="valuation * 2")])
+    )
+    info = {"trailingPE": 10.0}
+    with patch("stock_ranker.core.api.fetch_info", return_value=info):
+        results = realize_analysis(analysis, ["AAPL"])
+
+    assert len(results) == 1
+    assert results[0].error is None
+    assert results[0].scores["S"] == pytest.approx(10.0)
+
+
+# ---------------------------------------------------------------------------
+# Score Library CRUD
+# ---------------------------------------------------------------------------
+
+
+def test_create_and_list_library_scores():
+    score = LibraryScore(
+        name="pe_inv",
+        score_type="expression",
+        definition={"expression": "1 / trailingPE", "normalize": True},
+        description="Inverse PE ratio",
+    )
+    saved = upsert_library_score(score)
+    assert saved.name == "pe_inv"
+    assert saved.score_type == "expression"
+
+    all_scores = list_library_scores()
+    assert len(all_scores) == 1
+    assert all_scores[0].name == "pe_inv"
+    assert all_scores[0].definition["expression"] == "1 / trailingPE"
+
+
+def test_upsert_library_score_updates_existing():
+    score = LibraryScore(
+        name="pe_inv",
+        score_type="expression",
+        definition={"expression": "1 / trailingPE", "normalize": False},
+    )
+    upsert_library_score(score)
+
+    updated = LibraryScore(
+        name="pe_inv",
+        score_type="expression",
+        definition={"expression": "2 / trailingPE", "normalize": True},
+        description="Updated",
+    )
+    upsert_library_score(updated)
+
+    fetched = get_library_score("pe_inv")
+    assert fetched is not None
+    assert fetched.definition["expression"] == "2 / trailingPE"
+    assert fetched.description == "Updated"
+    assert list_library_scores() == [fetched]
+
+
+def test_delete_library_score():
+    score = LibraryScore(
+        name="to_delete",
+        score_type="threshold",
+        definition={"metrics": [], "aggregate": "mean"},
+    )
+    upsert_library_score(score)
+    ok = delete_library_score("to_delete")
+    assert ok is True
+    assert get_library_score("to_delete") is None
+
+
+def test_get_library_score_not_found():
+    result = get_library_score("nonexistent")
+    assert result is None
+
+
+# ---------------------------------------------------------------------------
+# test_library_score — expression
+# ---------------------------------------------------------------------------
+
+
+def test_run_score_test_expression():
+    score = LibraryScore(
+        name="pe_inv",
+        score_type="expression",
+        definition={"expression": "1 / trailingPE", "normalize": False},
+    )
+    upsert_library_score(score)
+
+    info = {"trailingPE": 25.0}
+    with patch("stock_ranker.core.api.fetch_info", return_value=info):
+        result = run_score_test("pe_inv", "AAPL")
+
+    assert result["type"] == "expression"
+    assert result["score"] == pytest.approx(0.04)
+    assert result["variables"]["trailingPE"] == pytest.approx(25.0)
+    assert result["error"] is None
+
+
+# ---------------------------------------------------------------------------
+# run_score_test — threshold
+# ---------------------------------------------------------------------------
+
+
+def test_run_score_test_threshold():
+    score = LibraryScore(
+        name="my_val",
+        score_type="threshold",
+        definition={
+            "metrics": [
+                {
+                    "key": "trailingPE",
+                    "rules": [
+                        {"lte": 15, "score": 5},
+                        {"lte": 25, "score": 3},
+                        {"else": True, "score": 1},
+                    ],
+                }
+            ],
+            "aggregate": "mean",
+        },
+    )
+    upsert_library_score(score)
+
+    info = {"trailingPE": 20.0}
+    with patch("stock_ranker.core.api.fetch_info", return_value=info):
+        result = run_score_test("my_val", "AAPL")
+
+    assert result["type"] == "threshold"
+    assert result["score"] == pytest.approx(3.0)
+    assert result["metric_scores"][0]["key"] == "trailingPE"
+    assert result["metric_scores"][0]["value"] == pytest.approx(20.0)
+    assert result["metric_scores"][0]["rule_score"] == 3
+    assert result["error"] is None
+
+
+# ---------------------------------------------------------------------------
+# run_score_test — expression referencing spec threshold var
+# ---------------------------------------------------------------------------
+
+
+def test_run_score_test_expression_references_spec_threshold():
+    upsert_spec("test_spec", _SIMPLE_SPEC_YAML)
+
+    score = LibraryScore(
+        name="spec_combo",
+        score_type="expression",
+        definition={"expression": "valuation * 2", "normalize": False},
+    )
+    upsert_library_score(score)
+
+    # trailingPE=10 → valuation score=5 (lte 15), expression result = 5 * 2 = 10.0
+    info = {"trailingPE": 10.0}
+    with patch("stock_ranker.core.api.fetch_info", return_value=info):
+        result = run_score_test("spec_combo", "AAPL")
+
+    assert result["type"] == "expression"
+    assert result["score"] == pytest.approx(10.0)
+    assert result["error"] is None
+
+
+# ---------------------------------------------------------------------------
+# seed_library_from_spec
+# ---------------------------------------------------------------------------
+
+_FUNDASCOPE_YAML = """\
+grade_map:
+  score_to_grade:
+    - {gte: 4.5, grade: A}
+    - {gte: 3.5, grade: B}
+    - {gte: 2.5, grade: C}
+    - {gte: 1.5, grade: D}
+    - {else: true, grade: F}
+  grade_to_score: {A: 5, B: 4, C: 3, D: 2, F: 1}
+
+scores:
+  - type: threshold
+    id: valuation
+    label: Valuation
+    aggregate: mean
+    metrics:
+      - key: trailingPE
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 12, score: 5}
+          - {else: true, score: 1}
+      - key: pegRatio
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 1, score: 5}
+          - {else: true, score: 1}
+      - key: priceToBook
+        rules:
+          - {lt: 0, score: 1}
+          - {lt: 1.5, score: 5}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: profitability
+    label: Profitability
+    aggregate: mean
+    metrics:
+      - key: returnOnEquity
+        rules:
+          - {gt: 0.25, score: 5}
+          - {else: true, score: 1}
+      - key: operatingMargins
+        rules:
+          - {gt: 0.25, score: 5}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: financial_health
+    label: Financial Health
+    aggregate: mean
+    metrics:
+      - key: currentRatio
+        rules:
+          - {gt: 2.0, score: 5}
+          - {else: true, score: 1}
+      - key: debtToEquity
+        rules:
+          - {lt: 30, score: 5}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: growth
+    label: Growth
+    aggregate: mean
+    metrics:
+      - key: revenueGrowth
+        rules:
+          - {gt: 0.20, score: 5}
+          - {else: true, score: 1}
+      - key: earningsGrowth
+        rules:
+          - {gt: 0.25, score: 5}
+          - {else: true, score: 1}
+
+  - type: threshold
+    id: dividends
+    label: Dividends
+    aggregate: mean
+    condition:
+      require_any_truthy: [dividendYield, dividendRate]
+    metrics:
+      - key: dividendYield
+        rules:
+          - {gt: 0.04, score: 5}
+          - {else: true, score: 1}
+      - key: payoutRatio
+        rules:
+          - {gt: 0, lte: 0.4, score: 5}
+          - {else: true, score: 1}
+"""
+
+_EXPECTED_SCORE_NAMES = {"valuation", "profitability", "financial_health", "growth", "dividends"}
+
+
+def test_seed_library_from_spec_creates_scores():
+    upsert_spec("fundascope_info", _FUNDASCOPE_YAML)
+    count = seed_library_from_spec("fundascope_info")
+    assert count == 5
+
+    names = {s.name for s in list_library_scores()}
+    assert _EXPECTED_SCORE_NAMES <= names
+
+    dividends = get_library_score("dividends")
+    assert dividends is not None
+    assert "condition" in dividends.definition
+    expected_truthy = ["dividendYield", "dividendRate"]
+    assert dividends.definition["condition"]["require_any_truthy"] == expected_truthy
+
+
+def test_seed_library_from_spec_idempotent():
+    upsert_spec("fundascope_info", _FUNDASCOPE_YAML)
+    seed_library_from_spec("fundascope_info")
+
+    # Save current state of one score before second seed
+    valuation_before = get_library_score("valuation")
+
+    count2 = seed_library_from_spec("fundascope_info")
+    assert count2 == 0
+
+    scores = list_library_scores()
+    assert sum(1 for s in scores if s.name in _EXPECTED_SCORE_NAMES) == 5
+
+    # Existing score unchanged
+    valuation_after = get_library_score("valuation")
+    assert valuation_after is not None
+    assert valuation_after.definition == valuation_before.definition  # type: ignore[union-attr]

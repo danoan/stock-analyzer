@@ -5,7 +5,7 @@ from typing import Any
 
 import peewee
 import yaml
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, File, HTTPException, Response, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -16,6 +16,7 @@ from stock_ranker.core.api import (
     create_collection,
     delete_analysis,
     delete_collection,
+    delete_library_score,
     delete_spec,
     get_analysis,
     get_available_metrics,
@@ -24,16 +25,21 @@ from stock_ranker.core.api import (
     list_all_tickers,
     list_analyses,
     list_collections,
+    list_library_scores,
     list_specs,
     lookup_tickers,
     realize_analysis,
     remove_ticker_from_collection,
+    run_score_test,
+    seed_library_from_spec,
     update_analysis,
+    upsert_library_score,
     upsert_spec,
 )
 from stock_ranker.core.model import (
     Analysis,
     Collection,
+    LibraryScore,
     LookupResult,
     RealizationResult,
     Ticker,
@@ -65,6 +71,18 @@ def _seed_bundled_specs() -> None:
 
 
 _seed_bundled_specs()
+
+
+def _seed_library_from_specs() -> None:
+    """Seed score library from all bundled spec files (non-destructive)."""
+    for spec_name in list_specs():
+        try:
+            seed_library_from_spec(spec_name)
+        except Exception:
+            pass
+
+
+_seed_library_from_specs()
 
 
 @app.get("/", include_in_schema=False)
@@ -106,6 +124,10 @@ class EvaluateCollectionRequest(BaseModel):
     spec_name: str | None = None
     spec: dict[str, Any] | None = None
     tickers_info: dict[str, dict[str, Any]]
+
+
+class ScoreTestRequest(BaseModel):
+    ticker: str
 
 
 # ---------------------------------------------------------------------------
@@ -373,6 +395,88 @@ async def post_evaluate_collection(req: EvaluateCollectionRequest) -> dict[str, 
             )
 
     return results_by_ticker
+
+
+@app.get("/scores/presets")
+async def get_preset_scores() -> list[dict[str, Any]]:
+    """Return all scores from all stored specs."""
+    result = []
+    for spec_name in list_specs():
+        content = get_spec(spec_name)
+        if not content:
+            continue
+        try:
+            spec = load_spec_from_str(content)
+        except Exception:
+            continue
+        for score_def in spec.get("scores", []):
+            score_type = score_def.get("type", "expression")
+            result.append({
+                "spec": spec_name,
+                "id": score_def.get("id", ""),
+                "label": score_def.get("label", score_def.get("id", "")),
+                "type": score_type,
+                "expression": score_def.get("expression", ""),
+            })
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Score Library
+# ---------------------------------------------------------------------------
+
+
+@app.get("/score-library", response_model=list[LibraryScore])
+async def get_score_library() -> list[LibraryScore]:
+    return list_library_scores()
+
+
+@app.post("/score-library", response_model=LibraryScore, status_code=201)
+async def post_score_library(score: LibraryScore) -> LibraryScore:
+    return upsert_library_score(score)
+
+
+@app.post("/score-library/import")
+async def import_score_library(file: UploadFile = File(...)) -> dict[str, Any]:
+    content = await file.read()
+    try:
+        raw = yaml.safe_load(content)
+    except yaml.YAMLError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid YAML: {e}")
+    if not isinstance(raw, list):
+        raise HTTPException(status_code=400, detail="YAML must be a top-level list of scores")
+    imported, errors = [], []
+    for i, item in enumerate(raw):
+        try:
+            score = LibraryScore.model_validate(item)
+            upsert_library_score(score)
+            imported.append(score.name)
+        except Exception as e:
+            errors.append({"index": i, "name": item.get("name", "?"), "error": str(e)})
+    return {"imported": len(imported), "names": imported, "errors": errors}
+
+
+@app.put("/score-library/{name}", response_model=LibraryScore)
+async def put_score_library(name: str, score: LibraryScore) -> LibraryScore:
+    score.name = name
+    return upsert_library_score(score)
+
+
+@app.delete("/score-library/{name}", status_code=204)
+async def delete_score_library(name: str) -> Response:
+    if not delete_library_score(name):
+        raise HTTPException(status_code=404, detail=f"Library score '{name}' not found")
+    return Response(status_code=204)
+
+
+@app.post("/score-library/{name}/test")
+async def post_score_library_test(name: str, req: ScoreTestRequest) -> dict[str, Any]:
+    try:
+        return run_score_test(name, req.ticker)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Upstream error: {e}")
 
 
 if __name__ == "__main__":

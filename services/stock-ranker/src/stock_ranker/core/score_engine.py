@@ -279,13 +279,18 @@ def evaluate_threshold_score(
 def evaluate_expression_score(
     info: dict,  # type: ignore[type-arg]
     score_def: dict,  # type: ignore[type-arg]
+    score_vars: dict[str, float] | None = None,
 ) -> dict:  # type: ignore[type-arg]
     """Evaluate an expression score for a single ticker.
 
     Returns {id, label, type, raw_result, result, variables}.
+    score_vars, if provided, contains numeric_score values from preceding
+    threshold scores (keyed by score id) so expressions can reference them.
     """
     expression: str = score_def["expression"]
     all_variables: dict[str, float | None] = {k: _to_numeric(v) for k, v in info.items()}
+    if score_vars:
+        all_variables.update(score_vars)
     referenced = _extract_identifiers(expression)
     expr_variables = {name: all_variables.get(name) for name in referenced}
     raw_result = evaluate_expression(expression, expr_variables)
@@ -309,6 +314,7 @@ def evaluate_spec(
     overall_grade is computed only when threshold scores with grade_map are present.
     """
     results: list[dict] = []  # type: ignore[type-arg]
+    score_vars: dict[str, float] = {}
     grade_map = spec.get("grade_map")
 
     for score_def in spec.get("scores", []):
@@ -317,8 +323,9 @@ def evaluate_spec(
             result = evaluate_threshold_score(info, score_def, spec)
             if result is not None:
                 results.append(result)
+                score_vars[score_def["id"]] = result["numeric_score"]
         elif score_type == "expression":
-            results.append(evaluate_expression_score(info, score_def))
+            results.append(evaluate_expression_score(info, score_def, score_vars))
 
     # Compute overall_grade from threshold results when grade_map is present
     overall_grade: str | None = None

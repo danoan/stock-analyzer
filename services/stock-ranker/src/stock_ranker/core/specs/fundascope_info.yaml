@@ -119,3 +119,4 @@ scores:
           - {lte: 0.8, score: 3}
           - {lte: 1.0, score: 2}
           - {else: true, score: 1}
+

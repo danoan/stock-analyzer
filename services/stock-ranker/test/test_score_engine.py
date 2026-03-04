@@ -439,6 +439,45 @@ def test_normalize_expression_results_with_none():
 
 
 # ---------------------------------------------------------------------------
+# Expression scores referencing threshold scores
+# ---------------------------------------------------------------------------
+
+
+def test_expression_score_references_threshold_score():
+    """An expression score may use a threshold score's id to reference its numeric_score."""
+    spec = {
+        "grade_map": _SIMPLE_GRADE_MAP,
+        "scores": [
+            {
+                "id": "valuation",
+                "label": "Valuation",
+                "type": "threshold",
+                "aggregate": "mean",
+                "metrics": [{"key": "trailingPE", "rules": _PE_RULES}],
+            },
+            {
+                "id": "composite",
+                "label": "Composite",
+                "type": "expression",
+                # references the threshold score "valuation" by id
+                "expression": "valuation * 2",
+            },
+        ],
+    }
+    # trailingPE=10 → threshold score 5 → valuation numeric_score=5.0
+    # expression: 5.0 * 2 = 10.0
+    info = {"trailingPE": 10.0}
+    result = evaluate_spec(info, spec)
+    assert len(result["results"]) == 2
+    threshold_r = next(r for r in result["results"] if r["id"] == "valuation")
+    expr_r = next(r for r in result["results"] if r["id"] == "composite")
+    assert threshold_r["numeric_score"] == pytest.approx(5.0)
+    assert expr_r["raw_result"] == pytest.approx(10.0)
+    # "valuation" should appear in variables of the expression result
+    assert expr_r["variables"]["valuation"] == pytest.approx(5.0)
+
+
+# ---------------------------------------------------------------------------
 # load_spec_from_str validation
 # ---------------------------------------------------------------------------
 

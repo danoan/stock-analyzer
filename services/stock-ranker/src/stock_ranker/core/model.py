@@ -147,13 +147,41 @@ class SpecDB(Model):
         table_name = "spec"
 
 
+class ScoreLibraryDB(Model):
+    name = TextField(primary_key=True)
+    score_type = TextField()  # 'expression' | 'threshold'
+    definition_json = TextField()
+    description = TextField(default="")
+
+    class Meta:
+        database = db
+        table_name = "score_library"
+
+
 # For tests that need an integer PK placeholder
 _REALIZATION_UNUSED_ID = IntegerField(null=True)
+
+
+class LibraryScore(BaseModel):
+    name: str
+    score_type: str  # "expression" | "threshold"
+    definition: dict[str, Any]
+    description: str = ""
+
+    @classmethod
+    def from_db(cls, record: ScoreLibraryDB) -> LibraryScore:
+        return cls(
+            name=record.name,
+            score_type=record.score_type,
+            definition=json.loads(record.definition_json),
+            description=record.description,
+        )
 
 
 def init_db() -> None:
     db.connect(reuse_if_open=True)
     db.create_tables(
-        [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB, SpecDB],
+        [TickerDB, CollectionDB, TickerCollectionDB, AnalysisDB, RealizationDB, SpecDB,
+         ScoreLibraryDB],
         safe=True,
     )

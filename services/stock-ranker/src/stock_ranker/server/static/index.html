@@ -135,12 +135,16 @@
     .op-btn:hover { background: #e5e7eb; }
 
     /* ── Metric Palette ──────────────────────────────────────────────────── */
-    .metric-palette { border: 1px solid var(--br); border-radius: 8px; display: flex; flex-direction: column; background: #fafafa; overflow: hidden; min-height: 310px; }
+    .metric-palette { border: 1px solid var(--br); border-radius: 8px; display: flex; flex-direction: column; background: #fafafa; overflow: hidden; min-height: 310px; max-height: calc(90vh - 6rem); position: sticky; top: 0; }
     .palette-header { padding: .45rem .75rem; font-size: .72rem; font-weight: 700; color: var(--tm); letter-spacing: .07em; border-bottom: 1px solid var(--br); background: #f3f4f6; }
+    .palette-tabs { display: flex; border-bottom: 1px solid var(--br); }
+    .palette-tab { flex: 1; padding: .4rem .5rem; font-size: .72rem; font-weight: 700; letter-spacing: .07em; color: var(--tm); background: #f3f4f6; border: none; cursor: pointer; transition: background .1s, color .1s; }
+    .palette-tab.active { background: var(--cb); color: var(--cp); border-bottom: 2px solid var(--cp); }
+    .palette-tab:hover:not(.active) { background: #e8e9eb; }
     .palette-filter { padding: .4rem .6rem; border-bottom: 1px solid var(--br); }
     .palette-filter input { width: 100%; padding: .28rem .5rem; border: 1px solid var(--br); border-radius: 5px; font-size: .8rem; outline: none; background: var(--cb); }
     .palette-filter input:focus { border-color: var(--cp); }
-    .metric-grid { padding: .4rem; display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; height: 240px; min-height: 240px; align-content: start; flex-shrink: 0; }
+    .metric-grid { padding: .4rem; display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; min-height: 0; align-content: start; flex: 1; overflow-y: auto; }
     .metric-chip { font-size: .76rem; background: var(--cb); border: 1px solid var(--br); border-radius: 4px; padding: .2rem .4rem; cursor: pointer; color: var(--tx); transition: background .1s, color .1s, border-color .1s; white-space: nowrap; text-overflow: ellipsis; }
     .metric-chip:hover { background: var(--cp); color: #fff; border-color: var(--cp); }
     .palette-empty { padding: 1rem; font-size: .8rem; color: var(--tm); text-align: center; grid-column: 1/-1; }
@@ -171,6 +175,13 @@
     /* ── Score Detail ────────────────────────────────────────────────────── */
     .detail-section { border: 1px solid var(--br); border-radius: 6px; padding: .75rem; margin-bottom: .75rem; }
     .detail-section:last-child { margin-bottom: 0; }
+
+    /* ── Threshold Builder ───────────────────────────────────────────────── */
+    .th-metric-box { border: 1px solid var(--br); border-radius: 6px; padding: .625rem .875rem; margin-bottom: .625rem; background: #fafafa; }
+    .th-rule-row { display: flex; align-items: center; gap: .35rem; margin-bottom: .3rem; flex-wrap: wrap; }
+    .th-rule-row select, .th-rule-row input[type=number] { padding: .28rem .4rem; border: 1px solid var(--br); border-radius: 5px; font-size: .82rem; background: var(--cb); width: auto; }
+    .th-rule-row input[type=number] { width: 80px; }
+    .th-cond-sep { font-size: .78rem; color: var(--tm); font-weight: 600; }
   </style>
 </head>
 <body x-data="app()" x-cloak>
@@ -180,11 +191,21 @@
   <div class="nav-left">
     <span class="brand">Stock Ranker</span>
     <a :class="{active: page==='analyses'}" @click="setPage('analyses')">Analyses</a>
+    <a :class="{active: page==='scores'}" @click="setPage('scores')">Scores</a>
     <a :class="{active: page==='collections'}" @click="setPage('collections')">Collections</a>
     <a :class="{active: page==='tickers'}" @click="setPage('tickers')">Tickers</a>
   </div>
   <div>
-    <button class="btn btn-primary btn-sm" @click="openWizard()">+ New Analysis</button>
+    <button x-show="page==='analyses'" class="btn btn-primary btn-sm" @click="openWizard()">+ New Analysis</button>
+    <template x-if="page==='scores'">
+      <div style="display:flex;gap:.4rem">
+        <input type="file" accept=".yml,.yaml" x-ref="importFileInput" style="display:none"
+               @change="importScores($event)">
+        <button class="btn btn-sm" style="background:#f3f4f6;border:1px solid var(--br)"
+                @click="$refs.importFileInput.click()">Import YAML</button>
+        <button class="btn btn-primary btn-sm" @click="openCreateScore()">+ New Score</button>
+      </div>
+    </template>
   </div>
 </nav>
 
@@ -414,19 +435,50 @@
 
           <!-- Right panel: Metric palette -->
           <div class="metric-palette">
-            <div class="palette-header">METRICS</div>
+            <!-- Tab switcher -->
+            <div class="palette-tabs">
+              <button class="palette-tab" :class="wizard.paletteTab==='metrics' && 'active'"
+                @click="wizard.paletteTab='metrics'; wizard.metricsFilter=''">METRICS</button>
+              <button class="palette-tab" :class="wizard.paletteTab==='scores' && 'active'"
+                @click="wizard.paletteTab='scores'; wizard.scoresFilter=''; ensurePresetScores()">SCORES</button>
+            </div>
+            <!-- Filter -->
             <div class="palette-filter">
-              <input type="text" x-model="wizard.metricsFilter" placeholder="filter…" />
+              <input x-show="wizard.paletteTab==='metrics'" type="text"
+                x-model="wizard.metricsFilter" placeholder="filter…" />
+              <input x-show="wizard.paletteTab==='scores'" type="text"
+                x-model="wizard.scoresFilter" placeholder="filter…" />
             </div>
-            <div x-show="wizard.metricsLoading" class="palette-loading">Loading…</div>
-            <div x-show="!wizard.metricsLoading" class="metric-grid">
-              <template x-for="m in filteredMetrics()" :key="m">
-                <span class="metric-chip" @click="insertAtCursor(m)" x-text="m" :title="'Insert: '+m"></span>
-              </template>
-              <div x-show="filteredMetrics().length===0" class="palette-empty">
-                <span x-text="wizard.metricsAvail.length===0 ? 'No metrics loaded' : 'No matches'"></span>
+            <!-- Metrics content -->
+            <template x-if="wizard.paletteTab==='metrics'">
+              <div>
+                <div x-show="wizard.metricsLoading" class="palette-loading">Loading…</div>
+                <div x-show="!wizard.metricsLoading" class="metric-grid">
+                  <template x-for="m in filteredMetrics()" :key="m">
+                    <span class="metric-chip" @click="insertAtCursor(m)" x-text="m" :title="'Insert: '+m"></span>
+                  </template>
+                  <div x-show="filteredMetrics().length===0" class="palette-empty">
+                    <span x-text="wizard.metricsAvail.length===0 ? 'No metrics loaded' : 'No matches'"></span>
+                  </div>
+                </div>
               </div>
-            </div>
+            </template>
+            <!-- Scores content -->
+            <template x-if="wizard.paletteTab==='scores'">
+              <div>
+                <div x-show="wizard.presetScoresLoading" class="palette-loading">Loading…</div>
+                <div x-show="!wizard.presetScoresLoading" class="metric-grid">
+                  <template x-for="s in filteredPresetScores()" :key="s.spec + '/' + s.id">
+                    <span class="metric-chip" @click="insertAtCursor(s.id)"
+                      x-text="s.label || s.id"
+                      :title="'[' + s.type + '] ' + (s.label || s.id)"></span>
+                  </template>
+                  <div x-show="filteredPresetScores().length===0" class="palette-empty">
+                    <span x-text="wizard.presetScores.length===0 ? 'No preset scores' : 'No matches'"></span>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -678,6 +730,280 @@
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- SCORES TAB                                                             -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section x-show="page==='scores'">
+  <div class="page-header">
+    <h2>Scores</h2>
+  </div>
+
+  <div x-show="scores.length===0" class="muted" style="padding:2rem 0;text-align:center;">
+    No scores yet. Click "+ New Score" to get started.
+  </div>
+
+  <template x-for="s in scores" :key="s.name">
+    <div class="card">
+      <div class="card-header">
+        <strong x-text="s.name" style="font-size:.95rem;"></strong>
+        <span class="badge badge-blue" x-text="s.score_type"></span>
+        <span x-show="s.score_type==='expression' && s.definition.normalize" class="badge badge-green">normalized</span>
+        <span style="flex:1"></span>
+        <button class="btn btn-ghost btn-sm" @click="openEditScore(s)">Edit</button>
+        <button class="btn btn-ghost btn-sm" @click="toggleScoreTest(s.name)">
+          <span x-text="scoreTest[s.name]?.open ? 'Hide Test' : 'Test'"></span>
+        </button>
+        <button class="btn btn-danger btn-sm" @click="deleteScore(s.name)">×</button>
+      </div>
+
+      <!-- Score summary -->
+      <div class="card-body" style="padding:.625rem 1rem;">
+        <template x-if="s.score_type==='expression'">
+          <div>
+            <code x-text="s.definition.expression"></code>
+          </div>
+        </template>
+        <template x-if="s.score_type==='threshold'">
+          <div style="font-size:.875rem;">
+            <span class="muted" x-text="(s.definition.metrics||[]).length + ' metric(s), aggregate: ' + (s.definition.aggregate||'mean')"></span>
+          </div>
+        </template>
+        <p x-show="s.description" class="muted" style="font-size:.82rem;margin-top:.25rem;" x-text="s.description"></p>
+      </div>
+
+      <!-- Test panel -->
+      <div x-show="scoreTest[s.name]?.open" class="card-body" style="border-top:1px solid var(--br);">
+        <div class="flex-row" style="margin-bottom:.75rem;">
+          <input class="form-input" type="text" placeholder="AAPL"
+            x-model="scoreTest[s.name].ticker" style="max-width:160px;"
+            @keydown.enter="runScoreTest(s.name)" />
+          <button class="btn btn-outline btn-sm"
+            :disabled="scoreTest[s.name].loading"
+            @click="runScoreTest(s.name)">
+            <span x-text="scoreTest[s.name].loading ? '…' : '▶ Run'"></span>
+          </button>
+        </div>
+
+        <p x-show="scoreTest[s.name].error" class="error-val" x-text="scoreTest[s.name].error"></p>
+
+        <!-- Expression result -->
+        <template x-if="scoreTest[s.name].result && scoreTest[s.name].result.type==='expression'">
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;">Expression score</p>
+            <table style="font-size:.82rem;max-width:400px;margin-bottom:.5rem;">
+              <thead><tr><th>Variable</th><th>Value</th></tr></thead>
+              <tbody>
+                <template x-for="[k, v] in Object.entries(scoreTest[s.name].result.variables||{})" :key="k">
+                  <tr>
+                    <td><code x-text="k"></code></td>
+                    <td :class="v===null?'null-val':''">
+                      <span x-text="v===null ? '—' : fmtRaw(v)"></span>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p style="font-size:.875rem;"><strong>Result: </strong>
+              <span :class="scoreTest[s.name].result.score===null?'null-val':''"
+                    x-text="scoreTest[s.name].result.score===null ? '—' : fmtRaw(scoreTest[s.name].result.score)">
+              </span>
+            </p>
+          </div>
+        </template>
+
+        <!-- Threshold result -->
+        <template x-if="scoreTest[s.name].result && scoreTest[s.name].result.type==='threshold'">
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;">Threshold score</p>
+            <table style="font-size:.82rem;max-width:480px;margin-bottom:.5rem;">
+              <thead><tr><th>Metric</th><th>Value</th><th>Score</th></tr></thead>
+              <tbody>
+                <template x-for="m in (scoreTest[s.name].result.metric_scores||[])" :key="m.key">
+                  <tr>
+                    <td><code x-text="m.key"></code></td>
+                    <td :class="m.value===null?'null-val':''">
+                      <span x-text="m.value===null ? '—' : fmtRaw(m.value)"></span>
+                    </td>
+                    <td :class="m.rule_score===null?'null-val':''">
+                      <span x-text="m.rule_score===null ? '—' : m.rule_score + ' ' + '★'.repeat(m.rule_score)"></span>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p style="font-size:.875rem;"><strong>Aggregate: </strong>
+              <span :class="scoreTest[s.name].result.score===null?'null-val':''"
+                    x-text="scoreTest[s.name].result.score===null ? '—' : fmtFloat(scoreTest[s.name].result.score)">
+              </span>
+            </p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- SCORE LIBRARY MODAL                                                    -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" x-show="scoreModal.open" @click.self="scoreModal.open=false"
+     @keydown.window.escape="if(scoreModal.open) scoreModal.open=false">
+  <div class="modal-box">
+    <div class="modal-header">
+      <strong x-text="scoreModal.editing ? 'Edit Score' : 'New Score'"></strong>
+      <button class="btn btn-ghost btn-sm" @click="scoreModal.open=false">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="score-builder-grid">
+        <!-- Left panel -->
+        <div>
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input class="form-input" type="text" x-model="scoreModal.name"
+              :disabled="scoreModal.editing !== null"
+              placeholder="e.g. pe_inv" />
+            <p x-show="scoreModal.nameError" class="error-val" x-text="scoreModal.nameError"></p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select class="form-input" x-model="scoreModal.type" style="width:auto;">
+              <option value="expression">Expression</option>
+              <option value="threshold">Threshold</option>
+            </select>
+          </div>
+
+          <!-- Expression fields -->
+          <template x-if="scoreModal.type==='expression'">
+            <div>
+              <div class="form-group">
+                <label class="form-label">Expression</label>
+                <textarea class="form-input" x-ref="smExpr" x-model="scoreModal.expression"
+                  rows="4" placeholder="e.g. 1 / trailingPE"></textarea>
+                <p x-show="scoreModal.exprError" class="error-val" x-text="scoreModal.exprError"></p>
+              </div>
+              <div class="op-toolbar">
+                <button class="op-btn" type="button" @click="smInsertOp('+')">+</button>
+                <button class="op-btn" type="button" @click="smInsertOp('-')">−</button>
+                <button class="op-btn" type="button" @click="smInsertOp('*')">×</button>
+                <button class="op-btn" type="button" @click="smInsertOp('/')">÷</button>
+                <button class="op-btn" type="button" @click="smInsertOp('(')">(</button>
+                <button class="op-btn" type="button" @click="smInsertOp(')')">)</button>
+                <button class="op-btn" type="button" @click="smInsertOp('log()')">log()</button>
+                <button class="op-btn" type="button" @click="smInsertOp('sqrt()')">sqrt()</button>
+                <button class="op-btn" type="button" @click="smInsertOp('abs()')">abs()</button>
+              </div>
+              <div style="margin-bottom:.875rem;">
+                <label class="form-check">
+                  <input type="checkbox" x-model="scoreModal.normalize" />
+                  Normalize across tickers
+                </label>
+              </div>
+            </div>
+          </template>
+
+          <!-- Threshold fields -->
+          <template x-if="scoreModal.type==='threshold'">
+            <div>
+              <label class="form-label">Metrics</label>
+              <template x-for="(m, mi) in scoreModal.th_metrics" :key="mi">
+                <div class="th-metric-box">
+                  <div class="flex-row" style="margin-bottom:.5rem;">
+                    <input class="form-input" type="text" x-model="m.key"
+                      placeholder="metric key (e.g. trailingPE)"
+                      style="flex:1;"
+                      @focus="scoreModal._focusedMetricIdx = mi" />
+                    <button class="btn btn-ghost btn-xs" @click="removeThMetric(mi)" title="Remove metric">×</button>
+                  </div>
+                  <div style="margin-bottom:.3rem;font-size:.78rem;font-weight:600;color:var(--tm);">Rules</div>
+                  <template x-for="(rule, ri) in m.rules" :key="ri">
+                    <div class="th-rule-row">
+                      <!-- First condition -->
+                      <select x-model="rule.op" @change="if(rule.op==='else'){rule.is_else=true;rule.value='';rule.op2='';rule.value2='';}else{rule.is_else=false;}">
+                        <option value="lt">lt</option>
+                        <option value="lte">lte</option>
+                        <option value="gt">gt</option>
+                        <option value="gte">gte</option>
+                        <option value="else">else</option>
+                      </select>
+                      <input x-show="!rule.is_else" type="number" x-model="rule.value" placeholder="value" />
+                      <!-- Second condition -->
+                      <template x-if="!rule.is_else">
+                        <span class="th-cond-sep">AND</span>
+                      </template>
+                      <template x-if="!rule.is_else">
+                        <select x-model="rule.op2">
+                          <option value="">—</option>
+                          <option value="lt">lt</option>
+                          <option value="lte">lte</option>
+                          <option value="gt">gt</option>
+                          <option value="gte">gte</option>
+                        </select>
+                      </template>
+                      <template x-if="!rule.is_else && rule.op2">
+                        <input type="number" x-model="rule.value2" placeholder="value2" />
+                      </template>
+                      <span style="color:var(--tm);font-size:.82rem;">→</span>
+                      <select x-model="rule.score">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                      <button class="btn btn-ghost btn-xs" @click="removeThRule(mi, ri)">×</button>
+                    </div>
+                  </template>
+                  <button class="btn btn-ghost btn-xs" @click="addThRule(mi)" style="margin-top:.3rem;">+ Add rule</button>
+                </div>
+              </template>
+              <button class="btn btn-outline btn-sm" @click="addThMetric()" style="margin-bottom:.875rem;">+ Add metric</button>
+
+              <div class="form-group">
+                <label class="form-label">Aggregate</label>
+                <select class="form-input" x-model="scoreModal.th_aggregate" style="width:auto;">
+                  <option value="mean">mean</option>
+                </select>
+              </div>
+            </div>
+          </template>
+
+          <div class="form-group">
+            <label class="form-label">Description (optional)</label>
+            <input class="form-input" type="text" x-model="scoreModal.description"
+              placeholder="Short description" />
+          </div>
+        </div>
+
+        <!-- Right panel: metric palette -->
+        <div class="metric-palette">
+          <div class="palette-tabs">
+            <button class="palette-tab active">METRICS</button>
+          </div>
+          <div class="palette-filter">
+            <input type="text" x-model="scoreModal.metricsFilter" placeholder="filter…" />
+          </div>
+          <div x-show="scoreModal.metricsLoading" class="palette-loading">Loading…</div>
+          <div x-show="!scoreModal.metricsLoading" class="metric-grid">
+            <template x-for="m in smFilteredMetrics()" :key="m">
+              <span class="metric-chip" @click="smInsertMetric(m)" x-text="m" :title="'Insert: '+m"></span>
+            </template>
+            <div x-show="smFilteredMetrics().length===0" class="palette-empty">
+              <span x-text="scoreModal.metricsAvail.length===0 ? 'No metrics loaded' : 'No matches'"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" @click="scoreModal.open=false">Cancel</button>
+      <button class="btn btn-primary" :disabled="scoreModal.saving" @click="saveScore()">
+        <span x-text="scoreModal.saving ? 'Saving…' : 'Save Score'"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -714,6 +1040,10 @@ function app() {
       metricsAvail: [],
       metricsFilter: '',
       metricsLoading: false,
+      paletteTab: 'metrics',
+      presetScores: [],
+      presetScoresLoading: false,
+      scoresFilter: '',
       nameError: null,
       scoreError: null,
       saving: false,
@@ -734,12 +1064,34 @@ function app() {
     tickerLookup: [],
     tickerSearching: false,
 
+    // Score Library
+    scores: [],
+    scoreModal: {
+      open: false,
+      editing: null,
+      type: 'expression',
+      name: '', description: '',
+      expression: '', normalize: false,
+      th_metrics: [],
+      th_aggregate: 'mean',
+      nameError: '', exprError: '',
+      saving: false,
+      metricsAvail: [],
+      metricsFilter: '',
+      metricsLoading: false,
+      _focusedMetricIdx: null,
+    },
+    scoreTest: {},
+
     // ── init ────────────────────────────────────────────────────────────
     async init() {
       this.$watch('wizard.step', v => {
         if (v === 2) this.ensureMetrics();
       });
-      await Promise.all([this.loadAnalyses(), this.loadCollections(), this.loadTickers()]);
+      this.$watch('scoreModal.open', open => {
+        if (open) this.smEnsureMetrics();
+      });
+      await Promise.all([this.loadAnalyses(), this.loadCollections(), this.loadTickers(), this.loadScores()]);
     },
 
     // ── navigation ──────────────────────────────────────────────────────
@@ -915,6 +1267,9 @@ function app() {
       // Preserve metricsAvail for session caching
       this.wizard.metricsFilter = '';
       this.wizard.metricsLoading = false;
+      this.wizard.paletteTab = 'metrics';
+      this.wizard.scoresFilter = '';
+      // presetScores intentionally kept (cached across wizard opens)
       this.wizard.nameError = null;
       this.wizard.scoreError = null;
       this.wizard.saving = false;
@@ -973,6 +1328,28 @@ function app() {
       const f = (this.wizard.metricsFilter || '').toLowerCase();
       if (!f) return this.wizard.metricsAvail;
       return this.wizard.metricsAvail.filter(m => m.toLowerCase().includes(f));
+    },
+
+    filteredPresetScores() {
+      const f = (this.wizard.scoresFilter || '').toLowerCase();
+      if (!f) return this.wizard.presetScores;
+      return this.wizard.presetScores.filter(s =>
+        (s.label || s.id).toLowerCase().includes(f) ||
+        (s.expression || '').toLowerCase().includes(f) ||
+        (s.type || '').toLowerCase().includes(f)
+      );
+    },
+
+    async ensurePresetScores() {
+      if (this.wizard.presetScores.length > 0 || this.wizard.presetScoresLoading) return;
+      this.wizard.presetScoresLoading = true;
+      try {
+        this.wizard.presetScores = await this.apiFetch('/scores/presets');
+      } catch (e) {
+        this.showToast('Could not load preset scores: ' + e.message, false);
+      } finally {
+        this.wizard.presetScoresLoading = false;
+      }
     },
 
     insertAtCursor(text) {
@@ -1144,6 +1521,243 @@ function app() {
         await this.loadTickers();
         this.showToast(`${r.symbol} added to ${collName}`);
       } catch (e) { this.showToast(e.message, false); }
+    },
+
+    // ── score library ────────────────────────────────────────────────────
+    async importScores(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      event.target.value = '';
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const r = await fetch('/score-library/import', { method: 'POST', body: fd });
+        const data = await r.json();
+        if (!r.ok) { this.showToast(false, data.detail ?? 'Import failed'); return; }
+        const msg = `Imported ${data.imported} score(s)` +
+          (data.errors.length ? ` (${data.errors.length} error(s))` : '');
+        this.showToast(data.imported > 0 || data.errors.length === 0, msg);
+        if (data.imported > 0) this.loadScores();
+      } catch (e) {
+        this.showToast(false, 'Import failed: ' + e.message);
+      }
+    },
+
+    async loadScores() {
+      try { this.scores = await this.apiFetch('/score-library'); } catch (e) { this.showToast(e.message, false); }
+    },
+
+    openCreateScore() {
+      this.scoreModal = {
+        open: true,
+        editing: null,
+        type: 'expression',
+        name: '', description: '',
+        expression: '', normalize: false,
+        th_metrics: [],
+        th_aggregate: 'mean',
+        nameError: '', exprError: '',
+        saving: false,
+        metricsAvail: this.scoreModal.metricsAvail || [],
+        metricsFilter: '',
+        metricsLoading: false,
+        _focusedMetricIdx: null,
+      };
+    },
+
+    openEditScore(s) {
+      const th_metrics = (s.score_type === 'threshold')
+        ? (s.definition.metrics || []).map(m => ({
+            key: m.key,
+            rules: (m.rules || []).map(r => {
+              const ops = Object.keys(r).filter(k => ['lt','lte','gt','gte'].includes(k));
+              const is_else = !!r.else;
+              const op1 = is_else ? 'else' : (ops[0] || 'lt');
+              const val1 = is_else ? '' : String(r[op1] ?? '');
+              const op2 = is_else ? '' : (ops[1] || '');
+              const val2 = is_else ? '' : (op2 ? String(r[op2] ?? '') : '');
+              return { op: op1, value: val1, op2, value2: val2, score: String(r.score ?? '3'), is_else };
+            }),
+          }))
+        : [];
+      this.scoreModal = {
+        open: true,
+        editing: s.name,
+        type: s.score_type,
+        name: s.name,
+        description: s.description || '',
+        expression: s.score_type === 'expression' ? (s.definition.expression || '') : '',
+        normalize: s.score_type === 'expression' ? (s.definition.normalize || false) : false,
+        th_metrics,
+        th_aggregate: s.definition.aggregate || 'mean',
+        nameError: '', exprError: '',
+        saving: false,
+        metricsAvail: this.scoreModal.metricsAvail || [],
+        metricsFilter: '',
+        metricsLoading: false,
+        _focusedMetricIdx: null,
+      };
+    },
+
+    async saveScore() {
+      this.scoreModal.nameError = '';
+      this.scoreModal.exprError = '';
+      if (!this.scoreModal.name.trim()) { this.scoreModal.nameError = 'Name is required.'; return; }
+      if (this.scoreModal.type === 'expression' && !this.scoreModal.expression.trim()) {
+        this.scoreModal.exprError = 'Expression is required.'; return;
+      }
+
+      let definition;
+      if (this.scoreModal.type === 'expression') {
+        definition = { expression: this.scoreModal.expression.trim(), normalize: this.scoreModal.normalize };
+      } else {
+        const metrics = this.scoreModal.th_metrics.map(m => {
+          const rules = m.rules.map(r => {
+            if (r.is_else || r.op === 'else') return { else: true, score: parseInt(r.score) || 3 };
+            const rule = { [r.op]: parseFloat(r.value), score: parseInt(r.score) || 3 };
+            if (r.op2 && r.value2 !== '') rule[r.op2] = parseFloat(r.value2);
+            return rule;
+          });
+          return { key: m.key, rules };
+        });
+        definition = { metrics, aggregate: this.scoreModal.th_aggregate };
+      }
+
+      const payload = {
+        name: this.scoreModal.name.trim(),
+        score_type: this.scoreModal.type,
+        definition,
+        description: this.scoreModal.description,
+      };
+
+      this.scoreModal.saving = true;
+      try {
+        if (this.scoreModal.editing) {
+          await this.apiFetch(`/score-library/${encodeURIComponent(this.scoreModal.editing)}`, {
+            method: 'PUT', body: JSON.stringify(payload),
+          });
+        } else {
+          await this.apiFetch('/score-library', { method: 'POST', body: JSON.stringify(payload) });
+        }
+        this.scoreModal.open = false;
+        await this.loadScores();
+        this.showToast(this.scoreModal.editing ? 'Score updated' : 'Score saved');
+      } catch (e) {
+        this.showToast(e.message, false);
+      } finally {
+        this.scoreModal.saving = false;
+      }
+    },
+
+    async deleteScore(name) {
+      if (!window.confirm(`Delete score "${name}"?`)) return;
+      try {
+        await this.apiFetch(`/score-library/${encodeURIComponent(name)}`, { method: 'DELETE' });
+        await this.loadScores();
+        this.showToast('Score deleted');
+      } catch (e) { this.showToast(e.message, false); }
+    },
+
+    toggleScoreTest(name) {
+      const cur = this.scoreTest[name] || {};
+      this.scoreTest = {
+        ...this.scoreTest,
+        [name]: { ...cur, open: !cur.open, ticker: cur.ticker || '', loading: false, result: null, error: null },
+      };
+    },
+
+    async runScoreTest(name) {
+      const st = this.scoreTest[name] || {};
+      const ticker = (st.ticker || '').trim().toUpperCase();
+      if (!ticker) return;
+      this.scoreTest = { ...this.scoreTest, [name]: { ...st, loading: true, result: null, error: null } };
+      try {
+        const result = await this.apiFetch(`/score-library/${encodeURIComponent(name)}/test`, {
+          method: 'POST', body: JSON.stringify({ ticker }),
+        });
+        this.scoreTest = { ...this.scoreTest, [name]: { ...this.scoreTest[name], loading: false, result } };
+      } catch (e) {
+        this.scoreTest = { ...this.scoreTest, [name]: { ...this.scoreTest[name], loading: false, error: e.message } };
+      }
+    },
+
+    addThMetric() {
+      this.scoreModal.th_metrics.push({ key: '', rules: [] });
+    },
+
+    removeThMetric(i) {
+      this.scoreModal.th_metrics.splice(i, 1);
+    },
+
+    addThRule(mi) {
+      this.scoreModal.th_metrics[mi].rules.push({ op: 'lt', value: '', op2: '', value2: '', score: '3', is_else: false });
+    },
+
+    removeThRule(mi, ri) {
+      this.scoreModal.th_metrics[mi].rules.splice(ri, 1);
+    },
+
+    async smEnsureMetrics() {
+      if (this.scoreModal.metricsAvail.length > 0 || this.scoreModal.metricsLoading) return;
+      this.scoreModal.metricsLoading = true;
+      try {
+        this.scoreModal.metricsAvail = await this.apiFetch('/metrics?ticker=AAPL');
+      } catch (e) {
+        this.showToast('Could not load metrics: ' + e.message, false);
+      } finally {
+        this.scoreModal.metricsLoading = false;
+      }
+    },
+
+    smFilteredMetrics() {
+      const f = (this.scoreModal.metricsFilter || '').toLowerCase();
+      if (!f) return this.scoreModal.metricsAvail;
+      return this.scoreModal.metricsAvail.filter(m => m.toLowerCase().includes(f));
+    },
+
+    smInsertMetric(text) {
+      if (this.scoreModal.type === 'expression') {
+        const el = this.$refs.smExpr;
+        if (!el) return;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        const expr = this.scoreModal.expression;
+        const before = expr.slice(0, start);
+        const after = expr.slice(end);
+        const sep = before && !before.endsWith(' ') ? ' ' : '';
+        this.scoreModal.expression = before + sep + text + after;
+        this.$nextTick(() => {
+          const pos = (before + sep + text).length;
+          el.setSelectionRange(pos, pos);
+          el.focus();
+        });
+      } else {
+        // threshold mode: insert into focused metric key input
+        const idx = this.scoreModal._focusedMetricIdx;
+        if (idx !== null && this.scoreModal.th_metrics[idx] !== undefined) {
+          this.scoreModal.th_metrics[idx].key = text;
+        }
+      }
+    },
+
+    smInsertOp(op) {
+      const el = this.$refs.smExpr;
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const expr = this.scoreModal.expression;
+      const before = expr.slice(0, start);
+      const after = expr.slice(end);
+      const sep = before && !before.endsWith(' ') ? ' ' : '';
+      this.scoreModal.expression = before + sep + op + after;
+      this.$nextTick(() => {
+        const parenIdx = op.indexOf('()');
+        const pos = parenIdx >= 0
+          ? (before + sep).length + parenIdx + 1
+          : (before + sep + op).length;
+        el.setSelectionRange(pos, pos);
+        el.focus();
+      });
     },
   };
 }

@@ -18,6 +18,7 @@ dependencies = [
     "rich",
     "simpleeval",
     "pyyaml>=6",
+    "python-multipart",
 ]
 
 [project.optional-dependencies]

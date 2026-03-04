@@ -11,11 +11,13 @@ from stock_ranker.core.model import (
     AnalysisDB,
     Collection,
     CollectionDB,
+    LibraryScore,
     LookupResult,
     RealizationDB,
     RealizationResult,
     Score,
     ScoreDetail,
+    ScoreLibraryDB,
     SpecDB,
     Ticker,
     TickerCollectionDB,
@@ -28,6 +30,10 @@ from stock_ranker.core.score_engine import (
     _split_additive_terms,
     _to_numeric,
     evaluate_expression,
+    evaluate_spec,
+    evaluate_threshold_score,
+    load_spec_from_str,
+    score_metric,
 )
 from stock_ranker.utils.config import settings
 
@@ -77,14 +83,20 @@ def get_available_metrics(sample_ticker: str = "AAPL") -> list[str]:
 
 
 def compute_score(
-    score: Score, info_data: dict[str, Any]
+    score: Score,
+    info_data: dict[str, Any],
+    score_vars: dict[str, float | None] | None = None,
 ) -> tuple[float | None, ScoreDetail]:
     """Compute a score for one ticker given its info data.
 
     Returns (raw_result, detail). The 'result' in detail equals raw_result here;
     normalization across tickers is applied later in realize_analysis if score.normalize=True.
+    score_vars, if provided, injects previous scores' raw values so an expression
+    score can reference an earlier score by name.
     """
     all_variables: dict[str, float | None] = {k: _to_numeric(v) for k, v in info_data.items()}
+    if score_vars:
+        all_variables.update(score_vars)
     referenced = _extract_identifiers(score.expression)
     expr_variables = {name: all_variables.get(name) for name in referenced}
     raw_result = evaluate_expression(score.expression, expr_variables)
@@ -130,14 +142,43 @@ def realize_analysis(
     scores_dict: dict[str, dict[str, float | None]] = {t: {} for t in tickers}
     details_dict: dict[str, dict[str, ScoreDetail]] = {t: {} for t in tickers}
 
+    # Pre-compute threshold scores from all specs so expression scores can reference them.
+    spec_score_vars: dict[str, dict[str, float | None]] = {}  # symbol -> {score_id: value}
+    for spec_name in list_specs():
+        content = get_spec(spec_name)
+        if not content:
+            continue
+        try:
+            spec = load_spec_from_str(content)
+        except Exception:
+            continue
+        for symbol, info in ticker_info.items():
+            try:
+                spec_result = evaluate_spec(info, spec)
+            except Exception:
+                continue
+            for r in spec_result.get("results", []):
+                if r.get("type") == "threshold":
+                    spec_score_vars.setdefault(symbol, {})[r["id"]] = r["numeric_score"]
+
+    # prev_raw[score_name][symbol] = raw value before normalization
+    prev_raw: dict[str, dict[str, float | None]] = {}
+
     for score in analysis.scores:
         # Collect raw results for all tickers that have info
         raw_results: dict[str, float | None] = {}
         raw_details: dict[str, ScoreDetail] = {}
         for symbol, info in ticker_info.items():
-            raw_val, detail = compute_score(score, info)
+            ticker_score_vars: dict[str, float | None] = {}
+            ticker_score_vars.update(spec_score_vars.get(symbol, {}))
+            ticker_score_vars.update(
+                {name: prev_raw[name].get(symbol) for name in prev_raw}
+            )
+            raw_val, detail = compute_score(score, info, ticker_score_vars or None)
             raw_results[symbol] = raw_val
             raw_details[symbol] = detail
+
+        prev_raw[score.name] = dict(raw_results)
 
         if score.normalize and raw_results:
             terms = _split_additive_terms(score.expression)
@@ -356,3 +397,142 @@ def upsert_spec(name: str, content: str) -> None:
 def delete_spec(name: str) -> bool:
     count = SpecDB.delete().where(SpecDB.name == name).execute()
     return count > 0
+
+
+# ---------------------------------------------------------------------------
+# CRUD — Score Library
+# ---------------------------------------------------------------------------
+
+
+def list_library_scores() -> list[LibraryScore]:
+    return [LibraryScore.from_db(s) for s in ScoreLibraryDB.select()]
+
+
+def get_library_score(name: str) -> LibraryScore | None:
+    try:
+        return LibraryScore.from_db(ScoreLibraryDB.get_by_id(name))
+    except ScoreLibraryDB.DoesNotExist:
+        return None
+
+
+def upsert_library_score(score: LibraryScore) -> LibraryScore:
+    ScoreLibraryDB.insert(
+        name=score.name,
+        score_type=score.score_type,
+        definition_json=json.dumps(score.definition),
+        description=score.description,
+    ).on_conflict_replace().execute()
+    return get_library_score(score.name)  # type: ignore[return-value]
+
+
+def delete_library_score(name: str) -> bool:
+    count = ScoreLibraryDB.delete().where(ScoreLibraryDB.name == name).execute()
+    return count > 0
+
+
+def run_score_test(name: str, ticker: str) -> dict[str, Any]:
+    """Fetch ticker info and evaluate a library score against it."""
+    score = get_library_score(name)
+    if score is None:
+        raise ValueError(f"Library score '{name}' not found")
+
+    info = fetch_info(ticker)
+
+    if score.score_type == "expression":
+        defn = score.definition
+        expr = defn.get("expression", "")
+        normalize = defn.get("normalize", False)
+
+        # Pre-load spec threshold vars so expressions can reference them
+        spec_vars: dict[str, float | None] = {}
+        for spec_name in list_specs():
+            content = get_spec(spec_name)
+            if not content:
+                continue
+            try:
+                spec = load_spec_from_str(content)
+            except Exception:
+                continue
+            try:
+                spec_result = evaluate_spec(info, spec)
+            except Exception:
+                continue
+            for r in spec_result.get("results", []):
+                if r.get("type") == "threshold":
+                    spec_vars[r["id"]] = r["numeric_score"]
+
+        s_obj = Score(name=name, expression=expr, normalize=normalize)
+        raw_val, detail = compute_score(s_obj, info, spec_vars or None)
+        return {
+            "type": "expression",
+            "score": raw_val,
+            "variables": detail.variables,
+            "error": None,
+        }
+
+    else:  # threshold
+        defn = score.definition
+        score_def = {
+            "id": name,
+            "metrics": defn.get("metrics", []),
+            "aggregate": defn.get("aggregate", "mean"),
+        }
+        if "condition" in defn:
+            score_def["condition"] = defn["condition"]
+        metrics_list = defn.get("metrics", [])
+        metric_scores = []
+        for m in metrics_list:
+            key = m.get("key", "")
+            value = _to_numeric(info.get(key))
+            rule_score = score_metric(info.get(key), m.get("rules", []))
+            metric_scores.append({"key": key, "value": value, "rule_score": rule_score})
+
+        result = evaluate_threshold_score(info, score_def, {})
+        aggregate = result["numeric_score"] if result else None
+        return {
+            "type": "threshold",
+            "score": aggregate,
+            "metric_scores": metric_scores,
+            "error": None,
+        }
+
+
+# ---------------------------------------------------------------------------
+# Seeding
+# ---------------------------------------------------------------------------
+
+
+def seed_library_from_spec(spec_name: str) -> int:
+    """Import threshold scores from a named spec into the score library.
+
+    Only creates scores that do not already exist (non-destructive).
+    Returns the number of scores created.
+    """
+    content = get_spec(spec_name)
+    if content is None:
+        return 0
+    spec = load_spec_from_str(content)
+    created = 0
+    for score_def in spec.get("scores", []):
+        if score_def.get("type") != "threshold":
+            continue
+        score_id = score_def.get("id")
+        if not score_id:
+            continue
+        if get_library_score(score_id) is not None:
+            continue
+        definition: dict[str, Any] = {
+            "metrics": score_def.get("metrics", []),
+            "aggregate": score_def.get("aggregate", "mean"),
+        }
+        if "condition" in score_def:
+            definition["condition"] = score_def["condition"]
+        score = LibraryScore(
+            name=score_id,
+            score_type="threshold",
+            definition=definition,
+            description=score_def.get("label", ""),
+        )
+        upsert_library_score(score)
+        created += 1
+    return created
