@@ -232,8 +232,11 @@ def realize_analysis(
             final_scores.update(scores_dict.get(symbol, {}))
             final_details.update(details_dict.get(symbol, {}))
 
+        info = ticker_info.get(symbol, {})
         result = RealizationResult(
             ticker_symbol=symbol,
+            name=str(info.get("shortName", "")),
+            sector=str(info.get("sector", "")),
             scores=final_scores,
             score_details=final_details,
             error=error,

@@ -314,7 +314,11 @@
               <template x-for="(r, i) in sortedResults()" :key="r.ticker_symbol">
                 <tr>
                   <td class="muted" style="font-size:.8rem;text-align:right;" x-text="i+1"></td>
-                  <td><strong x-text="r.ticker_symbol"></strong></td>
+                  <td>
+                    <strong x-text="r.ticker_symbol"></strong>
+                    <div x-show="r.name" class="muted" style="font-size:.8rem;" x-text="r.name"></div>
+                    <div x-show="r.sector" class="muted" style="font-size:.75rem;" x-text="r.sector"></div>
+                  </td>
                   <template x-for="col in realizeColumns()" :key="col">
                     <td :class="scoreClass(col, r.scores[col])">
                       <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="isNormalizedCol(col) ? fmtFloat(r.scores[col]) : fmtRaw(r.scores[col])"></span>
@@ -526,7 +530,7 @@
      @keydown.window.arrow-right="if (realize.detailTicker !== null) navigateDetail(1)">
   <div class="modal-box modal-box-sm">
     <div class="modal-header">
-      <strong x-text="(realize.detailTicker || '') + ' — Score breakdown'"></strong>
+      <strong x-text="(realize.detailTicker || '') + (getDetailResult()?.name ? ' — ' + getDetailResult().name : '') + ' — Score breakdown'"></strong>
       <button class="btn btn-ghost btn-sm" @click="realize.detailTicker = null">✕</button>
     </div>
     <div class="modal-body">

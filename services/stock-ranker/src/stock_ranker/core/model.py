@@ -77,6 +77,8 @@ class ScoreDetail(BaseModel):
 
 class RealizationResult(BaseModel):
     ticker_symbol: str
+    name: str = ""
+    sector: str = ""
     scores: dict[str, float | None] = {}
     score_details: dict[str, ScoreDetail] = {}
     error: str | None = None
