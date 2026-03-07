@@ -261,7 +261,7 @@
         </template>
       </div>
 
-      <!-- Realize panel -->
+      <!-- Realize run panel -->
       <div x-show="openRealize===a.id" class="card-body">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.875rem;">
           <div>
@@ -289,21 +289,32 @@
         <button class="btn btn-primary" :disabled="realize.running" @click="runRealize(a.id)">
           <span x-text="realize.running ? 'Running…' : 'Run →'"></span>
         </button>
-        <p x-show="realize.error" class="error-val" x-text="realize.error"></p>
+      </div>
 
-        <!-- Results table -->
-        <div x-show="realize.results && realize.results.length>0" class="results-table-wrap">
+      <!-- Results panel: persists independently of run panel -->
+      <div x-show="realizeResultsMap[a.id]?.results || realizeResultsMap[a.id]?.error">
+        <div class="card-body" style="display:flex;align-items:center;gap:.5rem;padding-bottom:0;border-bottom:none;">
+          <span class="muted" style="font-size:.85rem;">Results</span>
+          <button class="btn btn-ghost btn-xs"
+            @click="realizeResultsMap[a.id].collapsed = !realizeResultsMap[a.id].collapsed"
+            x-text="realizeResultsMap[a.id]?.collapsed ? '▸ Show' : '▾ Hide'">
+          </button>
+        </div>
+        <p x-show="realizeResultsMap[a.id]?.error && !realizeResultsMap[a.id]?.collapsed"
+           class="error-val" style="padding:.5rem 1rem 0;" x-text="realizeResultsMap[a.id]?.error"></p>
+        <div x-show="!realizeResultsMap[a.id]?.collapsed && realizeResultsMap[a.id]?.results?.length > 0"
+             class="results-table-wrap">
           <table>
             <thead>
               <tr>
                 <th style="width:2rem;color:var(--tm);">#</th>
                 <th>Ticker</th>
-                <template x-for="col in realizeColumns()" :key="col">
+                <template x-for="col in realizeColumns(a.id)" :key="col">
                   <th>
                     <span x-text="col"></span>
-                    <button class="sort-btn" :class="realize.sortCol===col ? 'active' : ''"
-                      @click="sortByCol(col)"
-                      x-text="realize.sortCol===col ? (realize.sortDir==='asc' ? '↑' : '↓') : '↕'"></button>
+                    <button class="sort-btn" :class="realizeResultsMap[a.id]?.sortCol===col ? 'active' : ''"
+                      @click="sortByCol(a.id, col)"
+                      x-text="realizeResultsMap[a.id]?.sortCol===col ? (realizeResultsMap[a.id]?.sortDir==='asc' ? '↑' : '↓') : '↕'"></button>
                   </th>
                 </template>
                 <th>Error</th>
@@ -311,7 +322,7 @@
               </tr>
             </thead>
             <tbody>
-              <template x-for="(r, i) in sortedResults()" :key="r.ticker_symbol">
+              <template x-for="(r, i) in sortedResults(a.id)" :key="r.ticker_symbol">
                 <tr>
                   <td class="muted" style="font-size:.8rem;text-align:right;" x-text="i+1"></td>
                   <td>
@@ -319,9 +330,9 @@
                     <div x-show="r.name" class="muted" style="font-size:.8rem;" x-text="r.name"></div>
                     <div x-show="r.sector" class="muted" style="font-size:.75rem;" x-text="r.sector"></div>
                   </td>
-                  <template x-for="col in realizeColumns()" :key="col">
-                    <td :class="scoreClass(col, r.scores[col])">
-                      <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="isNormalizedCol(col) ? fmtFloat(r.scores[col]) : fmtRaw(r.scores[col])"></span>
+                  <template x-for="col in realizeColumns(a.id)" :key="col">
+                    <td :class="scoreClass(a.id, col, r.scores[col])">
+                      <span x-show="r.scores[col] !== undefined && r.scores[col] !== null" x-text="isNormalizedCol(a.id, col) ? fmtFloat(r.scores[col]) : fmtRaw(r.scores[col])"></span>
                       <span x-show="r.scores[col] === null || r.scores[col] === undefined" class="null-val">—</span>
                     </td>
                   </template>
@@ -332,7 +343,7 @@
                   <td>
                     <button x-show="r.score_details && Object.keys(r.score_details).length > 0"
                       class="btn btn-ghost btn-xs"
-                      @click="realize.detailTicker = r.ticker_symbol"
+                      @click="realize.detailId = a.id; realizeResultsMap[a.id].detailTicker = r.ticker_symbol"
                       title="Score breakdown">ⓘ</button>
                   </td>
                 </tr>
@@ -523,15 +534,15 @@
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <!-- SCORE DETAIL MODAL                                                     -->
 <!-- ══════════════════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" x-show="realize.detailTicker !== null"
-     @click.self="realize.detailTicker = null"
-     @keydown.window.escape="if (realize.detailTicker !== null) realize.detailTicker = null"
-     @keydown.window.arrow-left="if (realize.detailTicker !== null) navigateDetail(-1)"
-     @keydown.window.arrow-right="if (realize.detailTicker !== null) navigateDetail(1)">
+<div class="modal-overlay" x-show="realize.detailId !== null && realizeResultsMap[realize.detailId]?.detailTicker"
+     @click.self="realize.detailId = null"
+     @keydown.window.escape="if (realize.detailId !== null) realize.detailId = null"
+     @keydown.window.arrow-left="if (realize.detailId !== null) navigateDetail(-1)"
+     @keydown.window.arrow-right="if (realize.detailId !== null) navigateDetail(1)">
   <div class="modal-box modal-box-sm">
     <div class="modal-header">
-      <strong x-text="(realize.detailTicker || '') + (getDetailResult()?.name ? ' — ' + getDetailResult().name : '') + ' — Score breakdown'"></strong>
-      <button class="btn btn-ghost btn-sm" @click="realize.detailTicker = null">✕</button>
+      <strong x-text="(realizeResultsMap[realize.detailId]?.detailTicker || '') + (getDetailResult()?.name ? ' — ' + getDetailResult().name : '') + ' — Score breakdown'"></strong>
+      <button class="btn btn-ghost btn-sm" @click="realize.detailId = null">✕</button>
     </div>
     <div class="modal-body">
       <template x-if="getDetailResult()">
@@ -1026,12 +1037,9 @@ function app() {
       selectedCollections: [],
       forceRefresh: false,
       running: false,
-      results: null,
-      error: null,
-      detailTicker: null,
-      sortCol: null,
-      sortDir: 'asc',
+      detailId: null,
     },
+    realizeResultsMap: {},
 
     // Wizard
     wizard: {
@@ -1132,44 +1140,47 @@ function app() {
       return n.toFixed(2);
     },
 
-    realizeColumns() {
-      if (!this.realize.results || this.realize.results.length === 0) return [];
+    realizeColumns(id) {
+      const results = this.realizeResultsMap[id]?.results;
+      if (!results || results.length === 0) return [];
       const cols = new Set();
-      for (const r of this.realize.results) {
+      for (const r of results) {
         for (const k of Object.keys(r.scores || {})) cols.add(k);
       }
       return [...cols];
     },
 
-    isNormalizedCol(col) {
-      if (!this.openRealize) return false;
-      const a = this.analyses.find(a => a.id === this.openRealize);
+    isNormalizedCol(id, col) {
+      const a = this.analyses.find(a => a.id === id);
       if (!a) return false;
       const s = (a.scores || []).find(s => s.name === col);
       return s ? s.normalize : false;
     },
 
-    scoreClass(col, val) {
+    scoreClass(id, col, val) {
       if (val === null || val === undefined) return '';
-      if (!this.isNormalizedCol(col)) return '';
+      if (!this.isNormalizedCol(id, col)) return '';
       return val >= 0 ? 'cell-positive' : 'cell-negative';
     },
 
-    sortByCol(col) {
-      if (this.realize.sortCol === col) {
-        this.realize.sortDir = this.realize.sortDir === 'asc' ? 'desc' : 'asc';
+    sortByCol(id, col) {
+      const r = this.realizeResultsMap[id];
+      if (!r) return;
+      if (r.sortCol === col) {
+        r.sortDir = r.sortDir === 'asc' ? 'desc' : 'asc';
       } else {
-        this.realize.sortCol = col;
-        this.realize.sortDir = 'asc';
+        r.sortCol = col;
+        r.sortDir = 'asc';
       }
     },
 
-    sortedResults() {
-      if (!this.realize.results) return [];
-      if (!this.realize.sortCol) return this.realize.results;
-      const col = this.realize.sortCol;
-      const dir = this.realize.sortDir === 'asc' ? 1 : -1;
-      return [...this.realize.results].sort((a, b) => {
+    sortedResults(id) {
+      const entry = this.realizeResultsMap[id];
+      if (!entry?.results) return [];
+      if (!entry.sortCol) return entry.results;
+      const col = entry.sortCol;
+      const dir = entry.sortDir === 'asc' ? 1 : -1;
+      return [...entry.results].sort((a, b) => {
         const av = a.scores?.[col] ?? null;
         const bv = b.scores?.[col] ?? null;
         if (av === null && bv === null) return 0;
@@ -1180,20 +1191,27 @@ function app() {
     },
 
     getDetailResult() {
-      if (!this.realize.detailTicker || !this.realize.results) return null;
-      return this.realize.results.find(r => r.ticker_symbol === this.realize.detailTicker) || null;
+      const id = this.realize.detailId;
+      if (!id) return null;
+      const entry = this.realizeResultsMap[id];
+      if (!entry?.detailTicker || !entry.results) return null;
+      return entry.results.find(r => r.ticker_symbol === entry.detailTicker) || null;
     },
 
     navigateDetail(direction) {
-      const results = this.sortedResults().filter(
+      const id = this.realize.detailId;
+      if (!id) return;
+      const entry = this.realizeResultsMap[id];
+      if (!entry?.detailTicker) return;
+      const results = this.sortedResults(id).filter(
         r => r.score_details && Object.keys(r.score_details).length > 0
       );
-      if (!results.length || !this.realize.detailTicker) return;
-      const idx = results.findIndex(r => r.ticker_symbol === this.realize.detailTicker);
+      if (!results.length) return;
+      const idx = results.findIndex(r => r.ticker_symbol === entry.detailTicker);
       if (idx === -1) return;
       const next = idx + direction;
       if (next >= 0 && next < results.length) {
-        this.realize.detailTicker = results[next].ticker_symbol;
+        entry.detailTicker = results[next].ticker_symbol;
       }
     },
 
@@ -1222,7 +1240,7 @@ function app() {
         this.openRealize = null;
       } else {
         this.openRealize = id;
-        this.realize = { tickerInput: '', selectedCollections: [], forceRefresh: false, running: false, results: null, error: null, detailTicker: null, sortCol: null, sortDir: 'asc' };
+        this.realize = { tickerInput: '', selectedCollections: [], forceRefresh: false, running: false, detailId: null };
       }
     },
 
@@ -1237,8 +1255,7 @@ function app() {
 
     async runRealize(id) {
       this.realize.running = true;
-      this.realize.results = null;
-      this.realize.error = null;
+      this.realizeResultsMap[id] = { results: null, error: null, collapsed: false, detailTicker: null, sortCol: null, sortDir: 'asc' };
       try {
         const tickers = this.realize.tickerInput
           .split(',').map(s => s.trim()).filter(Boolean);
@@ -1247,12 +1264,12 @@ function app() {
           collections: this.realize.selectedCollections,
           force_refresh: this.realize.forceRefresh,
         };
-        this.realize.results = await this.apiFetch(`/analyses/${id}/realize`, {
+        this.realizeResultsMap[id].results = await this.apiFetch(`/analyses/${id}/realize`, {
           method: 'POST',
           body: JSON.stringify(body),
         });
       } catch (e) {
-        this.realize.error = e.message;
+        this.realizeResultsMap[id].error = e.message;
       } finally {
         this.realize.running = false;
       }
