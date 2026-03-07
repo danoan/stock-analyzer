@@ -1,0 +1,1090 @@
+A1RE34.SA 	40 	—
+A2FY34.SA 	96 	—
+AADA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AALR1.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AALR1F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AALR3.SA 	72 	—
+AALR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ABCB10.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ABCB10F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ABCB4.SA 	40 	—
+ABCB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ABEV3.SA 	0 	—
+ABEV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ABGD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ACWX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ADMF3.SA 	32 	—
+ADMF3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AERI3.SA 	96 	—
+AERI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AFLT3.SA 	30 	—
+AFLT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AGXY3.SA 	80 	—
+AGXY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AHEB3.SA 	72 	—
+AHEB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AHEB5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AHEB6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALLD3.SA 	4 	—
+ALLD3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALOS3.SA 	8 	—
+ALOS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALPA3.SA 	16 	—
+ALPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALPA4.SA 	16 	—
+ALPA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALPK3.SA 	84 	—
+ALPK3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALPK3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALUG11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALUP11.SA 	80 	—
+ALUP11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALUP3.SA 	96 	—
+ALUP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ALUP4.SA 	96 	—
+ALUP4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AMAR3.SA 	100 	—
+AMAR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AMBP3.SA 	72 	—
+AMBP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AMOB3.SA 	76 	—
+AMOB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ANCR11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ANGV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+APTV34.SA 	70 	—
+ARGT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ARML3.SA 	92 	—
+ARML3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ARND3.SA 	80 	—
+ARND3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ARRI11.SA 	96 	—
+ARXD11.SA 	20 	—
+ASAI3.SA 	24 	—
+ASAI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ASAI3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ATED3.SA 	50 	—
+ATED3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AUAU.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AUAU3.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AUAU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AURE3.SA 	12 	—
+AURO11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AVLL3.SA 	88 	—
+AVLL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AXIA3.SA 	5 	—
+AXIA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AXIA3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AXIA5.SA 	5 	—
+AXIA5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AXIA6.SA 	5 	—
+AXIA7.SA 	85 	—
+AXIA7F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZEV3.SA 	96 	—
+AZEV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZEV4.SA 	96 	—
+AZEV4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZTE3.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL12.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL12F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL14.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL14F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL16.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL16F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL53.SA 	12 	—
+AZUL53F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZUL53Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+AZZA3.SA 	84 	—
+AZZA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+B1BW34.SA 	56 	—
+B1WA34.SA 	95 	—
+B3SA3.SA 	100 	—
+B3SA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAAX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BACW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAGG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAIQ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BALM3.SA 	76 	—
+BALM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BALM4.SA 	76 	—
+BALM4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAOA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAOK39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAOM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAOR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BARY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAUH4.SA 	84 	—
+BAUH4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BAZA3.SA 	52 	—
+BAZA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBAJ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBAS3.SA 	10 	—
+BBAS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBDC3.SA 	80 	—
+BBDC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBDC4.SA 	80 	—
+BBDC4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBER39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBJP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBSE3.SA 	5 	—
+BBSE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BBUG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCAT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCHI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCHQ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCIC.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCIC11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCIR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCLO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCNY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCOM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCPX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCRB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCRI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCTE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BCWV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDLL3.SA 	88 	—
+BDLL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDLL4.SA 	88 	—
+BDLL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDRI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDVD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDVE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BDVY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BECH39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEEF3.SA 	84 	—
+BEEF3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEEM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEES3.SA 	95 	—
+BEES3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEES4.SA 	95 	—
+BEES4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEFA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEFG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEFV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEGD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEGE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEGU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEIS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEMC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEMV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEPP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEPU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEUF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEUW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWH39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWJ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWN39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWQ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEWZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEZA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BEZU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFAV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFCG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFDA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFIW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFLO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFNX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFPX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BFXI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGAR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP10F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP1F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP2.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP2F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP3.SA 	52 	—
+BGIP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGIP4.SA 	52 	—
+BGIP4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGLC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGNO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGOV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGOZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGRT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BGWH39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHDV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHEF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHER39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHIA3.SA 	88 	—
+BHIA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHYG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BHYS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIAG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIAI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIAK39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIAU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIBB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BICL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIDV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIED3.SA 	12 	—
+BIED3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIET39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIEZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIFR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIGF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIGO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIGS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIHA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIHE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIHF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIHI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIJR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIJS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIJT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BILF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIPC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIPZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BITB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BITO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIVB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIVE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIVW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIWD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIWF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIWM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIXC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIXG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIXJ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIXN39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIXU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYJ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYK39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BIYZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BJPI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BJQU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BKCH39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BKSA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BKWB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BKXI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BKYY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLAU3.SA 	84 	—
+BLAU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLBT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLPA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLPX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLQD39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BLTP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMBB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMEB3.SA 	56 	—
+BMEB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMEB4.SA 	56 	—
+BMEB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMEB9.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMEB9F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMGB10.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMGB10F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMGB2.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMGB2F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMGB4.SA 	52 	—
+BMGB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMIL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMIN3.SA 	40 	—
+BMIN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMIN4.SA 	40 	—
+BMIN4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMKS3.SA 	92 	—
+BMLC11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMOB3.SA 	88 	—
+BMOB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BMTU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BNBR3.SA 	28 	—
+BNBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BNDA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BOBR4.SA 	80 	—
+BOBR4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BOEF39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BOTZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPAC11.SA 	20 	—
+BPAC11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPAC3.SA 	36 	—
+BPAC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPAC5.SA 	36 	—
+BPAC5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPAR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPFR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPFV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPIC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BPVE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BQCL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BQLT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BQQW39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BQUA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BQYL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRAP3.SA 	100 	—
+BRAP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRAP4.SA 	100 	—
+BRAP4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRBI11.SA 	8 	—
+BRBI11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BREZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRKM3.SA 	12 	—
+BRKM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRKM5.SA 	12 	—
+BRKM5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRKM6.SA 	12 	—
+BRKM6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRSR3.SA 	90 	—
+BRSR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRSR5.SA 	90 	—
+BRSR5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRSR6.SA 	90 	—
+BRSR6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BRST3.SA 	90 	—
+BRST3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSCZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSDV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSHV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSHY39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSIL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSIZ39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSLI3.SA 	60 	—
+BSLI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSLI4.SA 	60 	—
+BSLI4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSLV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSOX39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSRE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSTI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BSUS39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BTFL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BTIP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BTLT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BUAE39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BURA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BURT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BUSM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BUSR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BUTL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BVEG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BVLU39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+BXTC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+C2ZR34.SA 	60 	—
+CACR11.SA 	12 	—
+CAML3.SA 	96 	—
+CAML3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CASN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CBAV3.SA 	20 	—
+CBAV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CBEE3.SA 	45 	—
+CBEE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CBTC39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CCTY3.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CCTY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEAB3.SA 	50 	—
+CEAB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEBR3.SA 	8 	—
+CEBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEBR5.SA 	8 	—
+CEBR5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEBR6.SA 	8 	—
+CEBR6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEDO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEDO4.SA 	88 	—
+CEDO4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEEB3.SA 	88 	—
+CEEB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEEB5.SA 	88 	—
+CEEB5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEED3.SA 	92 	—
+CEED3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEGR3.SA 	92 	—
+CEGR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CEOC11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CGAS3.SA 	88 	—
+CGAS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CGAS5.SA 	88 	—
+CGAS5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CGRA3.SA 	84 	—
+CGRA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CGRA4.SA 	84 	—
+CGRA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CLSC3.SA 	96 	—
+CLSC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CLSC4.SA 	96 	—
+CLSC4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CLXC34.SA 	32 	—
+CMIG3.SA 	48 	—
+CMIG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CMIG4.SA 	48 	—
+CMIG4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CMIN3.SA 	92 	—
+CMIN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+COCE3.SA 	50 	—
+COCE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+COCE5.SA 	50 	—
+COCE5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+COGN3.SA 	88 	—
+COGN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CPFE3.SA 	12 	—
+CPFE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CPFE3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CPLE.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CPLE3.SA 	75 	—
+CPLE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CPUR11.SA 	56 	—
+CRFF11.SA 	24 	—
+CRPG3.SA 	80 	—
+CRPG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CRPG5.SA 	80 	—
+CRPG5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CRPG6.SA 	80 	—
+CRPG6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CSAN3.SA 	40 	—
+CSAN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CSED3.SA 	84 	—
+CSED3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CSMG3.SA 	92 	—
+CSMG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CSNA3.SA 	28 	—
+CSNA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CSUD3.SA 	92 	—
+CSUD3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CTAX3.SA 	92 	—
+CTAX3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CTKA3.SA 	92 	—
+CTKA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CTKA4.SA 	92 	—
+CTKA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CTSA3.SA 	68 	—
+CTSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CTSA4.SA 	68 	—
+CTSA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CURY3.SA 	80 	—
+CURY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CURY3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CVCB3.SA 	88 	—
+CVCB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CXSE3.SA 	90 	—
+CXSE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CYCR11.SA 	69 	—
+CYRE.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CYRE3.SA 	84 	—
+CYRE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+CYRE4.SA 	68 	—
+CYRE4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DASA3.SA 	8 	—
+DASA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DDNB34.SA 	85 	—
+DEFT31.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DESK3.SA 	12 	—
+DESK3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DEVA11.SA 	96 	—
+DEXP3.SA 	92 	—
+DEXP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DEXP4.SA 	92 	—
+DEXP4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DIRR3.SA 	96 	—
+DIRR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DIVD11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DMVF3.SA 	76 	—
+DMVF3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DOHL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DOHL4.SA 	80 	—
+DOHL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DOTZ3.SA 	76 	—
+DOTZ3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DTCR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DTCY3.SA 	88 	—
+DTCY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+DXCO3.SA 	8 	—
+DXCO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+E1CL34.SA 	30 	—
+EALT3.SA 	76 	—
+EALT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EALT4.SA 	76 	—
+EALT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ECOR3.SA 	100 	—
+ECOR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EDFO11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EDGA11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EGIE3.SA 	55 	—
+EGIE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EIDO39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EKTR3.SA 	35 	—
+EKTR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EKTR4.SA 	88 	—
+EKTR4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ELAS11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ELCI34.SA 	80 	—
+EMAE4.SA 	96 	—
+EMAE4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EMBJ3.SA 	32 	—
+EMBJ3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ENEV3.SA 	100 	—
+ENEV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ENEV3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ENJU3.SA 	80 	—
+ENJU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ENMT3.SA 	88 	—
+ENMT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ENMT4.SA 	88 	—
+ENMT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EQMA3B.SA 	92 	—
+EQMA3BF.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EQPA3.SA 	8 	—
+EQPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EQPA5.SA 	8 	—
+EQPA5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EQPA7F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EQTL3.SA 	96 	—
+EQTL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ESTR4.SA 	68 	—
+ETER3.SA 	100 	—
+ETER3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ETHA39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ETHY11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EUCA3.SA 	88 	—
+EUCA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EUCA4.SA 	88 	—
+EUCA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EVEB31.SA 	100 	—
+EVTC31.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EWJV39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EXPB31.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+EZTC3.SA 	80 	—
+EZTC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FATN11.SA 	60 	—
+FESA3.SA 	76 	—
+FESA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FESA4.SA 	76 	—
+FESA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FHER3.SA 	84 	—
+FHER3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FICT3.SA 	96 	—
+FICT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FIEI3.SA 	4 	—
+FIEI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FIGE3.SA 	28 	—
+FIGE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FIQE3.SA 	84 	—
+FIQE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FLCR11.SA 	40 	—
+FLRY3.SA 	4 	—
+FLRY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FRIO3.SA 	92 	—
+FRIO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+FZDB11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+G1TR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+G1WW34.SA 	48 	—
+G2DI33.SA 	56 	—
+GCRA11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GCRI11.SA 	28 	—
+GDXB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GEPA3.SA 	88 	—
+GEPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GEPA4.SA 	88 	—
+GEPA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GFSA3.SA 	36 	—
+GFSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GGBR3.SA 	80 	—
+GGBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GGBR4.SA 	80 	—
+GGBR4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GGPS3.SA 	72 	—
+GGPS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GMAT3.SA 	100 	—
+GMAT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GOAU3.SA 	40 	—
+GOAU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GOAU4.SA 	40 	—
+GOAU4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GOLL54.SA 	28 	—
+GOLL54F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GOLL54L.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GPAR3.SA 	8 	—
+GPAR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GRND3.SA 	96 	—
+GRND3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GROP31.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+GSHP3.SA 	100 	—
+GSHP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+H1LT34.SA 	55 	—
+HAGA3.SA 	64 	—
+HAGA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HAGA4.SA 	64 	—
+HAGA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HAPV3.SA 	92 	—
+HAPV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HBOR3.SA 	100 	—
+HBOR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HBRE3.SA 	100 	—
+HBRE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HBSA3.SA 	88 	—
+HBSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HBTS5.SA 	4 	—
+HBTS5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HCHG11.SA 	72 	—
+HETA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HETA4.SA 	60 	—
+HETA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HGPO11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HOOT4.SA 	80 	—
+HOOT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HREC11.SA 	72 	—
+HSHY34.SA 	40 	—
+HSRE11.SA 	85 	—
+HTEK11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+HYEM39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+I2RS34.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IBIT39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IFCM1.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IFCM1F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IFCM3.SA 	84 	—
+IFCM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IGTI11.SA 	64 	—
+IGTI11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IGTI3.SA 	80 	—
+IGTI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IGTI4.SA 	80 	—
+IGTI4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+INBR32.SA 	92 	—
+INEP3.SA 	8 	—
+INEP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+INEP4.SA 	8 	—
+INEP4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+INTB3.SA 	50 	—
+INTB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IRBR3.SA 	100 	—
+IRBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ISAE3.SA 	35 	—
+ISAE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ISAE4.SA 	35 	—
+ISAE4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITSA3.SA 	16 	—
+ITSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITSA4.SA 	16 	—
+ITSA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITSA4Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITUB3.SA 	95 	—
+ITUB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITUB4.SA 	95 	—
+ITUB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ITUB4Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+IWMI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JALL3.SA 	60 	—
+JALL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JBSS32.SA 	44 	—
+JCCJ11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JEPI39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JFEN3.SA 	96 	—
+JFEN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JHSF3.SA 	92 	—
+JHSF3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JOPA3.SA 	60 	—
+JOPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JOPA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+JSLG3.SA 	76 	—
+JSLG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+KEPL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+KEVE11.SA 	4 	—
+KHCB34.SA 	45 	—
+KIVO11.SA 	4 	—
+KLBN11.SA 	25 	—
+KLBN11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+KLBN3.SA 	45 	—
+KLBN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+KLBN4.SA 	45 	—
+KLBN4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+KNCR11.SA 	20 	—
+LAVV3.SA 	80 	—
+LAVV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LIGT3.SA 	76 	—
+LIGT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LJQQ3.SA 	84 	—
+LJQQ3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LOGG3.SA 	35 	—
+LOGG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LOGN3.SA 	64 	—
+LOGN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LPSB3.SA 	100 	—
+LPSB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LREN3.SA 	100 	—
+LREN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LUPA3.SA 	96 	—
+LUPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LUXM4.SA 	80 	—
+LUXM4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+LWSA3.SA 	80 	—
+LWSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MAPT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MAPT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MATD3.SA 	96 	—
+MATD3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MBRF3.SA 	92 	—
+MBRF3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MCCI11.SA 	20 	—
+MDIA3.SA 	45 	—
+MDIA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MDNE3.SA 	92 	—
+MDNE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MDNE3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MEAL3.SA 	8 	—
+MEAL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MELK3.SA 	76 	—
+MELK3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MGEL4.SA 	80 	—
+MGEL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MGLU3.SA 	96 	—
+MGLU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MILS3.SA 	100 	—
+MILS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MLAS3.SA 	80 	—
+MLAS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MNDL3.SA 	88 	—
+MNDL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MNPR3.SA 	100 	—
+MNPR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MOTV3.SA 	40 	—
+MOTV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MRSA3B.SA 	92 	—
+MRSA3BF.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MRSA5B.SA 	92 	—
+MRSA5BF.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MRVE3.SA 	92 	—
+MRVE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MRVE3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MTRE3.SA 	96 	—
+MTRE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MTSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MTSA4.SA 	76 	—
+MTSA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MWET3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MWET4.SA 	88 	—
+MWET4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+MYPK3.SA 	88 	—
+MYPK3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+N1TA34.SA 	35 	—
+NDIV.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+NDIV11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+NEOE3.SA 	50 	—
+NEOE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+NEWU11.SA 	8 	—
+NEXP3.SA 	4 	—
+NEXP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+NGRD3.SA 	8 	—
+NGRD3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+NUIF11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OBTC3.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OBTC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ODER4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ODPV3.SA 	50 	—
+ODPV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OFSA3.SA 	8 	—
+OFSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OIAG11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OIBR3.SA 	92 	—
+OIBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OIBR4.SA 	92 	—
+OIBR4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OPCT3.SA 	76 	—
+OPCT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ORVR3.SA 	8 	—
+ORVR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OSXB3.SA 	88 	—
+OSXB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+OUJP11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+P2LN34.SA 	72 	—
+PATI3.SA 	52 	—
+PATI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PATI4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PCAR3.SA 	95 	—
+PCAR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PDGR3.SA 	96 	—
+PDGR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PDTC3.SA 	84 	—
+PDTC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PEAB3.SA 	96 	—
+PEAB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PEAB4.SA 	96 	—
+PEAB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PETR4.SA 	48 	—
+PFRM3.SA 	88 	—
+PFRM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PGMN3.SA 	72 	—
+PGMN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PGMN9F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PINE3.SA 	90 	—
+PLPL3.SA 	80 	—
+PLPL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PLRI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PMAM1.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PMAM1F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PMAM3.SA 	100 	—
+PMAM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PMFO11.SA 	18 	—
+PNVL3.SA 	100 	—
+PNVL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+POMO3.SA 	92 	—
+POMO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+POMO4.SA 	92 	—
+POMO4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PORD11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+POSI3.SA 	72 	—
+PPLA11.SA 	68 	—
+PRIO3.SA 	96 	—
+PRIO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PRNR3.SA 	100 	—
+PRNR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PRNR3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PRXB31.SA 	45 	—
+PSSA3.SA 	64 	—
+PSSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PSVM11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PSVM11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PTBL3.SA 	88 	—
+PTBL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PTNT3.SA 	92 	—
+PTNT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+PTNT4.SA 	92 	—
+PTNT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+QTOP39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+R1OP34.SA 	15 	—
+RADL3.SA 	92 	—
+RADL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RADL3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RAIZ4.SA 	45 	—
+RAIZ4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RANI3.SA 	96 	—
+RANI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RAPT3.SA 	4 	—
+RAPT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RAPT4.SA 	4 	—
+RAPT4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RBDS11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RBFY11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RBHG11.SA 	4 	—
+RBHY11.SA 	4 	—
+RBIR11.SA 	48 	—
+RBRS11.SA 	44 	—
+RCRI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RCSL3.SA 	64 	—
+RCSL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RCSL4.SA 	64 	—
+RCSL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RDOR3.SA 	45 	—
+RDOR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RDOR3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RECR11.SA 	28 	—
+RECV3.SA 	80 	—
+RECV3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+REDE3.SA 	92 	—
+RIAA3.SA 	4 	—
+RIAA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RIOS3.SA 	96 	—
+RNEW3.SA 	100 	—
+RNEW3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RNEW4.SA 	100 	—
+RNEW4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+ROMI3.SA 	35 	—
+ROMI3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RPAD3.SA 	48 	—
+RPAD3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RPAD5.SA 	48 	—
+RPAD5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RPAD6.SA 	48 	—
+RPAD6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RPMG3.SA 	72 	—
+RPMG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RPRI11.SA 	96 	—
+RSID3.SA 	47 	—
+RSID3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RSPD11.SA 	24 	—
+RSSL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RSUL4.SA 	80 	—
+RSUL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RVEE3.SA 	31 	—
+RVEE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+RZZR11.SA 	20 	—
+SANB11.SA 	60 	—
+SANB11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SANB3.SA 	76 	—
+SANB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SANB4.SA 	20 	—
+SANB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SAPR11.SA 	76 	—
+SAPR11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SAPR11Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SAPR3.SA 	40 	—
+SAPR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SAPR4.SA 	92 	—
+SAPR4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SBFG3.SA 	8 	—
+SBFG3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SBSP3.SA 	16 	—
+SBSP3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SCAR3.SA 	84 	—
+SCAR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SEER3.SA 	8 	—
+SEER3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SEQL3.SA 	92 	—
+SEQL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SEQR11.SA 	28 	—
+SHOW3.SA 	96 	—
+SHOW3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SHPH11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SHPP11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SHUL4.SA 	68 	—
+SHUL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SIMH3.SA 	76 	—
+SIMH3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SIMN34.SA 	55 	—
+SIVR39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SLCE3.SA 	12 	—
+SLCE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SLXB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SMFT3.SA 	4 	—
+SMFT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SMFT9F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SMIN39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SMTO3.SA 	45 	—
+SMTO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SNCI11.SA 	96 	—
+SNFZ11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SNID11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SNSY3.SA 	20 	—
+SNSY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SNSY5.SA 	20 	—
+SNSY5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SOJA3.SA 	80 	—
+SOJA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SOLN39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SOND5.SA 	72 	—
+SOND5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SOND6.SA 	72 	—
+SOND6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SPYI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SUZB3.SA 	48 	—
+SUZB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+SUZB3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+T1DG34.SA 	70 	—
+T2TD34.SA 	15 	—
+TAEE11.SA 	64 	—
+TAEE11F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TAEE3.SA 	80 	—
+TAEE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TAEE4.SA 	80 	—
+TAEE4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TASA4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TBIL39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TCSA3.SA 	12 	—
+TCSA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TECN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TELB3.SA 	4 	—
+TELB3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TELB4.SA 	4 	—
+TELB4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TEND3.SA 	4 	—
+TEND3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TFCO4.SA 	80 	—
+TFCO4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TGMA3.SA 	4 	—
+TGMA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TIMS3.SA 	32 	—
+TIMS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TIMS3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TJKB11.SA 	48 	—
+TKNO3.SA 	92 	—
+TKNO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TKNO4.SA 	92 	—
+TKNO4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TOKY3.SA 	100 	—
+TOPB39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TOTS3.SA 	50 	—
+TOTS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TOTS3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TPIS3.SA 	100 	—
+TPIS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TPRY34.SA 	64 	—
+TRIS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TTEN3.SA 	80 	—
+TTEN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TUPY3.SA 	8 	—
+TUPY3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TVRI11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TXRX3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+TXRX4.SA 	76 	—
+TXRX4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+UCAS3.SA 	76 	—
+UCAS3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+UGPA3.SA 	28 	—
+UGPA3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+UGPA3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+UNIP6.SA 	92 	—
+USIG39.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+USIM3.SA 	50 	—
+USIM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+USIM5.SA 	50 	—
+USIM5F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+USIM6F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VALE3.SA 	24 	—
+VAMO.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VAMO3.SA 	72 	—
+VAMO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VBBR3.SA 	4 	—
+VBBR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VBBR3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VITT3.SA 	80 	—
+VITT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VIVR13.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VIVR13F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VIVR3.SA 	8 	—
+VIVR3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VIVT3.SA 	90 	—
+VIVT3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VLID3.SA 	4 	—
+VLID3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VSLH11.SA 	35 	—
+VSTE3.SA 	92 	—
+VSTE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VTRU3.SA 	96 	—
+VTRU3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VULC3.SA 	4 	—
+VVCR11.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VVEO3.SA 	96 	—
+VVEO3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+VVRI11.SA 	78 	—
+WDCN3.SA 	72 	—
+WDCN3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WEGE3.SA 	25 	—
+WEGE3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WEGE3Q.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WHRL3.SA 	88 	—
+WHRL3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WHRL4.SA 	88 	—
+WHRL4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WIZC3.SA 	68 	—
+WIZC3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WLMM3.SA 	4 	—
+WLMM3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WLMM4.SA 	4 	—
+WLMM4F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+WTSP11.SA 	11 	—
+XPBR31.SA 	36 	—
+YDUQ3.SA 	8 	—
+YDUQ3F.SA 	0 	could not convert string to float: 'No data available for income_stmt'
+Z1IO34.SA 	90 	—
